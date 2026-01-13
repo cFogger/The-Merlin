@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="The_Merlin.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:The_Merlin"
+    xmlns:views="clr-namespace:The_Merlin.Views"
+    Title="𝕸 𝕰 𝕽 𝕷 𝕴 𝕹" 
+    FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}">
+    <ShellContent
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage"    
+        Title="MainPage" />
+</Shell>
