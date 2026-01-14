@@ -14,10 +14,9 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -30,47 +29,54 @@
             
             <Label Text="Desc:" Grid.Row="1" Grid.Column="0"></Label>
             <Label Grid.Column="1" Grid.Row="1" Text="{Binding TodoInside}" />
-            
-            <Label Text="Created:" Grid.Row="2" Grid.Column="0"></Label>
-            <Label Grid.Column="1" Grid.Row="2" Text="{Binding CreatedAt}"/>
-            
-            <Label Text="Priority:" Grid.Row="3" Grid.Column="0"></Label>
-            <Label Grid.Column="1" Grid.Row="3" Text="{Binding Priority}"/>
-            
-            <Label Text="Is Completed:" Grid.Row="4" Grid.Column="0"></Label>
-            <Switch Grid.Column="1" Grid.Row="4" IsToggled="{Binding IsCompleted}"/>
-            
-            <Label Text="Assigned:" Grid.Row="5" Grid.Column="0"></Label>
-            <DatePicker Grid.Column="1" Grid.Row="5" Date="{Binding AssignedDate}"/>
 
-            <Label Text="Time Type:" Grid.Row="6" Grid.Column="0"></Label>
-            <Picker Grid.Row="6" Grid.Column="1">
+            <HorizontalStackLayout Grid.Row="0" Grid.Column="2" HeightRequest="32">
+                <Label Text="Created:"/>
+                <Label Text="{Binding CreatedAt}"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="1" Grid.Column="2" HeightRequest="32">
+                <Label Text="Priority:"/>
+                <Label Text="{Binding Priority}"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HeightRequest="32">
+                <Label Text="Assigned:"></Label>
+                <DatePicker Date="{Binding AssignedDate}"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
+                <Label Text="Is Completed:"/>
+                <Switch IsToggled="{Binding IsCompleted}"/>
+            </HorizontalStackLayout>
+
+            <Label Text="Time Type:" Grid.Row="2" Grid.Column="0"></Label>
+            <Picker x:Name="TimeTypePckr" SelectedIndexChanged="TimeTypePckr_SelectedIndexChanged" Grid.Row="2" Grid.Column="1">
                 <Picker.Items>
-                <x:String>Predefined</x:String>
-                <x:String>Estimated Time</x:String>
-                <x:String>Limited Time</x:String>
-                <x:String>No time</x:String>
+                    <x:String>No time</x:String>
+                    <x:String>Predefined</x:String>
+                    <x:String>Estimated Time</x:String>
+                    <x:String>Limited Time</x:String>
                 </Picker.Items>
             </Picker>
 
-            <HorizontalStackLayout Grid.Row="7" Grid.ColumnSpan="2">
-            <Button
+            <HorizontalStackLayout Grid.Row="4" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Spacing="10" Margin="20">
+                <Button
                 Text="Done"
                 x:Name="ToggleButton1"
                 Clicked="ToggleButton1_Clicked" 
                 VerticalOptions="Center" 
                 HorizontalOptions="End" 
-                BackgroundColor="#2F2F2F"/>
-            
-            <Button 
+                BackgroundColor="#2F2F2F"
+                    FontSize="Small" Padding="15"/>
+                <Button
                 Text="Delete"
                 x:Name="DeleteButton"
                 Clicked="DeleteButton_Clicked"
                 VerticalOptions="Center"
                 HorizontalOptions="End"
                 BackgroundColor="#9D1818"
-                TextColor="GhostWhite"/>
+                TextColor="GhostWhite"
+                    FontSize="Small" Padding="15"/>
             </HorizontalStackLayout>
+            <StackLayout x:Name="TimerStack" Grid.Row="5" Grid.ColumnSpan="3"></StackLayout>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

@@ -1,10 +1,27 @@
-﻿namespace The_Merlin.Timer;
+﻿using The_Merlin.Models;
+
+namespace The_Merlin.Timer;
 
 public partial class CountdownView : ContentView
 {
-	public CountdownView()
+    bool todoMode = false;
+    TodoItem item;
+
+	public CountdownView(TodoItem TodoCnt)
 	{
 		InitializeComponent();
+        App.CountdownTimer = TodoCnt.Time;
+        App.IsCntDwnRunning = false;
+        TimerLabel.Text = App.CountdownTimer.ToString(@"hh\:mm\:ss");
+        StartButtonOrganize();
+        todoMode = true;
+        item = TodoCnt;
+        App.AppTimer.Tick += AppTimer_Tick;
+    }
+
+    public CountdownView()
+    {
+        InitializeComponent();
         if (App.CountdownTimer != TimeSpan.Zero)
         {
             StartButtonOrganize(false);
@@ -35,12 +52,23 @@ public partial class CountdownView : ContentView
     {
         App.CountdownTimer = App.CountdownTimer.Add(TimeSpan.FromMinutes(1));
         TimerLabel.Text = App.CountdownTimer.ToString(@"hh\:mm\:ss");
+        if (todoMode)
+        {
+            item.Time = App.CountdownTimer;
+            App.DataManager.TodoData.UpdateItem(item);
+        }
+
     }
 
     private void DecreaseTimeBtn_Clicked(object sender, EventArgs e)
     {
         App.CountdownTimer = App.CountdownTimer - TimeSpan.FromMinutes(1) < TimeSpan.Zero ? TimeSpan.Zero : App.CountdownTimer.Add(TimeSpan.FromMinutes(-1));
         TimerLabel.Text = App.CountdownTimer.ToString(@"hh\:mm\:ss");
+        if (todoMode)
+        {
+            item.Time = App.CountdownTimer;
+            App.DataManager.TodoData.UpdateItem(item);
+        }
     }
 
     private void StartButton_Clicked(object sender, EventArgs e)
