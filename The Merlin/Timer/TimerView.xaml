@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="The_Merlin.Timer.TimerView">
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <Label
+                x:Name="TimerLabel"
+                Text="00:00:00"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                FontAttributes="Bold" 
+                FontSize="50"/>
+        <Button 
+                x:Name="StartButton"
+                Grid.Row="1"
+                Grid.Column="0"
+                Clicked="StartButton_Clicked" FontSize="24" FontAttributes="Bold" BackgroundColor="#FF1E00" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1"/>
+    </VerticalStackLayout>
+</ContentView>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Animations;
 using System.Diagnostics;
 using The_Merlin.Data;
+using The_Merlin.Timer;
 
 namespace The_Merlin
 {
@@ -13,10 +15,7 @@ namespace The_Merlin
 
         public static DataManager DataManager = new DataManager();
         public static IDispatcherTimer AppTimer;
-        public static bool IsChronoRunning = false;
-        public static bool IsCntDwnRunning = false;
-        public static TimeSpan ChronoTimer;
-        public static TimeSpan CountdownTimer;
+
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
@@ -26,23 +25,11 @@ namespace The_Merlin
         protected override void OnStart()
         {
             AppTimer = Application.Current.Dispatcher.CreateTimer();
-            AppTimer.Start();
             AppTimer.Interval = TimeSpan.FromSeconds(1);
-            ChronoTimer = TimeSpan.Zero;
-            AppTimer.Tick += async (s, e) =>
+            AppTimer.Start();
+            AppTimer.Tick += (s, e) =>
             {
-                if (IsChronoRunning) ChronoTimer = ChronoTimer.Add(TimeSpan.FromSeconds(1));
-                if (IsCntDwnRunning)
-                    if (CountdownTimer > TimeSpan.Zero)
-                        CountdownTimer = CountdownTimer.Add(TimeSpan.FromSeconds(-1));
-                    else
-                    {
-                        IsCntDwnRunning = false;
-                        CountdownTimer = TimeSpan.Zero;
-                        await Windows[0].Page.DisplayAlertAsync("Time's up!", "The countdown has finished.", "OK");
-                    }
-                if (IsCntDwnRunning || IsChronoRunning)
-                    Debug.WriteLine($"Chrono: {ChronoTimer}, Countdown: {CountdownTimer}");
+                TimerService.Tick();
             };
         }
     }

@@ -9,10 +9,10 @@
         <DatePicker x:Name="AssignedDatePck" Margin="10" BackgroundColor="#2F2F2F"/>
         <HorizontalStackLayout Margin="10" RadioButtonGroup.GroupName="PriortySelecting" RadioButtonGroup.SelectedValue="{Binding priorityValue}" >
             <Label Text="Set Priority"/>
-                <RadioButton x:Name="PriorityLow" Value="0" Content="Low" Margin="10"/>
-                <RadioButton x:Name="PriorityMedium" Value="1" Content="Medium" Margin="10"/>
-                <RadioButton x:Name="PriorityHigh" Value="2" Content="High" Margin="10"/>
-                <RadioButton x:Name="PriorityCritical" Value="3" Content="Critical" Margin="10"/>
+            <RadioButton x:Name="PriorityLow" Value="0" Content="Low" Margin="10"/>
+            <RadioButton x:Name="PriorityMedium" Value="1" Content="Medium" Margin="10"/>
+            <RadioButton x:Name="PriorityHigh" Value="2" Content="High" Margin="10"/>
+            <RadioButton x:Name="PriorityCritical" Value="3" Content="Critical" Margin="10"/>
         </HorizontalStackLayout>
         <Button Text="Add Todo" Clicked="Button_Clicked" Margin="10"/>
     </VerticalStackLayout>

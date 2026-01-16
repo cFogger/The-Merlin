@@ -25,10 +25,10 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
-            <Label Grid.Row="0" Grid.Column="1" Text="{Binding TodoText}" />
+            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding TodoText}" TextChanged="ItemChanged"/>
             
             <Label Text="Desc:" Grid.Row="1" Grid.Column="0"></Label>
-            <Label Grid.Column="1" Grid.Row="1" Text="{Binding TodoInside}" />
+            <Editor Grid.Column="1" Grid.Row="1" Text="{Binding TodoInside}" TextChanged="ItemChanged" AutoSize="TextChanges"/>
 
             <HorizontalStackLayout Grid.Row="0" Grid.Column="2" HeightRequest="32">
                 <Label Text="Created:"/>
@@ -44,11 +44,11 @@
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
                 <Label Text="Is Completed:"/>
-                <Switch IsToggled="{Binding IsCompleted}"/>
+                <Switch IsToggled="{Binding IsCompleted}" Toggled="Switch_Toggled"/>
             </HorizontalStackLayout>
 
             <Label Text="Time Type:" Grid.Row="2" Grid.Column="0"></Label>
-            <Picker x:Name="TimeTypePckr" SelectedIndexChanged="TimeTypePckr_SelectedIndexChanged" Grid.Row="2" Grid.Column="1">
+            <Picker x:Name="TimeTypePckr" SelectedIndex="{Binding TimeMode}" SelectedIndexChanged="TimeTypePckr_SelectedIndexChanged" Grid.Row="2" Grid.Column="1">
                 <Picker.Items>
                     <x:String>No time</x:String>
                     <x:String>Predefined</x:String>
@@ -57,7 +57,8 @@
                 </Picker.Items>
             </Picker>
 
-            <HorizontalStackLayout Grid.Row="4" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Spacing="10" Margin="20">
+            <StackLayout x:Name="TimerStack" Grid.Row="4" Grid.ColumnSpan="3"></StackLayout>
+            <HorizontalStackLayout Grid.Row="5" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Spacing="10" Margin="20">
                 <Button
                 Text="Done"
                 x:Name="ToggleButton1"
@@ -76,7 +77,6 @@
                 TextColor="GhostWhite"
                     FontSize="Small" Padding="15"/>
             </HorizontalStackLayout>
-            <StackLayout x:Name="TimerStack" Grid.Row="5" Grid.ColumnSpan="3"></StackLayout>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

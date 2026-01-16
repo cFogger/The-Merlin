@@ -10,11 +10,13 @@ namespace The_Merlin.Data
     {
         public readonly SQLiteConnection dbConnection;
         public TodoData TodoData { get { return new TodoData(this); } }
+        public TimelineData TimelineData { get { return new TimelineData(this); } }
         public DataManager()
         {
             dbConnection = new SQLiteConnection(Path.Combine(FileSystem.AppDataDirectory, "themerlin.db3"));
             Debug.WriteLine($"Database path: {Path.Combine(FileSystem.AppDataDirectory, "themerlin.db3")}");
             dbConnection.CreateTable<Models.TodoItem>();
+            dbConnection.CreateTable<Models.TimelineItem>();
         }
     }
 }

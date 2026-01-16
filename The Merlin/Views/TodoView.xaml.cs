@@ -7,7 +7,6 @@ namespace The_Merlin.Views;
 
 public partial class TodoView : ContentView
 {
-    readonly DataManager dtm = App.DataManager;
     readonly TodoItem todoItem;
 
     public TodoView(TodoItem ti)
@@ -31,9 +30,6 @@ public partial class TodoView : ContentView
         this.BackgroundColor = ti.IsCompleted ? Colors.Green : this.BackgroundColor;
         todoItem = ti;
         TitleLabel.Text = ti.TodoText;
-        TextEditor.Text = ti.TodoInside;
-        if (!string.IsNullOrEmpty(ti.TodoInside))
-            isItNoted.IsVisible = true;
         this.BindingContext = this;
     }
 
@@ -54,11 +50,4 @@ public partial class TodoView : ContentView
     {
         NavigateToDetail();
     });
-
-
-    private void TextEditor_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        todoItem.TodoInside = TextEditor.Text;
-        dtm.TodoData.UpdateItem(todoItem);
-    }
 }

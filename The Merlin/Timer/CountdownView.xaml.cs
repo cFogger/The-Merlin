@@ -7,7 +7,7 @@ public partial class CountdownView : ContentView
     bool todoMode = false;
     TodoItem item;
 
-	public CountdownView(TodoItem TodoCnt)
+	public CountdownView(TodoItem TodoCnt, Action<TimelineItem> saveTimelineItem)
 	{
 		InitializeComponent();
         App.CountdownTimer = TodoCnt.Time;

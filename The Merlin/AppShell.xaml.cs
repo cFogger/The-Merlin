@@ -12,20 +12,8 @@ namespace The_Merlin
             InitializeComponent();
 
             Routing.RegisterRoute("DayView", typeof(DayView));
-            Routing.RegisterRoute("TimerView", typeof(ChronoPage));
             Routing.RegisterRoute("TodoAddView", typeof(TodoAddPage));
             Routing.RegisterRoute("TodoDetailView", typeof(TodoDetail));
-
-            Items.Add(new MenuItem
-            {
-                Text = "Timer",
-                Command = new Command(async () =>
-                {
-                    if (AppShell.Current.FlyoutBehavior != FlyoutBehavior.Locked)
-                        AppShell.Current.FlyoutIsPresented = false;
-                    await Shell.Current.GoToAsync("TimerView");
-                })
-            });
 
             Items.Add(new MenuItem
             {

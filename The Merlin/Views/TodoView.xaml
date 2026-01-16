@@ -11,15 +11,11 @@
             <ColumnDefinition Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <VerticalStackLayout Grid.Column="0" HorizontalOptions="Fill">
-            <HorizontalStackLayout>
-                <Label x:Name="isItNoted" Text="📃" IsVisible="False"></Label>
-                <Label 
-            x:Name="TitleLabel"
-            VerticalOptions="Center" 
-            HorizontalOptions="Fill"
-            Margin="25,5,25,5"/>
-            </HorizontalStackLayout>
-            <Editor x:Name="TextEditor" Margin="0,0,0,5" IsVisible="False" TextChanged="TextEditor_TextChanged"/>
+            <Label 
+                x:Name="TitleLabel"
+                VerticalOptions="Center" 
+                HorizontalOptions="Fill"
+                Margin="25,5,25,5"/>
         </VerticalStackLayout>
     </Grid>
 </ContentView>
