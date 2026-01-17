@@ -16,10 +16,5 @@ namespace The_Merlin.Timer
         {
             if (IsChronoRunning) ChronoTimer = ChronoTimer.Add(TimeSpan.FromSeconds(1));
         }
-
-        public static void CheckIfTodoRunning()
-        {
-            
-        }
     }
 }

@@ -14,7 +14,7 @@ public partial class TodoDetail : ContentPage
         myTodo = _todoId;
         InitializeComponent();
         BindingContext = myTodo;
-        totalHolder.Text = App.DataManager.TimelineData.GetTotal(myTodo.Id).ToString();
+        totalHolder.BindingContext = App.DataManager.TimelineData.GetTotal(myTodo.Id);
     }
 
     private async void DeleteButton_Clicked(object sender, EventArgs e)
