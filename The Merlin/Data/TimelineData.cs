@@ -20,6 +20,34 @@ namespace The_Merlin.Data
             return dtm.dbConnection.Table<Models.TimelineItem>().FirstOrDefault(x => x.Id == id);
         }
 
+        public TimeSpan GetTotal(int todoId)
+        {
+            TimeSpan ts = TimeSpan.Zero;
+            List<TimelineItem> tli = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == todoId && x.Ends != null).ToList();
+            foreach (TimelineItem item in tli)
+            {
+                ts = ts.Add(item.Ends.Value - item.Starts);
+            }
+            return ts;
+        }
+
+        public TimeSpan GetTodays(int todoId, DateTime? date = null)
+        {
+            if (date == null)
+                date = DateTime.Today;
+
+            TimeSpan ts = TimeSpan.Zero;
+            List<TimelineItem> tli = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == todoId && x.Starts.Date == date.Value.Date && x.Ends != null).ToList();
+            foreach (TimelineItem item in tli)
+                ts = ts.Add(item.Ends.Value - item.Starts);
+            return ts;
+        }
+
+        public TimelineItem? checkRunningTodo()
+        {
+            return dtm.dbConnection.Table<TimelineItem>().Where(x => x.Ends == null).FirstOrDefault();
+        }
+
         public void EndItem(int todoId, DateTime? ends)
         {
             var myItem = dtm.dbConnection.Table<Models.TimelineItem>().First(x => x.TodoId == todoId && x.Ends == null);

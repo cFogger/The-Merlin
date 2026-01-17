@@ -6,12 +6,27 @@ public partial class TimerView : ContentView
 {
     Action<bool> saveTimelineItem;
 
-    public TimerView(Action<bool> _saveTimelineItem)
+    public TimerView(Action<bool> _saveTimelineItem, TodoItem _myTodo)
     {
         InitializeComponent();
         StartButtonOrganize();
-        saveTimelineItem = _saveTimelineItem;
-        App.AppTimer.Tick += AppTimer_Tick;
+        if (TimerService.ActiveTodoSession != null)
+            if (TimerService.ActiveTodoSession.Id != _myTodo.Id)
+            {
+                TimerLabel.Text = "Another todo running";
+                this.IsEnabled = false;
+            }
+            else
+            {
+                StartButtonOrganize(false);
+                saveTimelineItem = _saveTimelineItem;
+                App.AppTimer.Tick += AppTimer_Tick;
+            }
+        else
+        {
+            saveTimelineItem = _saveTimelineItem;
+            App.AppTimer.Tick += AppTimer_Tick;
+        }
     }
 
     private void AppTimer_Tick(object? sender, EventArgs e)
