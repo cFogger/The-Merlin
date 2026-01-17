@@ -25,43 +25,55 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
-            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding TodoText}" TextChanged="ItemChanged"/>
+            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Todo.TodoText}" TextChanged="ItemChanged"/>
             
             <Label Text="Desc:" Grid.Row="1" Grid.Column="0"></Label>
-            <Editor Grid.Column="1" Grid.Row="1" Text="{Binding TodoInside}" TextChanged="ItemChanged" AutoSize="TextChanges"/>
+            <Editor Grid.Column="1" Grid.Row="1" Text="{Binding Todo.TodoInside}" TextChanged="ItemChanged" AutoSize="TextChanges"/>
 
             <HorizontalStackLayout Grid.Row="0" Grid.Column="2" HeightRequest="32">
                 <Label Text="Created:"/>
-                <Label Text="{Binding CreatedAt}"/>
+                <Label Text="{Binding Todo.CreatedAt}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="1" Grid.Column="2" HeightRequest="32">
                 <Label Text="Total:"/>
                 <!--<Label Text="{Binding Priority}"/>-->
-                <Label x:Name="totalHolder" Text="{Binding TotalMinutes}"/>
+                <Label Text="{Binding TimeString}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HeightRequest="32">
                 <Label Text="Assigned:"></Label>
-                <DatePicker Date="{Binding AssignedDate}"/>
+                <DatePicker Date="{Binding Todo.AssignedDate}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
                 <Label Text="Is Completed:"/>
-                <Switch IsToggled="{Binding IsCompleted}" Toggled="Switch_Toggled"/>
+                <Switch IsToggled="{Binding Todo.IsCompleted}" Toggled="Switch_Toggled"/>
             </HorizontalStackLayout>
 
             <Label Text="Time Type:" Grid.Row="2" Grid.Column="0"></Label>
-            <Picker x:Name="TimeTypePckr" SelectedIndex="{Binding TimeMode}" SelectedIndexChanged="TimeTypePckr_SelectedIndexChanged" Grid.Row="2" Grid.Column="1">
+            <Picker x:Name="TimeTypePckr" SelectedIndex="{Binding Todo.TimeMode}" SelectedIndexChanged="TimeTypePckr_SelectedIndexChanged" Grid.Row="2" Grid.Column="1">
                 <Picker.Items>
                     <x:String>No time</x:String>
                     <x:String>Timer</x:String>
                 </Picker.Items>
             </Picker>
 
-            <StackLayout x:Name="TimerStack" Grid.Row="5" Grid.ColumnSpan="3"></StackLayout>
+            <StackLayout Grid.Row="5" Grid.ColumnSpan="3">
+                <Label
+                Text="{Binding TimeString}"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                FontAttributes="Bold" 
+                FontSize="50"></Label>
+                <Button
+                    Text="StartStop"
+                    Command="{Binding StartStopCommand}"
+                    FontSize="24" 
+                    FontAttributes="Bold" 
+                    BackgroundColor="#FF1E00" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1"/>
+            </StackLayout>
             <HorizontalStackLayout Grid.Row="4" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Spacing="10" Margin="20">
                 <Button
                     Text="Delete"
-                    x:Name="DeleteButton"
-                    Clicked="DeleteButton_Clicked"
+                    Command="{Binding DeleteCommand}"
                     VerticalOptions="Center"
                     HorizontalOptions="End"
                     BackgroundColor="#9D1818"

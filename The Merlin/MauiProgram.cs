@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using The_Merlin.Interfaces;
+using The_Merlin.Services;
+using The_Merlin.ViewModels;
+using The_Merlin.Views;
 
 namespace The_Merlin
 {
@@ -15,8 +19,14 @@ namespace The_Merlin
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<IMessageService, MessageService>();
+            builder.Services.AddSingleton<ITimerService, TimerService>();
+
+            builder.Services.AddTransient<TodoDetailViewModel>();
+
+            builder.Services.AddTransient<TodoDetail>();
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

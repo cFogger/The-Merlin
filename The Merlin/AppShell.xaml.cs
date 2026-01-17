@@ -1,6 +1,6 @@
 ﻿using The_Merlin.Data;
 using The_Merlin.Models;
-using The_Merlin.Timer;
+using The_Merlin.Services;
 using The_Merlin.Views;
 
 namespace The_Merlin
@@ -10,14 +10,6 @@ namespace The_Merlin
         public AppShell()
         {
             InitializeComponent();
-
-            TimelineItem? tli = App.DataManager.TimelineData.checkRunningTodo();
-            if (tli != null)
-            {
-                TimerService.ActiveTodoSession = App.DataManager.TodoData.GetItem(tli.TodoId);
-                TimerService.IsChronoRunning = true;
-                TimerService.ChronoTimer = DateTime.Now - tli.Starts;
-            }
 
             Routing.RegisterRoute("DayView", typeof(DayView));
             Routing.RegisterRoute("TodoAddView", typeof(TodoAddPage));

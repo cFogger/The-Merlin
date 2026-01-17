@@ -55,9 +55,13 @@ namespace The_Merlin.Data
             dtm.dbConnection.Update(myItem);
         }
 
-        public void AddItem(TimelineItem ti)
+        public int AddItem(TimelineItem ti)
         {
-            dtm.dbConnection.Insert(ti);
+            if (checkRunningTodo() != null)
+            {
+                return 0;
+            }
+            return dtm.dbConnection.Insert(ti);
         }
 
         public void UpdateItem(TimelineItem ti)

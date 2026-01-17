@@ -81,16 +81,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Timer\ChronoView.xaml.cs" />
-	  <Compile Remove="Timer\CountdownView.xaml.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Remove="Timer\ChronoView.xaml" />
-	  <MauiXaml Remove="Timer\CountdownView.xaml" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
@@ -98,9 +88,6 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="DayView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Timer\TimerView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TodoAddPage.xaml">

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 using The_Merlin.Data;
 using The_Merlin.Models;
@@ -37,8 +38,12 @@ public partial class TodoView : ContentView
     {
         try
         {
-            //await Shell.Current.GoToAsync($"TodoDetailView?todoid={todoItem.Id}");
-            await Shell.Current.Navigation.PushAsync(new TodoDetail(todoItem));
+            var parameters = new Dictionary<string, object>
+            {
+                { "todo", todoItem }
+            };
+            await Shell.Current.GoToAsync("TodoDetailView", parameters);
+            //await Shell.Current.Navigation.PushAsync(new TodoDetail(todoItem));
         }
         catch (Exception ex)
         {
