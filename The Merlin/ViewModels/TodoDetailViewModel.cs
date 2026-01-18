@@ -7,10 +7,14 @@ namespace The_Merlin.ViewModels
     public class TodoDetailViewModel : BaseViewModel
     {
         private TodoItem _todo;
-        public TodoItem Todo { get { return _todo; } set { _todo = value; OnPropertyChanged(); App.DataManager.TodoData.UpdateItem(value); } }
+        public TodoItem Todo { get { return _todo; } set { _todo = value; OnPropertyChanged(); App.DataManager.TodoData.UpdateItem(value); TotalTimeString = App.DataManager.TimelineData.GetTotal(value.Id).ToString(); }
+        }
 
         private string _timeString;
         public string TimeString { get { return _timeString; } set { _timeString = value; OnPropertyChanged(); } }
+
+        private string _totalTimeString;
+        public string TotalTimeString { get { return _totalTimeString; } set { _totalTimeString = value; OnPropertyChanged(); } }
 
         public Command StartStopCommand { get; }
         public Command DeleteCommand { get; }
@@ -29,7 +33,11 @@ namespace The_Merlin.ViewModels
 
         private void TodoDetailViewModel_Tick(object? sender, EventArgs e)
         {
-            TimeString = _timerService.TimeString();
+            if (_timerService.IsTimerRunning())
+            if (_timerService.ActiveTodoSession().Id == Todo.Id)
+                TimeString = _timerService.TimeString();
+            else
+                TimeString = "Another todo running";
         }
 
         private void OnStartStop()

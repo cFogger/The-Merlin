@@ -37,7 +37,7 @@
             <HorizontalStackLayout Grid.Row="1" Grid.Column="2" HeightRequest="32">
                 <Label Text="Total:"/>
                 <!--<Label Text="{Binding Priority}"/>-->
-                <Label Text="{Binding TimeString}"/>
+                <Label Text="{Binding TotalTimeString}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HeightRequest="32">
                 <Label Text="Assigned:"></Label>
