@@ -65,7 +65,7 @@
                 FontSize="50"></Label>
                 <Button
                     Text="{Binding StartButtonText}"
-                    Command="{Binding StartStopCommand}" FontSize="24" FontAttributes="Bold" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
+                    Command="{Binding StartStopCommand}" TextColor="AliceBlue" FontSize="24" FontAttributes="Bold" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"

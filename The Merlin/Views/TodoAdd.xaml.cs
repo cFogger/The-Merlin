@@ -16,7 +16,7 @@ public partial class TodoAdd : ContentView
             TodoText = TitleEntry.Text,
             CreatedAt = DateTime.Now,
             IsCompleted = false,
-            AssignedDate = AssignedDate.Date.GetValueOrDefault(DateTime.Today)
+            AssignedDate = DateTime.Today
         });
         reloadDatas();
     });
@@ -26,6 +26,5 @@ public partial class TodoAdd : ContentView
         InitializeComponent();
         this.BindingContext = this;
         reloadDatas = _reloadDatas;
-        AssignedDate.Date = DateTime.Today.Date;
     }
 }

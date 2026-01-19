@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Net.Mime;
-using System.Text;
-using The_Merlin.Interfaces;
-using The_Merlin.Models;
+﻿using The_Merlin.Models;
 
 namespace The_Merlin.Data
 {
@@ -14,6 +8,12 @@ namespace The_Merlin.Data
         public TimelineData(DataManager dataManager)
         {
             dtm = dataManager;
+        }
+
+
+        public List<TimelineItem> GetAllItems()
+        {
+            return dtm.dbConnection.Table<TimelineItem>().ToList();
         }
 
         public TimelineItem GetItem(int id)

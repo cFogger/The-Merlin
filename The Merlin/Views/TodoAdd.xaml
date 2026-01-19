@@ -16,11 +16,6 @@
                 ReturnCommand="{Binding AddCommand}" />
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Column="1">
-            <DatePicker 
-                x:Name="AssignedDate"
-                Margin="15,0"
-                VerticalOptions="Center" 
-                HorizontalOptions="End" BackgroundColor="#2F2F2F"/>
             <Button 
                 Text="Add Todo"
                 x:Name="AddButton"

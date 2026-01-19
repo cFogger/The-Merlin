@@ -24,10 +24,13 @@ namespace The_Merlin
             builder.Services.AddSingleton<ITimerService, TimerService>();
             builder.Services.AddSingleton<DataManager>();
 
-            builder.Services.AddTransient<TodoDetailViewModel>();
-            builder.Services.AddSingleton<FlyoutMiniTodoViewModel>();
+            builder.Services.AddTransient<TimelineLogsViewModel>();
+            builder.Services.AddTransient<TimelineLogsView>();
 
+            builder.Services.AddTransient<TodoDetailViewModel>();
             builder.Services.AddTransient<TodoDetail>();
+
+            builder.Services.AddSingleton<FlyoutMiniTodoViewModel>();
             builder.Services.AddSingleton<FlyoutMiniTodoView>();
 #if DEBUG
             builder.Logging.AddDebug();

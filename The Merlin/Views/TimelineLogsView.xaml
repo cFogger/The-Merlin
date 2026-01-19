@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="The_Merlin.Views.TimelineLogsView"
+             Title="TimelineLogsView">
+    <VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10">
+            <CollectionView.Header>
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="85"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="ID" FontAttributes="Bold" Grid.Column="0"></Label>
+                    <Label Text="Todo" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"></Label>
+                    <Label Text="Duration(m)" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <Label Text="Starts" FontAttributes="Bold" Grid.Column="3" HorizontalOptions="Center"></Label>
+                    <Label Text="Ends" FontAttributes="Bold" Grid.Column="4" HorizontalOptions="Center"></Label>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="85"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="{Binding Path=Id}" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center"></Label>
+                        <Label Text="{Binding Path=GetTodoName}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"></Label>
+                        <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"></Label>
+                        <VerticalStackLayout Grid.Column="3">
+                            <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="4">
+                            <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

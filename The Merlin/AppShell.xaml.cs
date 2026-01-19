@@ -15,6 +15,18 @@ namespace The_Merlin
             Routing.RegisterRoute("DayView", typeof(DayView));
             Routing.RegisterRoute("TodoAddView", typeof(TodoAddPage));
             Routing.RegisterRoute("TodoDetailView", typeof(TodoDetail));
+            Routing.RegisterRoute("TimelineLogsView", typeof(TimelineLogsView));
+
+            Items.Add(new MenuItem
+            {
+                Text = "Timeline",
+                Command = new Command(async () =>
+                {
+                    if (AppShell.Current.FlyoutBehavior != FlyoutBehavior.Locked)
+                        AppShell.Current.FlyoutIsPresented = false;
+                    await Shell.Current.GoToAsync("TimelineLogsView");
+                })
+            });
 
             Items.Add(new MenuItem
             {
@@ -26,6 +38,7 @@ namespace The_Merlin
                     await Shell.Current.GoToAsync("TodoAddView");
                 })
             });
+
 
             //TodoDates MenuItems
             foreach (DateTime dtti in Application.Current.Handler.MauiContext.Services.GetService<DataManager>().TodoData.GetAssignedDates().OrderByDescending(x=>x.Ticks))
