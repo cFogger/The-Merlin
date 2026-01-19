@@ -7,13 +7,14 @@ namespace The_Merlin;
 public partial class DayView : ContentPage
 {
     DateTime selectedDate;
-    public DataManager dtm = App.DataManager;
+    private DataManager dtm;
     public string DayOfPage { set { if (!string.IsNullOrEmpty(value)) selectedDate = new DateTime(long.Parse(value.Split('/')[0])); else selectedDate = DateTime.Today; ReloadTodos(); } }
 
-    public DayView()
+    public DayView(DataManager dataManager)
 	{
         InitializeComponent();
 		this.BindingContext = this;
+        dtm = dataManager;
         //ReloadTodos();
     }
 

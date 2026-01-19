@@ -1,4 +1,5 @@
-﻿using The_Merlin.Interfaces;
+﻿using The_Merlin.Data;
+using The_Merlin.Interfaces;
 using The_Merlin.Models;
 
 namespace The_Merlin.ViewModels
@@ -7,7 +8,20 @@ namespace The_Merlin.ViewModels
     public class TodoDetailViewModel : BaseViewModel
     {
         private TodoItem _todo;
-        public TodoItem Todo { get { return _todo; } set { _todo = value; OnPropertyChanged(); App.DataManager.TodoData.UpdateItem(value); TotalTimeString = App.DataManager.TimelineData.GetTotal(value.Id).ToString(); }
+        public TodoItem Todo
+        {
+            get { return _todo; }
+            set
+            {
+                _todo = value;
+                OnPropertyChanged();
+                _dataManager.TodoData.UpdateItem(value);
+                TotalTimeString = _dataManager.TimelineData.GetTotal(value.Id).ToString(@"hh\:mm\:ss");
+                if (_timerService.IsTimerRunning() && _timerService.ActiveTodoSession().Id == value.Id)
+                    TimerRunning = true;
+                else
+                    TimerRunning = false;
+            }
         }
 
         private string _timeString;
@@ -16,36 +30,63 @@ namespace The_Merlin.ViewModels
         private string _totalTimeString;
         public string TotalTimeString { get { return _totalTimeString; } set { _totalTimeString = value; OnPropertyChanged(); } }
 
+        private string _startButtonText;
+        public string StartButtonText
+        {
+            get { return _startButtonText; }
+            set { _startButtonText = value; OnPropertyChanged(); }
+        }
+
+        private bool _timerRunning;
+        public bool TimerRunning
+        {
+            get { return _timerRunning; }
+            set
+            {
+                _timerRunning = value;
+                OnPropertyChanged();
+
+                if (value)
+                    StartButtonText = "Stop";
+                else
+                    StartButtonText = "Start";
+            }
+        }
+
         public Command StartStopCommand { get; }
         public Command DeleteCommand { get; }
 
         private IMessageService _messageService;
         private ITimerService _timerService;
-
-        public TodoDetailViewModel(IMessageService msgService, ITimerService timerService)
+        private DataManager _dataManager;
+            
+        public TodoDetailViewModel(IMessageService msgService, ITimerService timerService, DataManager dataManager)
         {
             StartStopCommand = new Command(OnStartStop);
             DeleteCommand = new Command(DeleteAsync);
             _timerService = timerService;
             _messageService = msgService;
+            _dataManager = dataManager;
             _timerService.Dispatcher().Tick += TodoDetailViewModel_Tick;
+
         }
 
         private void TodoDetailViewModel_Tick(object? sender, EventArgs e)
         {
             if (_timerService.IsTimerRunning())
-            if (_timerService.ActiveTodoSession().Id == Todo.Id)
-                TimeString = _timerService.TimeString();
-            else
-                TimeString = "Another todo running";
+                if (_timerService.ActiveTodoSession().Id == Todo.Id)
+                    TimeString = _timerService.TimeString();
+                else
+                    TimeString = "Another todo running";
         }
 
         private void OnStartStop()
         {
             if (!_timerService.IsTimerRunning())
-                if (App.DataManager.TimelineData.AddItem(new TimelineItem { Starts = DateTime.Now, TodoId = Todo.Id }) == 1)
+                if (_dataManager.TimelineData.AddItem(new TimelineItem { Starts = DateTime.Now, TodoId = Todo.Id }) == 1)
                 {
                     _timerService.StartTimer(Todo);
+                    TimerRunning = true;
                 }
                 else
                 {
@@ -55,8 +96,9 @@ namespace The_Merlin.ViewModels
             {
                 if (_timerService.ActiveTodoSession().Id == Todo.Id)
                 {
-                    App.DataManager.TimelineData.EndItem(Todo.Id, DateTime.Now);
+                    _dataManager.TimelineData.EndItem(Todo.Id, DateTime.Now);
                     _timerService.StopTimer();
+                    TimerRunning = false;
                 }
                 else
                 {
@@ -67,7 +109,7 @@ namespace The_Merlin.ViewModels
 
         private async void DeleteAsync()
         {
-            App.DataManager.TodoData.DeleteItem(Todo);
+            _dataManager.TodoData.DeleteItem(Todo);
             await Shell.Current.Navigation.PopAsync();
         }
     }

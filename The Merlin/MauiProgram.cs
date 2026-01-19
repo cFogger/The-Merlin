@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using The_Merlin.Data;
 using The_Merlin.Interfaces;
 using The_Merlin.Services;
 using The_Merlin.ViewModels;
@@ -21,10 +22,13 @@ namespace The_Merlin
 
             builder.Services.AddSingleton<IMessageService, MessageService>();
             builder.Services.AddSingleton<ITimerService, TimerService>();
+            builder.Services.AddSingleton<DataManager>();
 
             builder.Services.AddTransient<TodoDetailViewModel>();
+            builder.Services.AddSingleton<FlyoutMiniTodoViewModel>();
 
             builder.Services.AddTransient<TodoDetail>();
+            builder.Services.AddSingleton<FlyoutMiniTodoView>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

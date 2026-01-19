@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using The_Merlin.Data;
 using The_Merlin.Interfaces;
 using The_Merlin.Models;
 
@@ -16,12 +17,12 @@ namespace The_Merlin.Services
 
         public IDispatcherTimer TodoTimer;
 
-        public TimerService()
+        public TimerService(DataManager data)
         {
-            TimelineItem? tli = App.DataManager.TimelineData.checkRunningTodo();
+            TimelineItem? tli = data.TimelineData.checkRunningTodo();
             if (tli != null)
             {
-                _ActiveTodoSession = App.DataManager.TodoData.GetItem(tli.TodoId);
+                _ActiveTodoSession = data.TodoData.GetItem(tli.TodoId);
                 IsChronoRunning = true;
                 TodoTimeSpan = DateTime.Now - tli.Starts;
             }
@@ -34,7 +35,7 @@ namespace The_Merlin.Services
 
         private void TodoTimer_Tick(object? sender, EventArgs e)
         {
-            if (IsChronoRunning) { TodoTimeSpan = TodoTimeSpan.Add(TimeSpan.FromSeconds(1)); TodoTimerText = TodoTimeSpan.ToString(); }
+            if (IsChronoRunning) { TodoTimeSpan = TodoTimeSpan.Add(TimeSpan.FromSeconds(1)); TodoTimerText = TodoTimeSpan.ToString(@"hh\:mm\:ss"); }
         }
 
         public Task StartTimer(TodoItem todo)

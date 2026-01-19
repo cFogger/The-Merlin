@@ -1,13 +1,16 @@
+using The_Merlin.Data;
 using The_Merlin.Models;
 
 namespace The_Merlin;
 
 public partial class TodoAddPage : ContentPage
 {
-	public TodoAddPage()
+	private DataManager _dataManager;
+	public TodoAddPage(DataManager data)
 	{
 		InitializeComponent();
 		this.BindingContext = this;
+		_dataManager = data;
     }
 
 	public string priorityValue { get; set; }
@@ -27,6 +30,6 @@ public partial class TodoAddPage : ContentPage
 			RepeatSpan = TimeSpan.Zero,
 			Priority = int.Parse(priorityValue)
         };
-		App.DataManager.TodoData.AddItem(newTodo);
+		_dataManager.TodoData.AddItem(newTodo);
     }
 }

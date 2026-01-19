@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Net.Mime;
 using System.Numerics;
 using System.Text;
+using The_Merlin.Interfaces;
 using The_Merlin.Models;
 
 namespace The_Merlin.Data

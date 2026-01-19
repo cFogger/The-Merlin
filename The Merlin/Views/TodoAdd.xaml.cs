@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using The_Merlin.Data;
 using The_Merlin.Models;
+using The_Merlin.ViewModels;
 
 namespace The_Merlin.Views;
 
@@ -10,7 +11,7 @@ public partial class TodoAdd : ContentView
 
     public ICommand AddCommand => new Command(() =>
     {
-        App.DataManager.TodoData.AddItem(new TodoItem()
+        Application.Current.Handler.MauiContext.Services.GetService<DataManager>().TodoData.AddItem(new TodoItem()
         {
             TodoText = TitleEntry.Text,
             CreatedAt = DateTime.Now,

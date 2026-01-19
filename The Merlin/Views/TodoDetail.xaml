@@ -64,11 +64,21 @@
                 FontAttributes="Bold" 
                 FontSize="50"></Label>
                 <Button
-                    Text="StartStop"
-                    Command="{Binding StartStopCommand}"
-                    FontSize="24" 
-                    FontAttributes="Bold" 
-                    BackgroundColor="#FF1E00" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1"/>
+                    Text="{Binding StartButtonText}"
+                    Command="{Binding StartStopCommand}" FontSize="24" FontAttributes="Bold" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding TimerRunning}"
+                                     Value="true">
+                            <Setter Property="BackgroundColor" Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding TimerRunning}"
+                                     Value="false">
+                            <Setter Property="BackgroundColor" Value="Green"></Setter>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
             </StackLayout>
             <HorizontalStackLayout Grid.Row="4" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Spacing="10" Margin="20">
                 <Button
