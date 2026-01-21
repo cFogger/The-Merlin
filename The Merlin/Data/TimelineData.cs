@@ -13,7 +13,12 @@ namespace The_Merlin.Data
 
         public List<TimelineItem> GetAllItems()
         {
-            return dtm.dbConnection.Table<TimelineItem>().ToList();
+            return dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).ToList();
+        }
+
+        public List<TimelineItem> GetLastxItems(int Count)
+        {
+            return dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).Take(Count).ToList();
         }
 
         public TimelineItem GetItem(int id)

@@ -24,6 +24,9 @@ namespace The_Merlin
             builder.Services.AddSingleton<ITimerService, TimerService>();
             builder.Services.AddSingleton<DataManager>();
 
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<MainPageViewModel>();
+
             builder.Services.AddTransient<TimelineLogsViewModel>();
             builder.Services.AddTransient<TimelineLogsView>();
 

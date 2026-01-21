@@ -6,11 +6,16 @@
     xmlns:local="clr-namespace:The_Merlin"
     xmlns:views="clr-namespace:The_Merlin.Views"
     Title="𝕸 𝕰 𝕽 𝕷 𝕴 𝕹" 
-    FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}" >
-    <ShellContent
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage"    
-        Title="MainPage" />
+    FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}">
+    <FlyoutItem Title="Main">
+        <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Timeline Logs">
+        <ShellContent Route="TimelineLogs" ContentTemplate="{DataTemplate views:TimelineLogsView}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Todo Add">
+        <ShellContent Route="TodoAdd" ContentTemplate="{DataTemplate local:TodoAddPage}" />
+    </FlyoutItem>
     <Shell.FlyoutHeader>
             <views:FlyoutMiniTodoView />
     </Shell.FlyoutHeader>

@@ -12,7 +12,7 @@ namespace The_Merlin.Services
     {
         public bool IsChronoRunning = false;
         public TimeSpan TodoTimeSpan;
-        public TodoItem _ActiveTodoSession = null;
+        public TodoItem? _ActiveTodoSession = null;
         public string TodoTimerText;
 
         public IDispatcherTimer TodoTimer;

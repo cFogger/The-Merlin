@@ -6,14 +6,14 @@ using The_Merlin.Models;
 
 namespace The_Merlin.ViewModels
 {
-    public class TimelineLogsViewModel : BaseViewModel
+    public class MainPageViewModel : BaseViewModel
     {
         public List<TimelineItem> TimelineIS { get { return _timelineIS; } set { _timelineIS = value; OnPropertyChanged(); } }
         private List<TimelineItem> _timelineIS;
 
-        public TimelineLogsViewModel(DataManager dataManager)
+        public MainPageViewModel(DataManager dataManager)
         {
-            TimelineIS = dataManager.TimelineData.GetAllItems();
+            TimelineIS = dataManager.TimelineData.GetLastxItems(5);
         }
     }
 }

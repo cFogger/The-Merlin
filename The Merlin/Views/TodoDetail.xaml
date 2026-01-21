@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.TodoDetail"
-             Title="TodoDetail">
+             Title="{Binding Todo.TodoText}">
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="VerticalOptions" Value="Center"></Setter>
@@ -25,10 +25,10 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
-            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Todo.TodoText}" TextChanged="ItemChanged"/>
+            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Todo.TodoText}"/>
             
-            <Label Text="Desc:" Grid.Row="1" Grid.Column="0"></Label>
-            <Editor Grid.Column="1" Grid.Row="1" Text="{Binding Todo.TodoInside}" TextChanged="ItemChanged" AutoSize="TextChanges"/>
+            <Label Text="Name:" Grid.Row="1" Grid.Column="0"></Label>
+            <Editor Grid.Column="1" Grid.Row="1" Text="{Binding Todo.TodoInside}" AutoSize="TextChanges"/>
 
             <HorizontalStackLayout Grid.Row="0" Grid.Column="2" HeightRequest="32">
                 <Label Text="Created:"/>
@@ -45,11 +45,11 @@
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
                 <Label Text="Is Completed:"/>
-                <Switch IsToggled="{Binding Todo.IsCompleted}" Toggled="Switch_Toggled"/>
+                <Switch IsToggled="{Binding Todo.IsCompleted}"/>
             </HorizontalStackLayout>
 
             <Label Text="Time Type:" Grid.Row="2" Grid.Column="0"></Label>
-            <Picker x:Name="TimeTypePckr" SelectedIndex="{Binding Todo.TimeMode}" SelectedIndexChanged="TimeTypePckr_SelectedIndexChanged" Grid.Row="2" Grid.Column="1">
+            <Picker x:Name="TimeTypePckr" SelectedIndex="{Binding Todo.TimeMode}" Grid.Row="2" Grid.Column="1">
                 <Picker.Items>
                     <x:String>No time</x:String>
                     <x:String>Timer</x:String>
@@ -65,7 +65,7 @@
                 FontSize="50"></Label>
                 <Button
                     Text="{Binding StartButtonText}"
-                    Command="{Binding StartStopCommand}" TextColor="AliceBlue" FontSize="24" FontAttributes="Bold" CornerRadius="20" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
+                    Command="{Binding StartStopCommand}" VerticalOptions="Center" TextColor="AliceBlue" FontSize="24" FontAttributes="Bold" CornerRadius="20" WidthRequest="140" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"

@@ -87,7 +87,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="DayView.xaml">
+	  <MauiXaml Update="Views\DayView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\FlyoutMiniTodoView.xaml">

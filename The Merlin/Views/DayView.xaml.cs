@@ -22,7 +22,7 @@ public partial class DayView : ContentPage
     {
         MainStack.Children.Clear();
 
-        this.Title = selectedDate.ToString("dd MM yy");
+        this.Title = selectedDate.ToString("dd.MM.yy");
 
         foreach (var item in dtm.TodoData.GetUndoneItems(selectedDate))
             MainStack.Children.Add(new Views.TodoView(item));
