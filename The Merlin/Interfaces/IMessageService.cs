@@ -7,5 +7,6 @@ namespace The_Merlin.Interfaces
     public interface IMessageService
     {
         Task ShowAsync(string title, string message);
+        Task<string> ShowPromptAsync(string title, string message, string placeholder);
     }
 }

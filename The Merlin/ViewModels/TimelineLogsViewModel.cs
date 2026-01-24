@@ -11,9 +11,9 @@ namespace The_Merlin.ViewModels
         public List<TimelineItem> TimelineIS { get { return _timelineIS; } set { _timelineIS = value; OnPropertyChanged(); } }
         private List<TimelineItem> _timelineIS;
 
-        public TimelineLogsViewModel(DataManager dataManager)
+        public TimelineLogsViewModel(TimelineData timelineData)
         {
-            TimelineIS = dataManager.TimelineData.GetAllItems();
+            TimelineIS = timelineData.GetAllItems();
         }
     }
 }

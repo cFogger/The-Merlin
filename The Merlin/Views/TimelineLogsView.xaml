@@ -4,7 +4,7 @@
              x:Class="The_Merlin.Views.TimelineLogsView"
              Title="TimelineLogsView">
     <VerticalStackLayout>
-        <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10">
+        <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10" VerticalScrollBarVisibility="Always">
             <CollectionView.Header>
                 <Grid ColumnSpacing="10">
                     <Grid.ColumnDefinitions>

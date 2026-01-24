@@ -11,7 +11,7 @@ public partial class TodoAdd : ContentView
 
     public ICommand AddCommand => new Command(() =>
     {
-        Application.Current.Handler.MauiContext.Services.GetService<DataManager>().TodoData.AddItem(new TodoItem()
+        _todoData.AddItem(new TodoItem()
         {
             TodoText = TitleEntry.Text,
             CreatedAt = DateTime.Now,
@@ -21,10 +21,12 @@ public partial class TodoAdd : ContentView
         reloadDatas();
     });
 
-    public TodoAdd(Action _reloadDatas)
+    private TodoData _todoData;
+    public TodoAdd(Action _reloadDatas, TodoData todoData = null)
     {
         InitializeComponent();
         this.BindingContext = this;
         reloadDatas = _reloadDatas;
+        _todoData = todoData;
     }
 }

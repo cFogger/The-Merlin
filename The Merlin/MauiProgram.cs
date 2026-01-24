@@ -22,16 +22,20 @@ namespace The_Merlin
 
             builder.Services.AddSingleton<IMessageService, MessageService>();
             builder.Services.AddSingleton<ITimerService, TimerService>();
+
             builder.Services.AddSingleton<DataManager>();
+            builder.Services.AddSingleton<TimelineData>();
+            builder.Services.AddSingleton<TodoData>();
+            builder.Services.AddSingleton<TodoDefData>();
 
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<MainPageViewModel>();
-
-            builder.Services.AddTransient<TimelineLogsViewModel>();
-            builder.Services.AddTransient<TimelineLogsView>();
-
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<TimelineLogsViewModel>();
+            builder.Services.AddSingleton<TimelineLogsView>();
             builder.Services.AddTransient<TodoDetailViewModel>();
             builder.Services.AddTransient<TodoDetail>();
+            builder.Services.AddTransient<TodoDefDetailModelView>();
+            builder.Services.AddTransient<TodoDefDetail>();
 
             builder.Services.AddSingleton<FlyoutMiniTodoViewModel>();
             builder.Services.AddSingleton<FlyoutMiniTodoView>();

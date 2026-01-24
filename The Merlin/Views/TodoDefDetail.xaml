@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="The_Merlin.Views.TodoDefDetail"
+             Title="Todo Definition">
+    <VerticalStackLayout>
+        <Label 
+            Text="{Binding tdi.Id}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Start" />
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="Todo Definition:" />
+            <Entry Text="{Binding tdi.TodoDefText}" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Picker
+                Title="Select a repeat type"
+                ItemsSource="{Binding RepeatTypes}"
+                SelectedItem="{Binding tdi.RepeatType}"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="{Binding x:DataType='Stepper', Source={x:Reference Repeatxdaysstep}, Path=Value, StringFormat='The Stepper value is {0:F0}'}"></Label>
+            <Stepper 
+                Minimum="1" 
+                Maximum="30" 
+                Increment="1"
+                x:Name="Repeatxdaysstep"
+                Value="{Binding tdi.RepeatEveryXDays}"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="{Binding x:DataType='Stepper', Source={x:Reference durstepper}, Path=Value, StringFormat='Duration is {0:F0} minutes'}"></Label>
+        <Stepper 
+            Minimum="1" 
+            Maximum="60" 
+            Increment="1"
+            x:Name="durstepper"
+            Value="{Binding tdi.DefaultDuration}" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Text="{Binding x:DataType='Slider', Source={x:Reference cbdslider}, Path=Value, StringFormat='Can be done slider is {0:F0}'}"></Label>
+        <Slider 
+            Minimum="0" 
+            Maximum="4" 
+            WidthRequest="100"
+            x:Name="cbdslider"
+            Value="{Binding tdi.CanBeDone}"/>
+        </HorizontalStackLayout>
+        <Button
+            Text="Save"
+            Command="{Binding SaveCommand}"
+            VerticalOptions="Center" 
+            HorizontalOptions="End" />
+    </VerticalStackLayout>
+</ContentPage>

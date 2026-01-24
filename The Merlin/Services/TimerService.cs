@@ -17,12 +17,12 @@ namespace The_Merlin.Services
 
         public IDispatcherTimer TodoTimer;
 
-        public TimerService(DataManager data)
+        public TimerService(TimelineData timelineData, TodoData todoData)
         {
-            TimelineItem? tli = data.TimelineData.checkRunningTodo();
+            TimelineItem? tli = timelineData.checkRunningTodo();
             if (tli != null)
             {
-                _ActiveTodoSession = data.TodoData.GetItem(tli.TodoId);
+                _ActiveTodoSession = todoData.GetItem(tli.TodoId);
                 IsChronoRunning = true;
                 TodoTimeSpan = DateTime.Now - tli.Starts;
             }

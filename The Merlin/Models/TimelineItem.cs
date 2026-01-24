@@ -1,4 +1,7 @@
-﻿using SQLite;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SQLite;
+using System.Diagnostics;
+using System.Windows.Input;
 using The_Merlin.Data;
 
 namespace The_Merlin.Models
@@ -9,6 +12,7 @@ namespace The_Merlin.Models
         [AutoIncrement]
         public int Id { get; set; }
         public int TodoId { get; set; }
+        public string? Context { get; set; }
         public DateTime Starts { get; set; } = DateTime.Now;
         public DateTime? Ends { get; set; }
 
@@ -29,7 +33,7 @@ namespace The_Merlin.Models
         {
             get
             {
-                TodoItem? td = Application.Current.Handler.MauiContext.Services.GetService<DataManager>().TodoData.GetItem(TodoId);
+                TodoItem? td = Application.Current.Handler.MauiContext.Services.GetService<TodoData>().GetItem(TodoId);
                 if (td != null)
                     return td.TodoText;
                 else
@@ -49,6 +53,18 @@ namespace The_Merlin.Models
                     return string.Format("{0:D2}:{1:D2}", ts.Minutes, ts.Seconds);
                 else
                     return string.Format("00:{0:D2}", ts.Seconds);
+            }
+        }
+
+        [Ignore]
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    Application.Current.Handler.MauiContext.Services.GetService<TimelineData>().DeleteItem(this);
+                });
             }
         }
     }

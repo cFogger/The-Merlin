@@ -13,8 +13,11 @@
     <FlyoutItem Title="Timeline Logs">
         <ShellContent Route="TimelineLogs" ContentTemplate="{DataTemplate views:TimelineLogsView}" />
     </FlyoutItem>
-    <FlyoutItem Title="Todo Add">
-        <ShellContent Route="TodoAdd" ContentTemplate="{DataTemplate local:TodoAddPage}" />
+    <FlyoutItem Title="Day List">
+        <ShellContent Route="DayListView" ContentTemplate="{DataTemplate views:DayListView}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Todo Definitions">
+        <ShellContent Route="TodoDefListView" ContentTemplate="{DataTemplate views:TodoDefListView}" />
     </FlyoutItem>
     <Shell.FlyoutHeader>
             <views:FlyoutMiniTodoView />

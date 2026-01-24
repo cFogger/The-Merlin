@@ -18,7 +18,6 @@
         <HorizontalStackLayout Grid.Column="1">
             <Button 
                 Text="Add Todo"
-                x:Name="AddButton"
                 Command="{Binding AddCommand}"
                 VerticalOptions="Center" 
                 HorizontalOptions="End" />

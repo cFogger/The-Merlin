@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using The_Merlin.Data;
 using The_Merlin.Models;
 
@@ -8,12 +7,53 @@ namespace The_Merlin.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        public List<TimelineItem> TimelineIS { get { return _timelineIS; } set { _timelineIS = value; OnPropertyChanged(); } }
-        private List<TimelineItem> _timelineIS;
+        public ObservableCollection<TimelineItem> TimelineIS { get; } = new ObservableCollection<TimelineItem>();
 
-        public MainPageViewModel(DataManager dataManager)
+        public string dateString { get { return DateTime.Today.ToString("dd.MM.yy"); } }
+
+        public List<View> todoViews { get { return _todoViews; } set { _todoViews = value; OnPropertyChanged(); } }
+        private List<View> _todoViews;
+
+
+        private TimelineData _timelineData;
+        private TodoData _todoData;
+
+        public MainPageViewModel(TimelineData timelineData, TodoData todoData)
         {
-            TimelineIS = dataManager.TimelineData.GetLastxItems(5);
+            _timelineData = timelineData; 
+            _todoData = todoData;
+
+            _timelineData.TimelineChanged += onTimelineChanged;
+            ReloadLast5();
+            ReloadTodos();
+        }
+
+        public void onTimelineChanged(object? sender, EventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(ReloadLast5);
+        }
+
+        public void ReloadLast5()
+        {
+            var items = _timelineData.GetLastxItems(5);
+
+            TimelineIS.Clear();
+            foreach (var item in items)
+                TimelineIS.Add(item);
+        }
+
+        public void ReloadTodos()
+        {
+            todoViews = new List<View>();
+            DateTime selectedDate = DateTime.Today;
+
+            foreach (var item in _todoData.GetUndoneItems(selectedDate))
+                todoViews.Add(new Views.TodoView(item));
+
+            foreach (var item in _todoData.GetDoneItems(selectedDate))
+                todoViews.Add(new Views.TodoView(item));
+
+            todoViews.Add(new Views.TodoAdd(ReloadTodos));
         }
     }
 }

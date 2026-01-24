@@ -1,4 +1,7 @@
-﻿using The_Merlin.Models;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using The_Merlin.Models;
+using The_Merlin.ViewModels;
 
 namespace The_Merlin.Data
 {
@@ -16,9 +19,10 @@ namespace The_Merlin.Data
             return dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).ToList();
         }
 
-        public List<TimelineItem> GetLastxItems(int Count)
+        public ObservableCollection<TimelineItem> GetLastxItems(int Count)
         {
-            return dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).Take(Count).ToList();
+            ObservableCollection<TimelineItem> items = new ObservableCollection<TimelineItem>(dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).Take(Count).ToList());
+            return items;
         }
 
         public TimelineItem GetItem(int id)
@@ -54,11 +58,13 @@ namespace The_Merlin.Data
             return dtm.dbConnection.Table<TimelineItem>().Where(x => x.Ends == null).FirstOrDefault();
         }
 
-        public void EndItem(int todoId, DateTime? ends)
+        public void EndItem(int todoId, DateTime? ends, string? context = null)
         {
             var myItem = dtm.dbConnection.Table<Models.TimelineItem>().First(x => x.TodoId == todoId && x.Ends == null);
             myItem.Ends = ends;
+            myItem.Context = context;
             dtm.dbConnection.Update(myItem);
+            TimelineChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public int AddItem(TimelineItem ti)
@@ -67,17 +73,24 @@ namespace The_Merlin.Data
             {
                 return 0;
             }
-            return dtm.dbConnection.Insert(ti);
+            int xd = dtm.dbConnection.Insert(ti);
+            TimelineChanged?.Invoke(this, EventArgs.Empty);
+            return xd;
         }
 
         public void UpdateItem(TimelineItem ti)
         {
             dtm.dbConnection.Update(ti);
+            TimelineChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void DeleteItem(TimelineItem ti)
         {
+            Debug.WriteLine("Deleting Timeline Item ID " + ti.Id);
             dtm.dbConnection.Delete(ti);
+            TimelineChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public event EventHandler TimelineChanged;
     }
 }

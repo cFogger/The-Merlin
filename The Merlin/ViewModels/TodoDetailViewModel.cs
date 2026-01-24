@@ -1,4 +1,5 @@
-﻿using The_Merlin.Data;
+﻿using System.Threading.Tasks;
+using The_Merlin.Data;
 using The_Merlin.Interfaces;
 using The_Merlin.Models;
 
@@ -15,8 +16,8 @@ namespace The_Merlin.ViewModels
             {
                 _todo = value;
                 OnPropertyChanged();
-                _dataManager.TodoData.UpdateItem(value);
-                TotalTimeString = _dataManager.TimelineData.GetTotal(value.Id).ToString(@"hh\:mm\:ss");
+                _todoData.UpdateItem(value);
+                TotalTimeString = _timelineData.GetTotal(value.Id).ToString(@"hh\:mm\:ss");
                 if (_timerService.IsTimerRunning() && _timerService.ActiveTodoSession().Id == value.Id)
                     TimerRunning = true;
                 else
@@ -58,17 +59,18 @@ namespace The_Merlin.ViewModels
 
         private IMessageService _messageService;
         private ITimerService _timerService;
-        private DataManager _dataManager;
-            
-        public TodoDetailViewModel(IMessageService msgService, ITimerService timerService, DataManager dataManager)
+        private TimelineData _timelineData;
+        private TodoData _todoData;
+
+        public TodoDetailViewModel(IMessageService msgService, ITimerService timerService, TimelineData timelineData, TodoData todoData)
         {
             StartStopCommand = new Command(OnStartStop);
             DeleteCommand = new Command(DeleteAsync);
             _timerService = timerService;
             _messageService = msgService;
-            _dataManager = dataManager;
             _timerService.Dispatcher().Tick += TodoDetailViewModel_Tick;
-
+            _timelineData = timelineData;
+            _todoData = todoData;
         }
 
         private void TodoDetailViewModel_Tick(object? sender, EventArgs e)
@@ -80,36 +82,42 @@ namespace The_Merlin.ViewModels
                     TimeString = "Another todo running";
         }
 
-        private void OnStartStop()
+        private async void OnStartStop()
         {
             if (!_timerService.IsTimerRunning())
-                if (_dataManager.TimelineData.AddItem(new TimelineItem { Starts = DateTime.Now, TodoId = Todo.Id }) == 1)
+                if (_timelineData.AddItem(new TimelineItem { Starts = DateTime.Now, TodoId = Todo.Id }) == 1)
                 {
-                    _timerService.StartTimer(Todo);
+                    await _timerService.StartTimer(Todo);
                     TimerRunning = true;
                 }
                 else
                 {
-                    _messageService.ShowAsync("Problem", "Another todo running");
+                    await _messageService.ShowAsync("Problem", "Another todo running");
                 }
             else
             {
                 if (_timerService.ActiveTodoSession().Id == Todo.Id)
                 {
-                    _dataManager.TimelineData.EndItem(Todo.Id, DateTime.Now);
-                    _timerService.StopTimer();
+                    await EndTimelineContextAsync();
+                    await _timerService.StopTimer();
                     TimerRunning = false;
                 }
                 else
                 {
-                    _messageService.ShowAsync("Problem", "Another todo running - " + _timerService.ActiveTodoSession().TodoText);
+                    await _messageService.ShowAsync("Problem", "Another todo running - " + _timerService.ActiveTodoSession().TodoText);
                 }
             }
         }
 
+        private async Task EndTimelineContextAsync()
+        {
+            var cntxt = await _messageService.ShowPromptAsync(Todo.TodoText, "N'aptın?", "Fill Context");
+            _timelineData.EndItem(Todo.Id, DateTime.Now, cntxt);
+        }
+
         private async void DeleteAsync()
         {
-            _dataManager.TodoData.DeleteItem(Todo);
+            _todoData.DeleteItem(Todo);
             await Shell.Current.Navigation.PopAsync();
         }
     }
