@@ -33,7 +33,11 @@ public partial class TodoDefListView : ContentPage
         Debug.WriteLine("Navigating to TodoDefDetail");
         if (AppShell.Current.FlyoutBehavior != FlyoutBehavior.Locked)
             AppShell.Current.FlyoutIsPresented = false;
-        await Shell.Current.GoToAsync($"TodoDefDetailView");
+        IDictionary<string, object> parameters = new Dictionary<string, object>
+        {
+            { "tododef", new TodoDefItem() }
+        };
+        await Shell.Current.GoToAsync($"TodoDefDetailView", parameters);
     });
 
     public ICommand DeleteCommand => new Command<TodoDefItem>((tdi) =>

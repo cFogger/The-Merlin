@@ -37,6 +37,20 @@ namespace The_Merlin.Models
             }
         }
 
+        [Ignore]
+        public int GetDefaultDurationInMinutes
+        {
+            get
+            {
+                return (int)DefaultDuration.TotalMinutes;
+            }
+            set
+            {
+                if (value >= 1)
+                    DefaultDuration = TimeSpan.FromMinutes(value);
+            }
+        }
+
         public ICommand NavigateToDetail => new Command(async () =>
         {
 

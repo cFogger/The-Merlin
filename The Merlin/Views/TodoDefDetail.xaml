@@ -3,52 +3,68 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.TodoDefDetail"
              Title="Todo Definition">
+    <ContentPage.Resources>
+        <Style TargetType="VerticalStackLayout">
+            <Setter Property="Margin" Value="0,10"></Setter>
+        </Style>
+    </ContentPage.Resources>
     <VerticalStackLayout>
-        <Label 
-            Text="{Binding tdi.Id}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Start" />
-        <HorizontalStackLayout HorizontalOptions="Center">
+        <VerticalStackLayout HorizontalOptions="Center">
             <Label Text="Todo Definition:" />
             <Entry Text="{Binding tdi.TodoDefText}" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout HorizontalOptions="Center">
+        </VerticalStackLayout>
+        <VerticalStackLayout HorizontalOptions="Center">
             <Picker
                 Title="Select a repeat type"
                 ItemsSource="{Binding RepeatTypes}"
-                SelectedItem="{Binding tdi.RepeatType}"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout HorizontalOptions="Center">
-            <Label Text="{Binding x:DataType='Stepper', Source={x:Reference Repeatxdaysstep}, Path=Value, StringFormat='The Stepper value is {0:F0}'}"></Label>
-            <Stepper 
+                SelectedItem="{Binding rptType}"/>
+        </VerticalStackLayout>
+        <Border HorizontalOptions="Center" BackgroundColor="{StaticResource Gray900}" IsVisible="{Binding IsCustomRpt}">
+            <VerticalStackLayout HorizontalOptions="Center">
+                <Label Text="{Binding x:DataType='Stepper', Source={x:Reference Repeatxdaysstep}, Path=Value, StringFormat='Repeat in {0:F0} days'}" Margin="30,10,30,5"></Label>
+                <Stepper 
+                Margin="10,5,10,10"
                 Minimum="1" 
                 Maximum="30" 
                 Increment="1"
+                HorizontalOptions="Center"
                 x:Name="Repeatxdaysstep"
                 Value="{Binding tdi.RepeatEveryXDays}"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout HorizontalOptions="Center">
+            </VerticalStackLayout>
+        </Border>
+        <VerticalStackLayout HorizontalOptions="Center">
             <Label Text="{Binding x:DataType='Stepper', Source={x:Reference durstepper}, Path=Value, StringFormat='Duration is {0:F0} minutes'}"></Label>
-        <Stepper 
+            <Stepper 
             Minimum="1" 
             Maximum="60" 
             Increment="1"
+            HorizontalOptions="Center"
             x:Name="durstepper"
-            Value="{Binding tdi.DefaultDuration}" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout HorizontalOptions="Center">
+            Value="{Binding tdi.GetDefaultDurationInMinutes}" />
+        </VerticalStackLayout>
+        <VerticalStackLayout HorizontalOptions="Center">
             <Label Text="{Binding x:DataType='Slider', Source={x:Reference cbdslider}, Path=Value, StringFormat='Can be done slider is {0:F0}'}"></Label>
-        <Slider 
+            <Slider 
             Minimum="0" 
             Maximum="4" 
             WidthRequest="100"
             x:Name="cbdslider"
             Value="{Binding tdi.CanBeDone}"/>
-        </HorizontalStackLayout>
+        </VerticalStackLayout>
         <Button
+            BorderWidth="1"
+            BackgroundColor="{StaticResource Gray900}"
+            TextColor="AliceBlue"
             Text="Save"
+            FontSize="20"
+            WidthRequest="100"
             Command="{Binding SaveCommand}"
             VerticalOptions="Center" 
-            HorizontalOptions="End" />
+            HorizontalOptions="Center" />
+        <Label 
+            TextColor="Gray"
+            Text="{Binding tdi.Id}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>
