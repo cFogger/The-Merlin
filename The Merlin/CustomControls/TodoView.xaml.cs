@@ -4,7 +4,7 @@ using System.Windows.Input;
 using The_Merlin.Data;
 using The_Merlin.Models;
 
-namespace The_Merlin.Views;
+namespace The_Merlin.CustomControls;
 
 public partial class TodoView : ContentView
 {

@@ -1,6 +1,7 @@
+using The_Merlin.CustomControls;
 using The_Merlin.Data;
 
-namespace The_Merlin;
+namespace The_Merlin.Views;
 
 
 [QueryProperty(nameof(DayOfPage), "day")]
@@ -25,11 +26,11 @@ public partial class DayView : ContentPage
         this.Title = selectedDate.ToString("dd.MM.yy");
 
         foreach (var item in _todoData.GetUndoneItems(selectedDate))
-            MainStack.Children.Add(new Views.TodoView(item));
+            MainStack.Children.Add(new TodoView(item));
 
         foreach (var item in _todoData.GetDoneItems(selectedDate))
-            MainStack.Children.Add(new Views.TodoView(item));
+            MainStack.Children.Add(new TodoView(item));
 
-        MainStack.Children.Add(new Views.TodoAdd(ReloadTodos));
+        MainStack.Children.Add(new TodoAdd(ReloadTodos));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using The_Merlin.CustomControls;
 using The_Merlin.Data;
 using The_Merlin.Models;
 
@@ -48,12 +49,12 @@ namespace The_Merlin.ViewModels
             DateTime selectedDate = DateTime.Today;
 
             foreach (var item in _todoData.GetUndoneItems(selectedDate))
-                todoViews.Add(new Views.TodoView(item));
+                todoViews.Add(new TodoView(item));
 
             foreach (var item in _todoData.GetDoneItems(selectedDate))
-                todoViews.Add(new Views.TodoView(item));
+                todoViews.Add(new TodoView(item));
 
-            todoViews.Add(new Views.TodoAdd(ReloadTodos));
+            todoViews.Add(new TodoAdd(ReloadTodos));
         }
     }
 }

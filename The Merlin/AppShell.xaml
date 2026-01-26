@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:The_Merlin"
     xmlns:views="clr-namespace:The_Merlin.Views"
+    xmlns:ccontr="clr-namespace:The_Merlin.CustomControls"
     Title="𝕸 𝕰 𝕽 𝕷 𝕴 𝕹" 
     FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}">
     <FlyoutItem Title="Main">
@@ -20,6 +21,6 @@
         <ShellContent Route="TodoDefListView" ContentTemplate="{DataTemplate views:TodoDefListView}" />
     </FlyoutItem>
     <Shell.FlyoutHeader>
-            <views:FlyoutMiniTodoView />
+        <ccontr:FlyoutMiniTodoView />
     </Shell.FlyoutHeader>
 </Shell>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using The_Merlin.CustomControls;
 using The_Merlin.Data;
 using The_Merlin.Interfaces;
 using The_Merlin.Services;

@@ -3,7 +3,7 @@ using The_Merlin.Data;
 using The_Merlin.Models;
 using The_Merlin.ViewModels;
 
-namespace The_Merlin.Views;
+namespace The_Merlin.CustomControls;
 
 public partial class TodoAdd : ContentView
 {
@@ -22,11 +22,11 @@ public partial class TodoAdd : ContentView
     });
 
     private TodoData _todoData;
-    public TodoAdd(Action _reloadDatas, TodoData todoData = null)
+    public TodoAdd(Action _reloadDatas)
     {
         InitializeComponent();
         this.BindingContext = this;
         reloadDatas = _reloadDatas;
-        _todoData = todoData;
+        _todoData = App.Current.Handler.GetService<TodoData>();
     }
 }

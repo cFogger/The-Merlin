@@ -1,6 +1,6 @@
 using The_Merlin.ViewModels;
 
-namespace The_Merlin.Views;
+namespace The_Merlin.CustomControls;
 
 public partial class FlyoutMiniTodoView : ContentView
 {
