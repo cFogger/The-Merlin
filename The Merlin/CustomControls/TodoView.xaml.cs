@@ -8,51 +8,14 @@ namespace The_Merlin.CustomControls;
 
 public partial class TodoView : ContentView
 {
-    readonly TodoItem todoItem;
+    public static readonly BindableProperty myTodoItemProperty = BindableProperty.Create(nameof(myTodoItem), typeof(TodoItem), typeof(TodoView));
+    public TodoItem myTodoItem { get => (TodoItem)GetValue(myTodoItemProperty); set => SetValue(myTodoItemProperty, value); }
 
-    public TodoView(TodoItem ti)
+    public static readonly BindableProperty NavigateCommandProperty = BindableProperty.Create(nameof(NavigateCommand), typeof(ICommand), typeof(TodoView));
+    public ICommand NavigateCommand { get => (ICommand)GetValue(NavigateCommandProperty); set => SetValue(NavigateCommandProperty, value); }
+    
+    public TodoView()
 	{
 		InitializeComponent();
-        switch (ti.Priority)
-        {
-            case 0:
-                this.BackgroundColor = Color.FromArgb("2F2F2F");
-                break;
-            case 1:
-                this.BackgroundColor = Color.FromRgb(255, 175, 0);
-                break;
-            case 2:
-                this.BackgroundColor = Color.FromRgb(255, 100, 0);
-                break;
-            case 3:
-                this.BackgroundColor = Color.FromRgb(255, 0, 0);
-                break;
-        }
-        this.BackgroundColor = ti.IsCompleted ? Colors.Green : this.BackgroundColor;
-        todoItem = ti;
-        TitleLabel.Text = ti.TodoText;
-        this.BindingContext = this;
     }
-
-    private async void NavigateToDetail()
-    {
-        try
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                { "todo", todoItem }
-            };
-            await Shell.Current.GoToAsync("TodoDetailView", parameters);
-            //await Shell.Current.Navigation.PushAsync(new TodoDetail(todoItem));
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Navigation to TodoDetail failed: {ex.Message}");
-        }
-    }
-
-    public ICommand ClickedFromGrid => new Command(() =>
-    {
-        NavigateToDetail();
-    });
 }

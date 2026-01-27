@@ -18,6 +18,8 @@ namespace The_Merlin.Data
         public List<TodoItem> GetUndoneItems(DateTime date) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.IsCompleted == false && x.AssignedDate == date)];
 
         public List<TodoItem> GetDoneItems(DateTime date) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.IsCompleted && x.AssignedDate == date)];
+        
+        public List<TodoItem> GetTodaysTodos() => [.. dtm.dbConnection.Table<TodoItem>().Where(x=>x.AssignedDate == DateTime.Today)];
 
         public List<DateTime> GetAssignedDates()
         {
@@ -30,6 +32,7 @@ namespace The_Merlin.Data
             }
             if (dates.Exists(dates => dates == DateTime.Today) == false)
                 dates.Add(DateTime.Today);
+            AssignedDatesChanged?.Invoke(this, EventArgs.Empty);
             return dates;
         }
 
@@ -41,16 +44,22 @@ namespace The_Merlin.Data
         public void AddItem(TodoItem ti)
         {
             dtm.dbConnection.Insert(ti);
+            TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateItem(TodoItem ti)
         {
             dtm.dbConnection.Update(ti);
+            TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void DeleteItem(TodoItem ti)
         {
             dtm.dbConnection.Delete(ti);
+            TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
         }
+        
+        public event EventHandler TodoItemCollectionChanged;
+        public event EventHandler AssignedDatesChanged;
     }
 }

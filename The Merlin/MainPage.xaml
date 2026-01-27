@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
+             x:Name="myMainPage"
              x:Class="The_Merlin.MainPage">
     <VerticalStackLayout>
         <Label Text="Son 5 aktivite" Margin="10,0" FontAttributes="Bold" FontSize="23"></Label>
@@ -55,12 +57,18 @@
         </Border>
         <Label Text="{Binding dateString}" Margin="10,20,10,0" FontAttributes="Bold" FontSize="23"></Label>
         <Border Stroke="AliceBlue" Background="{StaticResource BlackBrush}" Margin="10,0" Padding="2">
-            <CollectionView ItemsSource="{Binding todoViews}" SelectionMode="None">
+            <CollectionView ItemsSource="{Binding todoItems}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ContentView Content="{Binding .}" Padding="0,1"/>
+                        <customcontrols:TodoView myTodoItem="{Binding .}" NavigateCommand="{Binding NavigateToDetail}"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <customcontrols:TodoAdd 
+                        TodoDefs="{Binding BindingContext.TodoDefs, Source={x:Reference myMainPage}}" 
+                        SelectedTodoDef="{Binding BindingContext.SelectedTodoDef, Source={x:Reference myMainPage}}" 
+                        AddCommand="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" />
+                </CollectionView.Footer>
             </CollectionView>
         </Border>
     </VerticalStackLayout>

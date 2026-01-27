@@ -7,26 +7,17 @@ namespace The_Merlin.CustomControls;
 
 public partial class TodoAdd : ContentView
 {
-    readonly Action reloadDatas;
+    public static readonly BindableProperty TodoDefsProperty = BindableProperty.Create(nameof(TodoDefs), typeof(IEnumerable<TodoDefItem>), typeof(TodoAdd));
+    public IEnumerable<TodoDefItem> TodoDefs { get => (IEnumerable<TodoDefItem>)GetValue(TodoDefsProperty); set => SetValue(TodoDefsProperty, value); }
 
-    public ICommand AddCommand => new Command(() =>
-    {
-        _todoData.AddItem(new TodoItem()
-        {
-            TodoText = TitleEntry.Text,
-            CreatedAt = DateTime.Now,
-            IsCompleted = false,
-            AssignedDate = DateTime.Today
-        });
-        reloadDatas();
-    });
+    public static readonly BindableProperty AddCommandProperty = BindableProperty.Create(nameof(AddCommand), typeof(ICommand), typeof(TodoAdd));
+    public ICommand AddCommand { get => (ICommand)GetValue(AddCommandProperty); set => SetValue(AddCommandProperty, value); }
 
-    private TodoData _todoData;
-    public TodoAdd(Action _reloadDatas)
+    public static readonly BindableProperty SelectedTodoDefProperty = BindableProperty.Create(nameof(SelectedTodoDef), typeof(TodoDefItem), typeof(TodoAdd), default(TodoDefItem), defaultBindingMode: BindingMode.TwoWay);
+    public TodoDefItem SelectedTodoDef { get => (TodoDefItem)GetValue(SelectedTodoDefProperty); set { SetValue(SelectedTodoDefProperty, value); } }
+
+    public TodoAdd()
     {
         InitializeComponent();
-        this.BindingContext = this;
-        reloadDatas = _reloadDatas;
-        _todoData = App.Current.Handler.GetService<TodoData>();
     }
 }

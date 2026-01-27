@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using The_Merlin.Data;
 
 namespace The_Merlin.Models
 {
@@ -63,6 +64,21 @@ namespace The_Merlin.Models
                 AppShell.Current.FlyoutIsPresented = false;
             await Shell.Current.GoToAsync($"TodoDefDetailView", parameters);
         });
+
+        public void CreateTodoItem(TodoData _todoData)
+        {
+            TodoItem todoItem = new()
+            {
+                TodoDefId = this.Id,
+                TodoText = this.TodoDefText,
+                IsCompleted = false,
+                CreatedAt = DateTime.Now,
+                AssignedDate = DateTime.Today,
+                Status = TodoItemStatus.Pending,
+                Priority = 0
+            };
+            _todoData.AddItem(todoItem);
+        }
     }
 
     public enum TodoDefRepeatType
