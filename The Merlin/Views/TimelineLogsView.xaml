@@ -31,7 +31,10 @@
                             <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Text="{Binding Path=Id}" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center"></Label>
+                        <HorizontalStackLayout Grid.Column="0">
+                            <Button Text="X" Command="{Binding DeleteCommand}" Background="IndianRed" TextColor="AliceBlue" Margin="0" Padding="0" WidthRequest="20" HeightRequest="20" CornerRadius="10"/>
+                            <Label Text="{Binding Path=Id}" HorizontalOptions="Start" VerticalOptions="Center"></Label>
+                        </HorizontalStackLayout>
                         <Label Text="{Binding Path=GetTodoName}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"></Label>
                         <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"></Label>
                         <VerticalStackLayout Grid.Column="3">

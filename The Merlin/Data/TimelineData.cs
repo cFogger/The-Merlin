@@ -14,20 +14,29 @@ namespace The_Merlin.Data
         }
 
 
-        public List<TimelineItem> GetAllItems()
+        public void GetAllItems(ObservableCollection<TimelineItem> timelinecoll)
         {
-            return dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).ToList();
+            timelinecoll.Clear();
+            var allItems = dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).ToList();
+            foreach (var item in allItems)
+            {
+                timelinecoll.Add(item);
+            }
         }
 
-        public ObservableCollection<TimelineItem> GetLastxItems(int Count)
+        public void GetLastxItems(ObservableCollection<TimelineItem> timelinecoll, int Count)
         {
-            ObservableCollection<TimelineItem> items = new ObservableCollection<TimelineItem>(dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).Take(Count).ToList());
-            return items;
+            timelinecoll.Clear();
+            var items = dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).Take(Count).ToList();
+            foreach (var item in items)
+            {
+                timelinecoll.Add(item);
+            }
         }
 
         public TimelineItem GetItem(int id)
         {
-            return dtm.dbConnection.Table<Models.TimelineItem>().FirstOrDefault(x => x.Id == id);
+            return dtm.dbConnection.Table<TimelineItem>().FirstOrDefault(x => x.Id == id);
         }
 
         public TimeSpan GetTotal(int todoId)

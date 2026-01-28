@@ -42,10 +42,7 @@ namespace The_Merlin.ViewModels
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                var items = _timelineData.GetLastxItems(5);
-                TimelineIS.Clear();
-                foreach (var item in items)
-                    TimelineIS.Add(item);
+                _timelineData.GetLastxItems(TimelineIS, 5);
             });
         }
 
