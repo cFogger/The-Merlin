@@ -21,23 +21,36 @@ namespace The_Merlin
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            //services
             builder.Services.AddSingleton<IMessageService, MessageService>();
             builder.Services.AddSingleton<ITimerService, TimerService>();
 
+            //datamanagers
             builder.Services.AddSingleton<DataManager>();
             builder.Services.AddSingleton<TimelineData>();
+            builder.Services.AddSingleton<DayData>();
             builder.Services.AddSingleton<TodoData>();
             builder.Services.AddSingleton<TodoDefData>();
 
-            builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<MainPageViewModel>();
-            builder.Services.AddSingleton<TimelineLogsViewModel>();
-            builder.Services.AddSingleton<TimelineLogsView>();
+            //single pages
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<MainPageViewModel>();
+            builder.Services.AddTransient<TimelineLogsViewModel>();
+            builder.Services.AddTransient<TimelineLogsView>();
+            builder.Services.AddTransient<TodoDefListViewModel>();
+            builder.Services.AddTransient<TodoDefListView>();
+            builder.Services.AddTransient<DayListView>();
+            builder.Services.AddTransient<DayListViewModel>();
+
+            //reusable
             builder.Services.AddTransient<TodoDetailViewModel>();
             builder.Services.AddTransient<TodoDetail>();
             builder.Services.AddTransient<TodoDefDetailModelView>();
             builder.Services.AddTransient<TodoDefDetail>();
+            builder.Services.AddTransient<DayDetailViewModel>();
+            builder.Services.AddTransient<DayDetailView>();
 
+            //customcontrols
             builder.Services.AddSingleton<FlyoutMiniTodoViewModel>();
             builder.Services.AddSingleton<FlyoutMiniTodoView>();
 #if DEBUG

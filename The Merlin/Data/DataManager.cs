@@ -1,8 +1,6 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
+using The_Merlin.Models;
 
 namespace The_Merlin.Data
 {
@@ -13,9 +11,10 @@ namespace The_Merlin.Data
         {
             dbConnection = new SQLiteConnection(Path.Combine(FileSystem.AppDataDirectory, "themerlin.db3"));
             Debug.WriteLine($"Database path: {Path.Combine(FileSystem.AppDataDirectory, "themerlin.db3")}");
-            dbConnection.CreateTable<Models.TodoItem>();
-            dbConnection.CreateTable<Models.TimelineItem>();
-            dbConnection.CreateTable<Models.TodoDefItem>();
+            dbConnection.CreateTable<TodoItem>();
+            dbConnection.CreateTable<TimelineItem>();
+            dbConnection.CreateTable<TodoDefItem>();
+            dbConnection.CreateTable<DayItem>();
         }
     }
 }

@@ -13,7 +13,10 @@ namespace The_Merlin.Data
     public class TodoData
     {
         private readonly DataManager dtm;
-        public TodoData(DataManager _dtm) { dtm = _dtm; GetAssignedDates(); }
+        private readonly DayData _dayData;
+        public TodoData(DataManager _dtm, DayData dayData) { 
+            dtm = _dtm; 
+            _dayData = dayData; }
 
         public List<TodoItem> GetUndoneItems(DateTime date) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.IsCompleted == false && x.AssignedDate == date)];
 
@@ -21,19 +24,27 @@ namespace The_Merlin.Data
         
         public List<TodoItem> GetTodaysTodos() => [.. dtm.dbConnection.Table<TodoItem>().Where(x=>x.AssignedDate == DateTime.Today)];
 
-        public List<DateTime> GetAssignedDates()
+        public void GetAssignedDates()
         {
             var que = dtm.dbConnection.Query<Models.TodoItem>("SELECT DISTINCT AssignedDate FROM TodoItem");
-            List<DateTime> dates = [];
+            var dates = dtm.dbConnection.Query<DayItem>("SELECT DISTINCT Date FROM DayItem");
             foreach (var dt in que)
             {
-                if (!dates.Exists(x => x == dt.AssignedDate))
-                    dates.Add(dt.AssignedDate);
+                if (!dates.Exists(x => x.Date == dt.AssignedDate))
+                    _dayData.AddItem(new DayItem
+                    {
+                        Date = dt.AssignedDate,
+                        DayType = DayType.HomeDay,
+                    });
             }
-            if (dates.Exists(dates => dates == DateTime.Today) == false)
-                dates.Add(DateTime.Today);
+
+            if (dates.Exists(dates => dates.Date == DateTime.Today) == false)
+                _dayData.AddItem(new DayItem
+                {
+                    Date = DateTime.Today,
+                    DayType = DayType.HomeDay,
+                }); 
             AssignedDatesChanged?.Invoke(this, EventArgs.Empty);
-            return dates;
         }
 
         public TodoItem GetItem(int id)

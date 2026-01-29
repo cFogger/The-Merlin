@@ -17,22 +17,6 @@ namespace The_Merlin.Models
         public TodoItemStatus Status { get; set; } = 0; // 0 Pending 1 InProgress 2 Success 3 Failed/Delayed
 
         public int Priority { get; set; } = 0; // 0 Low 1 Medium 2 High 3 Critical
-
-        public ICommand NavigateToDetail => new Command(async () =>
-        {
-            try
-            {
-                var parameters = new Dictionary<string, object>
-            {
-                { "todo", this }
-            };
-                await Shell.Current.GoToAsync("TodoDetailView", parameters);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Navigation to TodoDetail failed: {ex.Message}");
-            }
-        });
     }
 
     public enum TodoItemStatus

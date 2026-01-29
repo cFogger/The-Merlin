@@ -6,70 +6,82 @@
              x:Class="The_Merlin.MainPage">
     <VerticalStackLayout>
         <Label Text="Son 5 aktivite" Margin="10,0" FontAttributes="Bold" FontSize="23"></Label>
-        <Border Stroke="AliceBlue" Background="{StaticResource BlackBrush}" Margin="10,0">
-            <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None">
-                <CollectionView.Header>
-                    <Grid ColumnSpacing="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <ColumnDefinition Width="40"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label Text="Duration" FontAttributes="Bold" Grid.Column="0" HorizontalOptions="Center"></Label>
-                        <Label Text="Todo" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"></Label>
-                        <Label Text="Starts" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"></Label>
-                        <Label Text="Ends" FontAttributes="Bold" Grid.Column="3" HorizontalOptions="Center"></Label>
-                        <Label Text="..." FontAttributes="Bold" Grid.Column="4" HorizontalOptions="Center"></Label>
-                    </Grid>
-                </CollectionView.Header>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Stroke="AliceBlue" StrokeThickness=".1">
-                            <Grid ColumnSpacing="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-                                    <ColumnDefinition Width="40"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Path=GetDurationString}" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"></Label>
-                                <VerticalStackLayout Grid.Column="1">
-                                    <Label Text="{Binding Path=GetTodoName}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Bold"></Label>
-                                    <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
-                                </VerticalStackLayout>
-                                <VerticalStackLayout Grid.Column="2">
-                                    <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                                    <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                                </VerticalStackLayout>
-                                <VerticalStackLayout Grid.Column="3">
-                                    <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                                    <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                                </VerticalStackLayout>
-                                <Button Text="X" Grid.Column="4" Command="{Binding DeleteCommand}" Background="IndianRed" TextColor="AliceBlue" Margin="3" CornerRadius="15"/>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Border>
+        <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None">
+            <CollectionView.Header>
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                        <ColumnDefinition Width="32"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Duration" FontAttributes="Bold" Grid.Column="0" HorizontalOptions="Center"></Label>
+                    <Label Text="Todo" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"></Label>
+                    <Label Text="Starts" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <Label Text="Ends" FontAttributes="Bold" Grid.Column="3" HorizontalOptions="Center"></Label>
+                    <Label Text="..." FontAttributes="Bold" Grid.Column="4" HorizontalOptions="Center"></Label>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="32"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Path=GetDurationString}" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"></Label>
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="{Binding Path=GetTodoName}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Bold"></Label>
+                                <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" VerticalOptions="Center">
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            </VerticalStackLayout>
+                            <Button Text="X" Grid.Column="4" Command="{Binding DeleteCommand}" Background="IndianRed" TextColor="Black" Margin="3" CornerRadius="15"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <Label Text="{Binding dateString}" Margin="10,20,10,0" FontAttributes="Bold" FontSize="23"></Label>
-        <Border Stroke="AliceBlue" Background="{StaticResource BlackBrush}" Margin="10,0" Padding="2">
-            <CollectionView ItemsSource="{Binding todoItems}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <customcontrols:TodoView myTodoItem="{Binding .}" NavigateCommand="{Binding NavigateToDetail}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                <CollectionView.Footer>
-                    <customcontrols:TodoAdd 
+        <CollectionView ItemsSource="{Binding todoItems}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
+                        <Grid Padding="5,2,5,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    Text="{Binding TodoText}"
+                                    VerticalOptions="Center" 
+                                    HorizontalOptions="Fill"
+                                    Margin="25,5,25,5"/>
+                            <Button Grid.Column="1" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Footer>
+                <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
+                    <customcontrols:TodoAdd Margin="10,0" 
                         TodoDefs="{Binding BindingContext.TodoDefs, Source={x:Reference myMainPage}}" 
                         SelectedTodoDef="{Binding BindingContext.SelectedTodoDef, Source={x:Reference myMainPage}}" 
                         AddCommand="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" />
-                </CollectionView.Footer>
-            </CollectionView>
-        </Border>
+                </Border>
+            </CollectionView.Footer>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

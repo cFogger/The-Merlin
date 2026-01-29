@@ -18,7 +18,8 @@ namespace The_Merlin.Models
         public TodoDefRepeatType RepeatType { get; set; } = 0; // 0 None, 1 Daily, 2 Weekly, 3 Custom
 
         public TimeSpan DefaultDuration { get; set; } = TimeSpan.FromMinutes(25);
-        public int CanBeDone { get; set; } = 0;
+
+        //public int CanBeDone { get; set; } = 0;
         //everywhere onlyhome atworkavailable nopc holiday
 
         [Ignore]
@@ -51,19 +52,6 @@ namespace The_Merlin.Models
                     DefaultDuration = TimeSpan.FromMinutes(value);
             }
         }
-
-        public ICommand NavigateToDetail => new Command(async () =>
-        {
-
-            IDictionary<string, object> parameters = new Dictionary<string, object>
-            {
-                { "tododef", this }
-            };
-
-            if (AppShell.Current.FlyoutBehavior != FlyoutBehavior.Locked)
-                AppShell.Current.FlyoutIsPresented = false;
-            await Shell.Current.GoToAsync($"TodoDefDetailView", parameters);
-        });
 
         public void CreateTodoItem(TodoData _todoData)
         {

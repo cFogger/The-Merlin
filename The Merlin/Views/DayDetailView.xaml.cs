@@ -1,13 +1,12 @@
-using The_Merlin.Data;
 using The_Merlin.ViewModels;
 
 namespace The_Merlin.Views;
 
-public partial class DayListView : ContentPage
+public partial class DayDetailView : ContentPage
 {
-	public DayListView(DayListViewModel vm)
+	public DayDetailView(DayDetailViewModel vm)
 	{
 		InitializeComponent();
 		this.BindingContext = vm;
-    }
+	}
 }

@@ -3,23 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.CustomControls.TodoAdd"
              xmlns:local="clr-namespace:The_Merlin.CustomControls">
-    <Grid Padding="5,2,5,2" Background="#232323">
+    <Grid Padding="5,2,5,2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="80"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <HorizontalStackLayout Grid.Column="0" HorizontalOptions="Fill" VerticalOptions="Center">
-            <Picker Margin="25,0" VerticalOptions="Center" 
+        <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
+            <Label Margin="15,0" Text="Add " VerticalOptions="Center"></Label>
+            <Picker Margin="10,0" VerticalOptions="Center" 
                     ItemsSource="{Binding TodoDefs, Source={RelativeSource AncestorType={x:Type local:TodoAdd}}}" 
                     SelectedItem="{Binding SelectedTodoDef, Source={RelativeSource AncestorType={x:Type local:TodoAdd}}, Mode=TwoWay}" 
                     ItemDisplayBinding="{Binding TodoDefText}"/>
         </HorizontalStackLayout>
-        <HorizontalStackLayout Grid.Column="1">
             <Button 
+                Grid.Column="1"
                 Text="Add Todo"
-                Command="{Binding AddCommand, Source={RelativeSource AncestorType={x:Type local:TodoAdd}}}"
-                VerticalOptions="Center" 
-                HorizontalOptions="End" />
-        </HorizontalStackLayout>
+                Command="{Binding AddCommand, Source={RelativeSource AncestorType={x:Type local:TodoAdd}}}"/>
     </Grid>
 </ContentView>

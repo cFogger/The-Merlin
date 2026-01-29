@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="The_Merlin.Views.DayView"
-             Title="{Binding TitleOfPage}">
-    <ScrollView Orientation="Both" HorizontalScrollBarVisibility="Default" VerticalScrollBarVisibility="Default">
-        <VerticalStackLayout x:Name="MainStack" Padding="0,50,0,0" Spacing="10"></VerticalStackLayout>
-    </ScrollView>
-</ContentPage>

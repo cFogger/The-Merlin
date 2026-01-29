@@ -23,29 +23,31 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnSpacing="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="85"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <HorizontalStackLayout Grid.Column="0">
-                            <Button Text="X" Command="{Binding DeleteCommand}" Background="IndianRed" TextColor="AliceBlue" Margin="0" Padding="0" WidthRequest="20" HeightRequest="20" CornerRadius="10"/>
-                            <Label Text="{Binding Path=Id}" HorizontalOptions="Start" VerticalOptions="Center"></Label>
-                        </HorizontalStackLayout>
-                        <Label Text="{Binding Path=GetTodoName}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"></Label>
-                        <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"></Label>
-                        <VerticalStackLayout Grid.Column="3">
-                            <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                            <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="4">
-                            <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                            <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                        </VerticalStackLayout>
-                    </Grid>
+                    <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="85"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <HorizontalStackLayout Grid.Column="0">
+                                <Button Text="X" Command="{Binding DeleteCommand}" Background="IndianRed" TextColor="AliceBlue" Margin="0" Padding="0" WidthRequest="20" HeightRequest="20" CornerRadius="10"/>
+                                <Label Text="{Binding Path=Id}" HorizontalOptions="Start" VerticalOptions="Center"></Label>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding Path=GetTodoName}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"></Label>
+                            <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"></Label>
+                            <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="4" VerticalOptions="Center">
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

@@ -10,12 +10,12 @@
     </ContentPage.Resources>
     <VerticalStackLayout>
         <VerticalStackLayout HorizontalOptions="Center">
-            <Label Text="Todo Definition:" />
-            <Entry Text="{Binding tdi.TodoDefText}" />
+            <Label Text="Todo Name" HorizontalOptions="Center"/>
+            <Entry Text="{Binding tdi.TodoDefText}" HorizontalTextAlignment="Center"/>
         </VerticalStackLayout>
         <VerticalStackLayout HorizontalOptions="Center">
             <Picker
-                Title="Select a repeat type"
+                Title="Select a repeat type (for auto-create)"
                 ItemsSource="{Binding RepeatTypes}"
                 SelectedItem="{Binding rptType}"/>
         </VerticalStackLayout>
@@ -42,15 +42,16 @@
             x:Name="durstepper"
             Value="{Binding tdi.GetDefaultDurationInMinutes}" />
         </VerticalStackLayout>
-        <VerticalStackLayout HorizontalOptions="Center">
-            <Label Text="{Binding x:DataType='Slider', Source={x:Reference cbdslider}, Path=Value, StringFormat='Can be done slider is {0:F0}'}"></Label>
+        <!--<VerticalStackLayout HorizontalOptions="Center">
+            <Label x:Name="cbdlabel" Text="Everywhere"></Label>
             <Slider 
+            ValueChanged="cbdslider_ValueChanged"
             Minimum="0" 
             Maximum="4" 
             WidthRequest="100"
             x:Name="cbdslider"
             Value="{Binding tdi.CanBeDone}"/>
-        </VerticalStackLayout>
+        </VerticalStackLayout>-->
         <Button
             BorderWidth="1"
             BackgroundColor="{StaticResource Gray900}"

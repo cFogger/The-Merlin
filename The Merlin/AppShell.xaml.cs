@@ -12,7 +12,7 @@ namespace The_Merlin
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("DayView", typeof(DayView));
+            Routing.RegisterRoute("DayView", typeof(DayDetailView));
             Routing.RegisterRoute("TodoDetailView", typeof(TodoDetail));
             Routing.RegisterRoute("TodoDefDetailView", typeof(TodoDefDetail));
         }

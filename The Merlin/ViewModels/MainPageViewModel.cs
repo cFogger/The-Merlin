@@ -15,10 +15,6 @@ namespace The_Merlin.ViewModels
 
         public string dateString { get { return DateTime.Today.ToString("dd.MM.yy"); } }
 
-        public List<View> todoViews { get { return _todoViews; } set { _todoViews = value; OnPropertyChanged(); } }
-        private List<View> _todoViews;
-
-
         private TimelineData _timelineData;
         private TodoData _todoData;
         private TodoDefData _todoDefData;
@@ -67,6 +63,15 @@ namespace The_Merlin.ViewModels
                     todoItems.Add(item);
             });
         }
+
+        public ICommand NavigateToTodoDetail => new Command<TodoItem>(async (ti) =>
+        {
+                var parameters = new Dictionary<string, object>
+                {
+                    { "todo", ti }
+                };
+                await Shell.Current.GoToAsync("TodoDetailView", parameters);
+        });
 
         public ICommand TodoAddCommand => new Command(() => { SelectedTodoDef.CreateTodoItem(_todoData); });
         public TodoDefItem SelectedTodoDef { get; set; }

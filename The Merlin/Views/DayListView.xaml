@@ -2,7 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.DayListView"
-             Title="DayListView">
-    <VerticalStackLayout x:Name="mainStack">
-    </VerticalStackLayout>
+             Title="DayListView"
+             x:Name="daylst">
+    <CollectionView ItemsSource="{Binding dayItems}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Border Margin="10,0" StrokeThickness="0.1" BackgroundColor="{StaticResource Gray950}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"></ColumnDefinition>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button Text="Go" Command="{Binding Path=BindingContext.GoToDetail, Source={x:Reference daylst}}" CommandParameter="{Binding .}" Grid.Column="0"></Button>
+                        <Label Text="{Binding Date, StringFormat='{0:dd.MM.yy}'}" Grid.Column="1" VerticalOptions="Center"></Label>
+                        <Label Text="{Binding DayType}" Grid.Column="2" VerticalOptions="Center"></Label>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 </ContentPage>
