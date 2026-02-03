@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Windows.Input;
 using The_Merlin.Data;
 using The_Merlin.Models;
 
@@ -26,5 +27,10 @@ namespace The_Merlin.ViewModels
                 _timelineData.GetAllItems(TimelineIS);
             });
         }
+
+        public ICommand DeleteCommand => new Command<TimelineItem>((item) =>
+        {
+            _timelineData.DeleteItem(item);
+        });
     }
 }

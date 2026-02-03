@@ -3,16 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.DayDetailView"
              Title="DayDetailView">
-    <VerticalStackLayout BindingContext="{Binding myItem}">
+    <VerticalStackLayout>
         <Label 
-            Text="{Binding Id}"
+            Text="{Binding myItem.Id}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label Text="{Binding Date}"
+        <Label Text="{Binding myItem.Date}"
                VerticalOptions="Center"
                HorizontalOptions="Center"/>
-        <Label Text="{Binding DayType}"
+        <Label Text="{Binding myItem.DayType}"
                VerticalOptions="Center"
                HorizontalOptions="Center"/>
+        <Border Padding="10" Margin="5" BackgroundColor="{StaticResource Gray950}">
+            <CollectionView ItemsSource="{Binding TodoItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10" Margin="5" StrokeThickness=".1">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding TodoText}" FontAttributes="Bold" />
+                                <Label Text="{Binding IsCompleted, StringFormat='Completed: {0}'}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
     </VerticalStackLayout>
 </ContentPage>

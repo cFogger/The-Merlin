@@ -7,32 +7,52 @@ namespace The_Merlin.Data
 {
     public class TodoDefData
     {
-        private readonly DataManager dataManager;
+        private readonly DataManager dtm;
         public TodoDefData(DataManager _dataManager)
         {
-            dataManager = _dataManager;
+            dtm = _dataManager;
         }
 
         public List<TodoDefItem> GetAllTodoDefItems()
         {
-            return dataManager.dbConnection.Table<TodoDefItem>().ToList();
+            return dtm.dbConnection.Table<TodoDefItem>().ToList();
+        }
+
+        public TodoDefItem GetTodoDefItemById(int id)
+        {
+            return dtm.dbConnection.Table<TodoDefItem>().FirstOrDefault(t => t.Id == id);
+        }
+
+        public TimeSpan GetTotalDurationByTodoDefId(int tdi)
+        {
+            TimeSpan ts = TimeSpan.Zero;
+            var todoItems = dtm.dbConnection.Table<TodoItem>().Where(x => x.TodoDefId == tdi).ToList();
+            foreach (var ti in todoItems)
+            {
+                var timelines = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == ti.Id && x.Ends != null).ToList();
+                foreach (var tl in timelines)
+                {
+                    ts = ts.Add(tl.Ends.Value - tl.Starts);
+                }
+            }
+            return ts;
         }
 
         public void AddTodoDefItem(TodoDefItem todoDef)
         {
-            dataManager.dbConnection.Insert(todoDef);
+            dtm.dbConnection.Insert(todoDef);
             TodoDefItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateTodoDefItem(TodoDefItem todoDef)
         {
-            dataManager.dbConnection.Update(todoDef);
+            dtm.dbConnection.Update(todoDef);
             TodoDefItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void DeleteTodoDefItem(TodoDefItem todoDef)
         {
-            dataManager.dbConnection.Delete(todoDef);
+            dtm.dbConnection.Delete(todoDef);
             TodoDefItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 

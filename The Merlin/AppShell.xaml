@@ -7,18 +7,12 @@
     xmlns:views="clr-namespace:The_Merlin.Views"
     xmlns:ccontr="clr-namespace:The_Merlin.CustomControls"
     Title="𝕸 𝕰 𝕽 𝕷 𝕴 𝕹" 
-    FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}">
+    FlyoutBehavior="Flyout">
+
+    <!-- FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}"-->
+
     <FlyoutItem Title="Main">
         <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
-    </FlyoutItem>
-    <FlyoutItem Title="Timeline Logs">
-        <ShellContent Route="TimelineLogs" ContentTemplate="{DataTemplate views:TimelineLogsView}" />
-    </FlyoutItem>
-    <FlyoutItem Title="Day List">
-        <ShellContent Route="DayListView" ContentTemplate="{DataTemplate views:DayListView}" />
-    </FlyoutItem>
-    <FlyoutItem Title="Todo Definitions">
-        <ShellContent Route="TodoDefListView" ContentTemplate="{DataTemplate views:TodoDefListView}" />
     </FlyoutItem>
     <Shell.FlyoutHeader>
         <ccontr:FlyoutMiniTodoView />

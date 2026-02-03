@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.TodoDetail"
-             Title="{Binding Todo.TodoText}">
+             Title="{Binding Todo.TodoText}" Disappearing="ContentPage_Disappearing">
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="VerticalOptions" Value="Center"></Setter>
@@ -24,12 +24,13 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
-            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Todo.TodoText}"/>
-            
-            <Label Text="Name:" Grid.Row="1" Grid.Column="0"></Label>
-            <Editor Grid.Column="1" Grid.Row="1" Text="{Binding Todo.TodoInside}" AutoSize="TextChanges"/>
 
+            <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
+            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding myTodoText}"/>
+
+            <Label Text="Definition:" Grid.Row="1" Grid.Column="0"></Label>
+            <Label Grid.Row="1" Grid.Column="1" Text="{Binding TodoDefText}"/>
+            
             <HorizontalStackLayout Grid.Row="0" Grid.Column="2" HeightRequest="32">
                 <Label Text="Created:"/>
                 <Label Text="{Binding Todo.CreatedAt}"/>
@@ -40,21 +41,12 @@
                 <Label Text="{Binding TotalTimeString}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HeightRequest="32">
-                <Label Text="Assigned:"></Label>
-                <DatePicker Date="{Binding Todo.AssignedDate}"/>
+                <Label Text="{Binding Todo.AssignedDate, StringFormat='Assigned Date: {0:dd.MM.yy}'}"></Label>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
                 <Label Text="Is Completed:"/>
                 <Switch IsToggled="{Binding Todo.IsCompleted}"/>
             </HorizontalStackLayout>
-
-            <Label Text="Time Type:" Grid.Row="2" Grid.Column="0"></Label>
-            <Picker x:Name="TimeTypePckr" SelectedIndex="{Binding Todo.TimeMode}" Grid.Row="2" Grid.Column="1">
-                <Picker.Items>
-                    <x:String>No time</x:String>
-                    <x:String>Timer</x:String>
-                </Picker.Items>
-            </Picker>
 
             <StackLayout Grid.Row="5" Grid.ColumnSpan="3">
                 <Label
@@ -63,18 +55,18 @@
                 HorizontalOptions="Center"
                 FontAttributes="Bold" 
                 FontSize="50"></Label>
-                <Button
-                    Text="{Binding StartButtonText}"
-                    Command="{Binding StartStopCommand}" VerticalOptions="Center" TextColor="AliceBlue" FontSize="24" FontAttributes="Bold" CornerRadius="20" WidthRequest="140" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
+                <Button Command="{Binding StartStopCommand}" VerticalOptions="Center" TextColor="AliceBlue" FontSize="24" FontAttributes="Bold" CornerRadius="20" WidthRequest="140" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
                                      Value="true">
+                            <Setter Property="Text" Value="Stop"></Setter>
                             <Setter Property="BackgroundColor" Value="Red"></Setter>
                         </DataTrigger>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
                                      Value="false">
+                            <Setter Property="Text" Value="Start"></Setter>
                             <Setter Property="BackgroundColor" Value="Green"></Setter>
                         </DataTrigger>
                     </Button.Triggers>

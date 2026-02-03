@@ -8,7 +8,17 @@ namespace The_Merlin.ViewModels
     [QueryProperty(nameof(tdi), "tododef")]
     public class TodoDefDetailModelView : BaseViewModel
     {
-        public TodoDefItem tdi { get { return _originalTdi; } set { _originalTdi = value; rptType = value.RepeatType; OnPropertyChanged(); } }
+        public TodoDefItem tdi
+        {
+            get { return _originalTdi; }
+            set
+            {
+                _originalTdi = value;
+                rptType = value.RepeatType;
+                OnPropertyChanged();
+                TotalDuration = "Total Duration: " + _todoDefData.GetTotalDurationByTodoDefId(tdi.Id).ToString(@"hh\:mm\:ss");
+            }
+        }
         private TodoDefItem _originalTdi;
 
         public TodoDefRepeatType rptType { get { return _rptType; } 
@@ -24,6 +34,8 @@ namespace The_Merlin.ViewModels
         public bool IsCustomRpt { get { return _isCustomRpt; } set { _isCustomRpt = value; OnPropertyChanged(); } }
         private bool _isCustomRpt;
 
+        public string TotalDuration { get { return _totalDuration; } set { _totalDuration = value; OnPropertyChanged(); } }
+        private string _totalDuration;
         public TodoDefRepeatType[] RepeatTypes
         {
             get
@@ -49,5 +61,7 @@ namespace The_Merlin.ViewModels
                 _todoDefData.UpdateTodoDefItem(tdi);
             await Shell.Current.GoToAsync("..");
         });
+
+
     }
 }

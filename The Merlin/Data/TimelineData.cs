@@ -39,7 +39,7 @@ namespace The_Merlin.Data
             return dtm.dbConnection.Table<TimelineItem>().FirstOrDefault(x => x.Id == id);
         }
 
-        public TimeSpan GetTotal(int todoId)
+        public TimeSpan GetTotalbyTodoId(int todoId)
         {
             TimeSpan ts = TimeSpan.Zero;
             List<TimelineItem> tli = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == todoId && x.Ends != null).ToList();

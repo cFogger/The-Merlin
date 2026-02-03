@@ -67,5 +67,10 @@
             Text="{Binding tdi.Id}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Label 
+            TextColor="AliceBlue"
+            Text="{Binding TotalDuration}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>

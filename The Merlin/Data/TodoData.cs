@@ -24,6 +24,8 @@ namespace The_Merlin.Data
         
         public List<TodoItem> GetTodaysTodos() => [.. dtm.dbConnection.Table<TodoItem>().Where(x=>x.AssignedDate == DateTime.Today)];
 
+        public List<TodoItem> GetItemsByTodoDefId(int tdi) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.TodoDefId == tdi)];
+
         public void GetAssignedDates()
         {
             var que = dtm.dbConnection.Query<Models.TodoItem>("SELECT DISTINCT AssignedDate FROM TodoItem");

@@ -15,6 +15,10 @@ namespace The_Merlin
             Routing.RegisterRoute("DayView", typeof(DayDetailView));
             Routing.RegisterRoute("TodoDetailView", typeof(TodoDetail));
             Routing.RegisterRoute("TodoDefDetailView", typeof(TodoDefDetail));
+
+            Routing.RegisterRoute("DayListView", typeof(DayListView));
+            Routing.RegisterRoute("TimelineLogsView", typeof(TimelineLogsView));
+            Routing.RegisterRoute("TodoDefListView", typeof(TodoDefListView));
         }
     }
 }

@@ -57,14 +57,11 @@ namespace The_Merlin.Models
         }
 
         [Ignore]
-        public ICommand DeleteCommand
+        public bool IsToday
         {
             get
             {
-                return new Command(() =>
-                {
-                    Application.Current.Handler.MauiContext.Services.GetService<TimelineData>().DeleteItem(this);
-                });
+                return Starts.Date == DateTime.Now.Date;
             }
         }
     }

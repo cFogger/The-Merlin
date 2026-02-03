@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using The_Merlin.CustomControls;
 using The_Merlin.Data;
+using The_Merlin.Interfaces;
 using The_Merlin.Models;
 
 namespace The_Merlin.ViewModels
@@ -18,8 +19,9 @@ namespace The_Merlin.ViewModels
         private TimelineData _timelineData;
         private TodoData _todoData;
         private TodoDefData _todoDefData;
+        private ITimerService _timer;
 
-        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData)
+        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, ITimerService timerService)
         {
             _timelineData = timelineData;
             _todoData = todoData;
@@ -73,7 +75,23 @@ namespace The_Merlin.ViewModels
                 await Shell.Current.GoToAsync("TodoDetailView", parameters);
         });
 
-        public ICommand TodoAddCommand => new Command(() => { SelectedTodoDef.CreateTodoItem(_todoData); });
+        public ICommand NavigateToDayList => new Command(async () =>
+        {
+                await Shell.Current.GoToAsync("DayListView");
+        });
+
+        public ICommand NavigateToTimelineLogsView => new Command(async () =>
+        {
+                await Shell.Current.GoToAsync("TimelineLogsView");
+        });
+
+        public ICommand NavigateToTodoDefListView => new Command(async () =>
+        {
+                await Shell.Current.GoToAsync("TodoDefListView");
+        });
+
+        public ICommand TodoAddCommand => new Command(() => { if (SelectedTodoDef == null) return; SelectedTodoDef.CreateTodoItem(_todoData); });
+
         public TodoDefItem SelectedTodoDef { get; set; }
     }
 }

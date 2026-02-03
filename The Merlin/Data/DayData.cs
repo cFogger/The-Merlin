@@ -28,12 +28,21 @@ namespace The_Merlin.Data
             return dtm.dbConnection.Table<DayItem>().First(x => x.Date == date.Value.Date);
         }
 
+        public void GetTodos(ObservableCollection<TodoItem> myObs, DateTime? date = null)
+        {
+            if (date == null) { date = DateTime.Today; }
+            myObs.Clear();
+            var mylist = dtm.dbConnection.Table<TodoItem>().Where(x => x.AssignedDate == date.Value.Date).ToList();
+            foreach (TodoItem item in mylist)
+                myObs.Add(item);
+        }
+
         public void AddItem(DayItem item)
         {
             if (dtm.dbConnection.Table<DayItem>().Count(x => x.Date == DateTime.Today) > 0)
                 return;
             dtm.dbConnection.Insert(item);
-            ItemChanged.Invoke(this, EventArgs.Empty);
+            ItemChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateItem(DayItem item)

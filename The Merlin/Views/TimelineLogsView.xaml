@@ -2,49 +2,79 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.TimelineLogsView"
-             Title="TimelineLogsView">
+             Title="Timeline Logs" 
+             x:Name="timelineLogsView">
     <VerticalStackLayout>
         <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10" VerticalScrollBarVisibility="Always">
             <CollectionView.Header>
                 <Grid ColumnSpacing="10">
+                    <Grid.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="TextColor" Value="{StaticResource Gray400}"></Setter>
+                            <Setter Property="FontSize" Value="10"></Setter>
+                        </Style>
+                    </Grid.Resources>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20"></ColumnDefinition>
+                        <ColumnDefinition Width="44"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="85"></ColumnDefinition>
                         <ColumnDefinition Width="50"></ColumnDefinition>
+                        <ColumnDefinition Width="60"></ColumnDefinition>
                         <ColumnDefinition Width="50"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label Text="ID" FontAttributes="Bold" Grid.Column="0"></Label>
-                    <Label Text="Todo" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"></Label>
-                    <Label Text="Duration(m)" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"></Label>
-                    <Label Text="Starts" FontAttributes="Bold" Grid.Column="3" HorizontalOptions="Center"></Label>
-                    <Label Text="Ends" FontAttributes="Bold" Grid.Column="4" HorizontalOptions="Center"></Label>
+                    <Label Text="..." Grid.Column="0" HorizontalTextAlignment="Center"></Label>
+                    <Label Text="Todo" Grid.Column="1" HorizontalOptions="Start" Margin="15,0"></Label>
+                    <Label Text="Starts" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <Label Text="Time" Grid.Column="3" HorizontalOptions="Center"></Label>
+                    <Label Text="Ends" Grid.Column="4" HorizontalOptions="Center"></Label>
                 </Grid>
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                        <Grid ColumnSpacing="10">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20"></ColumnDefinition>
+                                <ColumnDefinition Width="44"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="85"></ColumnDefinition>
                                 <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="60"></ColumnDefinition>
                                 <ColumnDefinition Width="50"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <HorizontalStackLayout Grid.Column="0">
-                                <Button Text="X" Command="{Binding DeleteCommand}" Background="IndianRed" TextColor="AliceBlue" Margin="0" Padding="0" WidthRequest="20" HeightRequest="20" CornerRadius="10"/>
-                                <Label Text="{Binding Path=Id}" HorizontalOptions="Start" VerticalOptions="Center"></Label>
-                            </HorizontalStackLayout>
-                            <Label Text="{Binding Path=GetTodoName}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"></Label>
-                            <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center"></Label>
-                            <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
-                                <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                                <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                            <Button HeightRequest="22" FontAttributes="Bold" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}" CornerRadius="15" Grid.Column="0"/>
+                            <VerticalStackLayout Grid.Column="1" Margin="5,0">
+                                <Label Text="{Binding Path=GetTodoName}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Bold"></Label>
+                                <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
                             </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" VerticalOptions="Center">
+                                <VerticalStackLayout.Resources>
+                                    <Style TargetType="Label">
+                                        <Setter Property="TextColor" Value="#ccffdd"></Setter>
+                                    </Style>
+                                </VerticalStackLayout.Resources>
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14"></Label>
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </VerticalStackLayout>
+                            <Label Text="{Binding Path=GetDurationString}" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Start" FontAttributes="Bold" FontSize="14"></Label>
+                            <Label Text="→" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="End" TextColor="DimGrey"></Label>
                             <VerticalStackLayout Grid.Column="4" VerticalOptions="Center">
-                                <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="10"></Label>
-                                <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10"></Label>
+                                <VerticalStackLayout.Resources>
+                                    <Style TargetType="Label">
+                                        <Setter Property="TextColor" Value="#ffe6dd"></Setter>
+                                    </Style>
+                                </VerticalStackLayout.Resources>
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14"></Label>
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
                             </VerticalStackLayout>
                         </Grid>
                     </Border>

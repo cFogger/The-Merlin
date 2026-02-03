@@ -100,9 +100,6 @@
 	  <MauiXaml Update="Views\TimelineLogsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomControls\TodoAdd.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\TodoDefDetail.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
