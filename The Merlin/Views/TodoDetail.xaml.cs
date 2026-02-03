@@ -1,4 +1,6 @@
-﻿using The_Merlin.ViewModels;
+﻿using The_Merlin.Interfaces;
+using The_Merlin.Services;
+using The_Merlin.ViewModels;
 
 namespace The_Merlin.Views;
 
@@ -8,5 +10,15 @@ public partial class TodoDetail : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
+
+        this.Appearing += (s, e) =>
+        {
+            vm._timerService.Dispatcher().Tick += vm.TodoDetailViewModel_Tick;
+        };
+
+        this.Disappearing += (s, e) =>
+        {
+            vm._timerService.Dispatcher().Tick -= vm.TodoDetailViewModel_Tick;
+        };
     }
 }

@@ -7,10 +7,9 @@ namespace The_Merlin.Interfaces
 {
     public interface ITimerService
     {
-        Task StartTimer(TodoItem tdi);
-        Task StopTimer();
+        Task StartStopTimer(TodoItem tdi);
         IDispatcherTimer Dispatcher();
-        string TimeString();
+        string TimeString(TodoItem todo, Action<object?, EventArgs> e);
         bool IsTimerRunning();
         TodoItem ActiveTodoSession();
     }

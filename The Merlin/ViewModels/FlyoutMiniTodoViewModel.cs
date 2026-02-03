@@ -34,7 +34,7 @@ namespace The_Merlin.ViewModels
             {
                 IsVisible = true;
                 TodoTitle = TimerService.ActiveTodoSession().TodoText;
-                TodoTimer = TimerService.TimeString();
+                TodoTimer = TimerService.TimeString(TimerService.ActiveTodoSession(), FlyoutMiniTodoViewModel_Tick);
             }
             else
             {
