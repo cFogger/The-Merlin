@@ -7,7 +7,7 @@
     xmlns:views="clr-namespace:The_Merlin.Views"
     xmlns:ccontr="clr-namespace:The_Merlin.CustomControls"
     Title="𝕸 𝕰 𝕽 𝕷 𝕴 𝕹" 
-    FlyoutBehavior="Flyout">
+    FlyoutBehavior="Disabled">
     <Shell.TitleView>
         <ccontr:FlyoutMiniTodoView />
     </Shell.TitleView>

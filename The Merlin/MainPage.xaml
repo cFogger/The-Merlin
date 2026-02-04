@@ -12,7 +12,7 @@
         <!-- Todo Section -->
         <VerticalStackLayout Grid.Row="0">
             <HorizontalStackLayout Margin="10">
-                <Label Text="{Binding dateString}"  FontAttributes="Bold" FontSize="16" VerticalOptions="Center"></Label>
+                <Label Text="{Binding dateString}"  FontAttributes="Bold" FontSize="14" VerticalOptions="Center"></Label>
                 <Button Command="{Binding NavigateToDayList}" Text="Day List" Margin="15,0,0,0" BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"></Button>
             </HorizontalStackLayout>
             <CollectionView ItemsSource="{Binding todoItems}" SelectionMode="None">
@@ -22,6 +22,7 @@
                             <Grid Padding="5,2,5,2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
                                     <ColumnDefinition Width="80"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Label
@@ -30,7 +31,25 @@
                             VerticalOptions="Center" 
                             HorizontalOptions="Fill"
                             Margin="25,5,25,5"/>
-                                <Button Grid.Column="1" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
+                                <Border Margin="15,0" BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="1">
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="InProgress">
+                                            <Setter Property="BackgroundColor" Value="DarkSlateGrey"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Pending">
+                                            <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Completed">
+                                            <Setter Property="BackgroundColor" Value="DarkOliveGreen"></Setter>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Label
+                                        Text="{Binding Status}"
+                                        VerticalOptions="Center" 
+                                        HorizontalOptions="Fill"
+                                        Margin="15,0"/>
+                                </Border>
+                                <Button Grid.Column="2" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -64,7 +83,7 @@
         <!-- Timeline Section -->
         <VerticalStackLayout Grid.Row="1">
             <HorizontalStackLayout Margin="10">
-                <Label Text="Son 5 aktivite" FontAttributes="Bold" FontSize="16" VerticalOptions="Center"></Label>
+                <Label Text="Son 5 aktivite" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"></Label>
                 <Button Command="{Binding NavigateToTimelineLogsView}" Text="Timeline Logs" Margin="15,0,0,0" BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"></Button>
             </HorizontalStackLayout>
             <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None">
