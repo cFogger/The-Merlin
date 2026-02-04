@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.TodoDetail"
-             Title="{Binding Todo.TodoText}" Disappearing="ContentPage_Disappearing">
+             Title="{Binding Todo.TodoText}">
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="VerticalOptions" Value="Center"></Setter>
@@ -28,40 +28,25 @@
             <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
             <Entry Grid.Row="0" Grid.Column="1" Text="{Binding myTodoText}"/>
 
-            <Label Text="Definition:" Grid.Row="1" Grid.Column="0"></Label>
-            <Label Grid.Row="1" Grid.Column="1" Text="{Binding TodoDefText}"/>
-            
-            <HorizontalStackLayout Grid.Row="0" Grid.Column="2" HeightRequest="32">
-                <Label Text="Created:"/>
-                <Label Text="{Binding Todo.CreatedAt}"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Grid.Row="1" Grid.Column="2" HeightRequest="32">
-                <Label Text="Total:"/>
-                <!--<Label Text="{Binding Priority}"/>-->
-                <Label Text="{Binding TotalTimeString}"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HeightRequest="32">
-                <Label Text="{Binding Todo.AssignedDate, StringFormat='Assigned Date: {0:dd.MM.yy}'}"></Label>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
-                <Label Text="Is Completed:"/>
-                <Switch IsToggled="{Binding Todo.IsCompleted}"/>
-            </HorizontalStackLayout>
+            <Label Grid.Row="1" Grid.Column="1" Text="{Binding TodoDefText, StringFormat='Def: {0}'}" HeightRequest="32"/>
+            <Label Grid.Row="0" Grid.Column="2" Text="{Binding Todo.CreatedAt, StringFormat='Created: {0}'}" HeightRequest="32"/>
+            <Label Grid.Row="1" Grid.Column="2" Text="{Binding TotalTimeString, StringFormat='Total: {0}'}" HeightRequest="32"/>
+            <Label Grid.Row="2" Grid.Column="2" Text="{Binding Todo.AssignedDate, StringFormat='Assigned Date: {0:dd.MM.yy}'}" HeightRequest="32"></Label>
 
-            <StackLayout Grid.Row="5" Grid.ColumnSpan="3">
+            <HorizontalStackLayout Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="Center">
                 <Label
                 Text="{Binding TimeString}"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"
                 FontAttributes="Bold" 
-                FontSize="50"></Label>
-                <Button Command="{Binding StartStopCommand}" VerticalOptions="Center" TextColor="AliceBlue" FontSize="24" FontAttributes="Bold" CornerRadius="20" WidthRequest="140" HeightRequest="70" BorderColor="#FFFFFF" BorderWidth="1">
+                FontSize="26"></Label>
+                <Button Command="{Binding StartStopCommand}" VerticalOptions="Center" TextColor="AliceBlue" FontSize="20" FontAttributes="Bold" CornerRadius="20" WidthRequest="80" HeightRequest="44">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
                                      Value="true">
                             <Setter Property="Text" Value="Stop"></Setter>
-                            <Setter Property="BackgroundColor" Value="Red"></Setter>
+                            <Setter Property="BackgroundColor" Value="DarkRed"></Setter>
                         </DataTrigger>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
@@ -71,17 +56,18 @@
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-            </StackLayout>
-            <HorizontalStackLayout Grid.Row="4" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Spacing="10" Margin="20">
-                <Button
-                    Text="Delete"
-                    Command="{Binding DeleteCommand}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="End"
-                    BackgroundColor="#9D1818"
-                    TextColor="GhostWhite"
-                    FontSize="Small" 
-                    Padding="15"/>
+                <Button Text="Complete" Command="{Binding CompleteCommand}" IsVisible="{Binding IsManualCompletion}" HeightRequest="44"/>
+                <Label
+                Text="{Binding Todo.Duration}"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                FontAttributes="Bold" 
+                FontSize="26"></Label>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
+                <Label Text="{Binding Todo.CompletionType}"/>
+                <Label Text="{Binding Todo.Status}"/>
             </HorizontalStackLayout>
         </Grid>
     </VerticalStackLayout>

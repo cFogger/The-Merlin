@@ -17,13 +17,19 @@ namespace The_Merlin.Services
 
         private TimelineData _timelineData;
         private readonly IMessageService _messageService;
+        private TodoData _todoData;
 
-        public IDispatcherTimer TodoTimer;
+        private bool _isAlerted = false;
+        private TimeSpan _lastTotal = TimeSpan.Zero;
+
+        public IDispatcherTimer TodoTimer = App.AppTimer;
 
         public TimerService(TimelineData timelineData, TodoData todoData, IMessageService msgService)
         {
             _timelineData = timelineData;
+            _todoData = todoData;
             _messageService = msgService;
+
             TimelineItem? tli = timelineData.checkRunningTodo();
             if (tli != null)
             {
@@ -31,9 +37,7 @@ namespace The_Merlin.Services
                 IsChronoRunning = true;
                 TodoTimeSpan = DateTime.Now - tli.Starts;
             }
-            TodoTimer = Application.Current.Dispatcher.CreateTimer();
-            TodoTimer.Interval = TimeSpan.FromSeconds(1);
-            TodoTimer.Start();
+
             TodoTimer.Tick += TodoTimer_Tick;
         }
 
@@ -48,31 +52,51 @@ namespace The_Merlin.Services
         {
             if (!IsChronoRunning)
             {
-                if (_timelineData.AddItem(new TimelineItem { Starts = DateTime.Now, TodoId = todo.Id }) == 1)
+                if (_timelineData.AddItem(new TimelineItem
                 {
+                    Starts = DateTime.Now,
+                    TodoId = todo.Id
+                }) == 1)
+                {
+                    _isAlerted = false;
                     IsChronoRunning = true;
                     _ActiveTodoSession = todo;
                     TodoTimeSpan = TimeSpan.Zero;
+                    _lastTotal = _timelineData.GetTotalbyTodoId(todo.Id);
+                    if (todo.Status == TodoItemStatus.Pending)
+                    {
+                        todo.Status = TodoItemStatus.InProgress;
+                    }
+                    _todoData.UpdateItem(todo);
                 }
                 else
                 {
                     await _messageService.ShowAsync("Problem", "Another todo running - " + _ActiveTodoSession.TodoText);
                 }
             }
+            else if (_ActiveTodoSession.Id == todo.Id)
+            {
+                string cntxt = await _messageService.ShowPromptAsync(todo.TodoText, "N'aptın?", "Fill Context");
+                _timelineData.EndItem(todo.Id, DateTime.Now, cntxt);
+                if (todo.CompletionType == TodoCompletionType.DurationBased)
+                {
+                    if (todo.Duration > _lastTotal.Add(TodoTimeSpan))
+                    {
+                        todo.Status = TodoItemStatus.Pending;
+                    }
+                    else
+                    {
+                        todo.Status = TodoItemStatus.Completed;
+                    }
+                }
+                _todoData.UpdateItem(todo);
+                IsChronoRunning = false;
+                _ActiveTodoSession = null;
+                TodoTimeSpan = TimeSpan.Zero;
+            }
             else
             {
-                if (_ActiveTodoSession.Id == todo.Id)
-                {
-                    var cntxt = await _messageService.ShowPromptAsync(todo.TodoText, "N'aptın?", "Fill Context");
-                    _timelineData.EndItem(todo.Id, DateTime.Now, cntxt);
-                    IsChronoRunning = false;
-                    _ActiveTodoSession = null;
-                    TodoTimeSpan = TimeSpan.Zero;
-                }
-                else
-                {
-                    await _messageService.ShowAsync("Problem", "Another todo running - " + _ActiveTodoSession.TodoText);
-                }
+                await _messageService.ShowAsync("Problem", "Another todo running - " + _ActiveTodoSession.TodoText);
             }
         }
 
@@ -81,22 +105,34 @@ namespace The_Merlin.Services
             return TodoTimer;
         }
 
-        public string TimeString(TodoItem todo, Action<object?, EventArgs> evnt)
+        public string TimeString(TodoItem todo)
         {
             if (IsChronoRunning)
+            {
                 if (_ActiveTodoSession.Id == todo.Id)
                 {
+                    if (!_isAlerted && todo.CompletionType == TodoCompletionType.DurationBased && todo.Duration < _lastTotal.Add(TodoTimeSpan))
+                    {
+                        HandleCompletionAlert(todo);
+                    }
                     return TodoTimerText;
                 }
-                else
-                {
-                    TodoTimer.Tick -= new EventHandler(evnt);
-                    return "Another todo running";
-                }
+                return TodoTimerText + " " + _ActiveTodoSession.TodoText;
+            }
+            return "00:00:00";
+        }
+
+        private async void HandleCompletionAlert(TodoItem todo)
+        {
+            _isAlerted = true;
+            if (await _messageService.ShowConfirmAsync("Todo Time Exceeded", $"The time spent on {todo.TodoText} has exceeded the expected duration of {todo.Duration}. Do you want to continue?"))
+            {
+                todo.Status = TodoItemStatus.Completed;
+                _todoData.UpdateItem(todo);
+            }
             else
             {
-                TodoTimer.Tick -= new EventHandler(evnt);
-                return "Timer is not running";
+                await StartStopTimer(todo);
             }
         }
 

@@ -67,6 +67,13 @@ namespace The_Merlin.Data
             return dtm.dbConnection.Table<TimelineItem>().Where(x => x.Ends == null).FirstOrDefault();
         }
 
+        public int AddANoTimeItem(TimelineItem ti)
+        {
+            int xd = dtm.dbConnection.Insert(ti);
+            TimelineChanged?.Invoke(this, EventArgs.Empty);
+            return xd;
+        }
+
         public void EndItem(int todoId, DateTime? ends, string? context = null)
         {
             var myItem = dtm.dbConnection.Table<Models.TimelineItem>().First(x => x.TodoId == todoId && x.Ends == null);

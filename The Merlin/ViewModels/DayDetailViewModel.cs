@@ -25,6 +25,5 @@ namespace The_Merlin.ViewModels
         { 
             _dayData = dayData;
         }
-
     }
 }

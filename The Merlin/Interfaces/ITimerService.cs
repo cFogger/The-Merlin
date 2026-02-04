@@ -9,7 +9,7 @@ namespace The_Merlin.Interfaces
     {
         Task StartStopTimer(TodoItem tdi);
         IDispatcherTimer Dispatcher();
-        string TimeString(TodoItem todo, Action<object?, EventArgs> e);
+        string TimeString(TodoItem todo);
         bool IsTimerRunning();
         TodoItem ActiveTodoSession();
     }

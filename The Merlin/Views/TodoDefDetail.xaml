@@ -42,6 +42,19 @@
             x:Name="durstepper"
             Value="{Binding tdi.GetDefaultDurationInMinutes}" />
         </VerticalStackLayout>
+        <VerticalStackLayout HorizontalOptions="Center">
+            <Label>
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsManualCompletion}" Value="False">
+                        <Setter Property="Text" Value="Completion duration based"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsManualCompletion}" Value="True">
+                        <Setter Property="Text" Value="Complete manual"></Setter>
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+            <Switch IsToggled="{Binding IsManualCompletion}" HorizontalOptions="Center"></Switch>
+        </VerticalStackLayout>
         <!--<VerticalStackLayout HorizontalOptions="Center">
             <Label x:Name="cbdlabel" Text="Everywhere"></Label>
             <Slider 

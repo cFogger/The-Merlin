@@ -2,18 +2,29 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.CustomControls.FlyoutMiniTodoView" 
-             IsVisible="{Binding IsVisible}">
-    <VerticalStackLayout Margin="5">
-        <VerticalStackLayout.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding GoToActive}"></TapGestureRecognizer>
-        </VerticalStackLayout.GestureRecognizers>
-        <Label 
+             IsVisible="{Binding IsVisible}" HeightRequest="48">
+    <Grid Margin="2" HorizontalOptions="Center" ColumnSpacing="44">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <VerticalStackLayout Grid.Column="0">
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoToActiveCommand}"></TapGestureRecognizer>
+            </VerticalStackLayout.GestureRecognizers>
+            <Label 
             Text="{Binding TodoTimer}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label 
+            <Label 
             Text="{Binding TodoTitle}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+        <HorizontalStackLayout Grid.Column="1">
+            <Button Text="Stop" Command="{Binding StopCommand}" Background="DarkRed" HeightRequest="44"></Button>
+            <Button Text="Complete" Command="{Binding CompleteCommand}" HeightRequest="44" IsVisible="{Binding IsManualCompletion}"/>
+        </HorizontalStackLayout>
+    </Grid>
 </ContentView>

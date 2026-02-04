@@ -17,10 +17,6 @@ namespace The_Merlin.Data
         public TodoData(DataManager _dtm, DayData dayData) { 
             dtm = _dtm; 
             _dayData = dayData; }
-
-        public List<TodoItem> GetUndoneItems(DateTime date) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.IsCompleted == false && x.AssignedDate == date)];
-
-        public List<TodoItem> GetDoneItems(DateTime date) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.IsCompleted && x.AssignedDate == date)];
         
         public List<TodoItem> GetTodaysTodos() => [.. dtm.dbConnection.Table<TodoItem>().Where(x=>x.AssignedDate == DateTime.Today)];
 

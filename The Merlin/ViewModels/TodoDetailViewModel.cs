@@ -21,9 +21,13 @@ namespace The_Merlin.ViewModels
                 TotalTimeString = _timelineData.GetTotalbyTodoId(value.Id).ToString(@"hh\:mm\:ss");
                 TodoDefText = _todoDefData.GetTodoDefItemById(Todo.TodoDefId).TodoDefText;
                 myTodoText = Todo.TodoText;
+                IsManualCompletion = value.CompletionType == TodoCompletionType.Manual;
                 TimerRunning = false;
             }
         }
+
+        private bool _isManualCompletion;
+        public bool IsManualCompletion { get { return _isManualCompletion; } set { _isManualCompletion = value; OnPropertyChanged("IsManualCompletion"); } }
 
         private string _myTodoText;
         public string myTodoText
@@ -43,7 +47,6 @@ namespace The_Merlin.ViewModels
 
         private string _totalTimeString;
         public string TotalTimeString { get { return _totalTimeString; } set { _totalTimeString = value; OnPropertyChanged(); } }
-
 
         public ICommand DeleteCommand => new Command(async() => {
             _todoData.DeleteItem(Todo);
@@ -65,17 +68,38 @@ namespace The_Merlin.ViewModels
             _todoDefData = todoDefData;
         }
 
+        public ICommand CompleteCommand => new Command((Action)async delegate
+        {
+            Todo.Status = TodoItemStatus.Completed;
+            _todoData.UpdateItem(Todo);
+            if (_timerService.ActiveTodoSession() != null && _timerService.ActiveTodoSession().Id == Todo.Id)
+            {
+                await _timerService.StartStopTimer(Todo);
+            }
+            else
+            {
+                string cntxt = await _messageService.ShowPromptAsync(Todo.TodoText, "N'aptın?", "Fill Context");
+                _timelineData.AddANoTimeItem(new TimelineItem
+                {
+                    TodoId = Todo.Id,
+                    Starts = DateTime.Now.AddSeconds(-1.0),
+                    Ends = DateTime.Now,
+                    Context = cntxt
+                });
+            }
+        });
+
         //timer
         public ICommand StartStopCommand => new Command(async () =>
         {
             await _timerService.StartStopTimer(Todo);
-            TimerRunning = true;
         });
 
         public void TodoDetailViewModel_Tick(object? sender, EventArgs e)
         {
             Debug.WriteLine("Tick TodoDetailViewModel" + Todo.TodoText);
-            TimeString = _timerService.TimeString(Todo, TodoDetailViewModel_Tick);
+            TimeString = _timerService.TimeString(Todo);
+            TimerRunning = true;
         }
 
         private bool _timerRunning;

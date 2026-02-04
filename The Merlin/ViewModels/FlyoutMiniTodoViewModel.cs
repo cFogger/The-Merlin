@@ -2,13 +2,41 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using The_Merlin.Data;
 using The_Merlin.Interfaces;
+using The_Merlin.Models;
+using The_Merlin.Services;
 
 namespace The_Merlin.ViewModels
 {
     public class FlyoutMiniTodoViewModel : BaseViewModel
     {
-        ITimerService TimerService;
+        ITimerService _timerService;
+        TodoData _todoData;
+
+        public FlyoutMiniTodoViewModel(ITimerService timerService, TodoData todoData)
+        {
+            _timerService = timerService;
+            _todoData = todoData;
+            timerService.Dispatcher().Tick += FlyoutMiniTodoViewModel_Tick;
+        }
+
+        private void FlyoutMiniTodoViewModel_Tick(object? sender, EventArgs e)
+        {
+            if (_timerService.ActiveTodoSession() != null)
+            {
+                TodoItem ats = _timerService.ActiveTodoSession();
+                IsVisible = true;
+                TodoTitle = ats.TodoText;
+                IsManualCompletion = ats.CompletionType == TodoCompletionType.Manual;
+                TodoTimer = _timerService.TimeString(ats);
+            }
+            else
+            {
+                IsVisible = false;
+            }
+        }
 
         private string _todoTitle;
         public string TodoTitle { get { return _todoTitle; } set { _todoTitle = value; OnPropertyChanged(); } }
@@ -19,36 +47,25 @@ namespace The_Merlin.ViewModels
         private bool _isVisible;
         public bool IsVisible { get { return _isVisible; } set { _isVisible = value; OnPropertyChanged(); } }
 
-        public Command GoToActive { get; }
+        private bool _isManualCompletion;
+        public bool IsManualCompletion { get { return _isManualCompletion; } set { _isManualCompletion = value; OnPropertyChanged("IsManualCompletion"); } }
 
-        public FlyoutMiniTodoViewModel(ITimerService timerService)
-        {
-            TimerService = timerService;
-            timerService.Dispatcher().Tick += FlyoutMiniTodoViewModel_Tick;
-            GoToActive = new Command(_gotoActive);
-        }
 
-        private void FlyoutMiniTodoViewModel_Tick(object? sender, EventArgs e)
+        public ICommand GoToActiveCommand => new Command((Action)async delegate
         {
-            if (TimerService.ActiveTodoSession() != null)
-            {
-                IsVisible = true;
-                TodoTitle = TimerService.ActiveTodoSession().TodoText;
-                TodoTimer = TimerService.TimeString(TimerService.ActiveTodoSession(), FlyoutMiniTodoViewModel_Tick);
-            }
-            else
-            {
-                IsVisible = false;
-            }
-        }
-
-        private async void _gotoActive()
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                {"todo",TimerService.ActiveTodoSession()},
-            };
+            var parameters = new Dictionary<string, object> { { "todo", _todoData.GetItem(_timerService.ActiveTodoSession().Id) } };
             await Shell.Current.GoToAsync("TodoDetailView", parameters);
-        }
+        });
+
+        public ICommand StopCommand => new Command((Action)async delegate
+        {
+            await _timerService.StartStopTimer(_timerService.ActiveTodoSession());
+        });
+
+        public ICommand CompleteCommand => new Command((Action)async delegate
+        {
+            _timerService.ActiveTodoSession().Status = TodoItemStatus.Completed;
+            await _timerService.StartStopTimer(_timerService.ActiveTodoSession());
+        });
     }
 }

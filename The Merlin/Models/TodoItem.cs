@@ -11,13 +11,20 @@ namespace The_Merlin.Models
         public int Id { get; set; }
         public int TodoDefId { get; set; }
         public string? TodoText { get; set; }
-        public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime AssignedDate { get; set; }
         public TodoItemStatus Status { get; set; } = 0; // 0 Pending 1 InProgress 2 Success 3 Failed/Delayed
-        public TodoCompletionType CompletionType { get; set; } = TodoCompletionType.Manual;
+        public TodoCompletionType CompletionType { get; set; }
         public TimeSpan Duration { get; set; } = TimeSpan.Zero; // Used if CompletionType is DurationBased
-        public int Priority { get; set; } = 0; // 0 Low 1 Medium 2 High 3 Critical
+
+        [Ignore]
+        public bool IsCompleted
+        {
+            get
+            {
+                return this.Status == TodoItemStatus.Completed;
+            }
+        }
     }
 
     public enum TodoItemStatus
@@ -29,7 +36,7 @@ namespace The_Merlin.Models
 
     public enum TodoCompletionType
     {
-        Manual,
-        DurationBased
+        Manual = 0,
+        DurationBased = 1
     }
 }

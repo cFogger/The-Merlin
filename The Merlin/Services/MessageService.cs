@@ -21,5 +21,13 @@ namespace The_Merlin.Services
                 return await wind.DisplayPromptAsync(title, message, placeholder: placeholder);
             return "";
         }
+
+        public async Task<bool> ShowConfirmAsync(string title, string message)
+        {
+            Page? wind = Application.Current?.Windows[0].Page;
+            if (wind != null)
+                return await wind.DisplayAlertAsync(title, message, "OK", "Cancel");
+            return false;
+        }
     }
 }

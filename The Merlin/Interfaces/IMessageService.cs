@@ -8,5 +8,6 @@ namespace The_Merlin.Interfaces
     {
         Task ShowAsync(string title, string message);
         Task<string> ShowPromptAsync(string title, string message, string placeholder);
+        Task<bool> ShowConfirmAsync(string title, string message);
     }
 }

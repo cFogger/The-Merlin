@@ -13,12 +13,12 @@ public partial class TodoDetail : ContentPage
 
         this.Appearing += (s, e) =>
         {
-            vm._timerService.Dispatcher().Tick += vm.TodoDetailViewModel_Tick;
+            App.AppTimer.Tick += vm.TodoDetailViewModel_Tick;
         };
 
         this.Disappearing += (s, e) =>
         {
-            vm._timerService.Dispatcher().Tick -= vm.TodoDetailViewModel_Tick;
+            App.AppTimer.Tick -= vm.TodoDetailViewModel_Tick;
         };
     }
 }

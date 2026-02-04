@@ -17,6 +17,7 @@ namespace The_Merlin.ViewModels
                 rptType = value.RepeatType;
                 OnPropertyChanged();
                 TotalDuration = "Total Duration: " + _todoDefData.GetTotalDurationByTodoDefId(tdi.Id).ToString(@"hh\:mm\:ss");
+                IsManualCompletion = tdi.DefaultCompletionType == TodoCompletionType.Manual;
             }
         }
         private TodoDefItem _originalTdi;
@@ -34,8 +35,21 @@ namespace The_Merlin.ViewModels
         public bool IsCustomRpt { get { return _isCustomRpt; } set { _isCustomRpt = value; OnPropertyChanged(); } }
         private bool _isCustomRpt;
 
+        private bool _isManualCompletion;
+        public bool IsManualCompletion
+        {
+            get { return _isManualCompletion; }
+            set
+            {
+                _isManualCompletion = value;
+                OnPropertyChanged("IsManualCompletion");
+                tdi.DefaultCompletionType = ((!IsManualCompletion) ? TodoCompletionType.DurationBased : TodoCompletionType.Manual);
+            }
+        }
+
         public string TotalDuration { get { return _totalDuration; } set { _totalDuration = value; OnPropertyChanged(); } }
         private string _totalDuration;
+
         public TodoDefRepeatType[] RepeatTypes
         {
             get

@@ -8,13 +8,10 @@
     xmlns:ccontr="clr-namespace:The_Merlin.CustomControls"
     Title="𝕸 𝕰 𝕽 𝕷 𝕴 𝕹" 
     FlyoutBehavior="Flyout">
-
-    <!-- FlyoutBehavior="{OnPlatform Android=Flyout, WinUI=Locked}"-->
-
+    <Shell.TitleView>
+        <ccontr:FlyoutMiniTodoView />
+    </Shell.TitleView>
     <FlyoutItem Title="Main">
         <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
     </FlyoutItem>
-    <Shell.FlyoutHeader>
-        <ccontr:FlyoutMiniTodoView />
-    </Shell.FlyoutHeader>
 </Shell>

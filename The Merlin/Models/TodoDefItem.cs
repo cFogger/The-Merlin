@@ -18,6 +18,7 @@ namespace The_Merlin.Models
         public TodoDefRepeatType RepeatType { get; set; } = 0; // 0 None, 1 Daily, 2 Weekly, 3 Custom
 
         public TimeSpan DefaultDuration { get; set; } = TimeSpan.FromMinutes(25);
+        public TodoCompletionType DefaultCompletionType { get; set; } = TodoCompletionType.DurationBased;
 
         //public int CanBeDone { get; set; } = 0;
         //everywhere onlyhome atworkavailable nopc holiday
@@ -59,11 +60,11 @@ namespace The_Merlin.Models
             {
                 TodoDefId = this.Id,
                 TodoText = this.TodoDefText,
-                IsCompleted = false,
                 CreatedAt = DateTime.Now,
                 AssignedDate = DateTime.Today,
                 Status = TodoItemStatus.Pending,
-                Priority = 0
+                CompletionType = this.DefaultCompletionType,
+                Duration = this.DefaultDuration
             };
             _todoData.AddItem(todoItem);
         }
