@@ -12,5 +12,8 @@ namespace The_Merlin.Interfaces
         string TimeString(TodoItem todo);
         bool IsTimerRunning();
         TodoItem ActiveTodoSession();
+
+        event EventHandler TimerStarted;
+        event EventHandler TimerStopped;
     }
 }

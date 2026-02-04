@@ -10,15 +10,5 @@ public partial class TodoDetail : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
-
-        this.Appearing += (s, e) =>
-        {
-            App.AppTimer.Tick += vm.TodoDetailViewModel_Tick;
-        };
-
-        this.Disappearing += (s, e) =>
-        {
-            App.AppTimer.Tick -= vm.TodoDetailViewModel_Tick;
-        };
     }
 }

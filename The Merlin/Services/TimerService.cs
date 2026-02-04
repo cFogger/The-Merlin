@@ -36,6 +36,7 @@ namespace The_Merlin.Services
                 _ActiveTodoSession = todoData.GetItem(tli.TodoId);
                 IsChronoRunning = true;
                 TodoTimeSpan = DateTime.Now - tli.Starts;
+                TimerStarted?.Invoke(this, new EventArgs());
             }
 
             TodoTimer.Tick += TodoTimer_Tick;
@@ -68,6 +69,7 @@ namespace The_Merlin.Services
                         todo.Status = TodoItemStatus.InProgress;
                     }
                     _todoData.UpdateItem(todo);
+                    TimerStarted?.Invoke(this, new EventArgs());
                 }
                 else
                 {
@@ -92,7 +94,8 @@ namespace The_Merlin.Services
                 _todoData.UpdateItem(todo);
                 IsChronoRunning = false;
                 _ActiveTodoSession = null;
-                TodoTimeSpan = TimeSpan.Zero;
+                TodoTimeSpan = TimeSpan.Zero; 
+                TimerStopped?.Invoke(this, new EventArgs());
             }
             else
             {
@@ -145,5 +148,8 @@ namespace The_Merlin.Services
         {
             return _ActiveTodoSession;
         }
+
+        public event EventHandler TimerStopped;
+        public event EventHandler TimerStarted;
     }
 }

@@ -36,13 +36,7 @@
             
             <!-- To Remove -->
             <HorizontalStackLayout Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="Center">
-                <Label
-                Text="{Binding TimeString}"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center"
-                FontAttributes="Bold" 
-                FontSize="26"></Label>
-                <Button Command="{Binding StartStopCommand}" VerticalOptions="Center" TextColor="AliceBlue" FontSize="20" FontAttributes="Bold" CornerRadius="20" WidthRequest="80" HeightRequest="44">
+                <Button Command="{Binding StartStopCommand}" IsVisible="{Binding IsStartVisible}" FontAttributes="Bold" HeightRequest="44">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
@@ -59,12 +53,6 @@
                     </Button.Triggers>
                 </Button>
                 <Button Text="Complete" Command="{Binding CompleteCommand}" IsVisible="{Binding IsManualCompletion}" HeightRequest="44"/>
-                <Label
-                Text="{Binding Todo.Duration}"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center"
-                FontAttributes="Bold" 
-                FontSize="26"></Label>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
@@ -72,6 +60,7 @@
                 <Label Text="{Binding Todo.Status}"/>
             </HorizontalStackLayout>
             <Button Grid.Row="4" Grid.Column="2" WidthRequest="66" HeightRequest="44" Command="{Binding DeleteCommand}" Text="Delete" BackgroundColor="DarkRed" Opacity="0.8"></Button>
+            <Label Grid.Row="5" Grid.Column="2" Text="{Binding Todo.Duration}"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>
