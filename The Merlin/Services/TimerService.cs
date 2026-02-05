@@ -8,7 +8,7 @@ using The_Merlin.Models;
 
 namespace The_Merlin.Services
 {
-    public class TimerService : ITimerService
+    public class TimerService : ITimerService, IDisposable
     {
         public bool IsChronoRunning = false;
         public TimeSpan TodoTimeSpan;
@@ -23,6 +23,8 @@ namespace The_Merlin.Services
         private TimeSpan _lastTotal = TimeSpan.Zero;
 
         public IDispatcherTimer TodoTimer = App.AppTimer;
+
+        private bool _isDisposed = false;
 
         public TimerService(TimelineData timelineData, TodoData todoData, IMessageService msgService)
         {
@@ -147,6 +149,17 @@ namespace The_Merlin.Services
         public TodoItem ActiveTodoSession()
         {
             return _ActiveTodoSession;
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed) return;
+
+            try
+            {
+                if (TodoTimer != null) { TodoTimer.Tick -= TodoTimer_Tick; }
+            }
+            catch {  } finally { _isDisposed = true; }
         }
 
         public event EventHandler TimerStopped;
