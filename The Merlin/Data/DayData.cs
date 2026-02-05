@@ -39,7 +39,7 @@ namespace The_Merlin.Data
 
         public void AddItem(DayItem item)
         {
-            if (dtm.dbConnection.Table<DayItem>().Count(x => x.Date == DateTime.Today) > 0)
+            if (dtm.dbConnection.Table<DayItem>().Count(x => x.Date == item.Date) > 0)
                 return;
             dtm.dbConnection.Insert(item);
             ItemChanged?.Invoke(this, EventArgs.Empty);

@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="The_Merlin.Views.DayDetailView"
-             Title="DayDetailView">
+             Title="DayDetailView" x:Name="myMainPage">
     <VerticalStackLayout>
         <Label 
             Text="{Binding myItem.Id}"
@@ -26,6 +26,30 @@
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+                <CollectionView.Header>
+                    <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
+                        <Grid Padding="5,2,5,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                <Label Margin="15,0" Text="Add " VerticalOptions="Center"></Label>
+                                <Picker Margin="10,0" VerticalOptions="Center" 
+                                    ItemsSource="{Binding BindingContext.TodoDefs, Source={x:Reference myMainPage}}" 
+                                    SelectedItem="{Binding BindingContext.SelectedTodoDef, Source={x:Reference myMainPage}}" 
+                                    ItemDisplayBinding="{Binding TodoDefText}"/>
+                            </HorizontalStackLayout>
+                            <Button 
+                                Grid.Column="1" Text="Add Todo"
+                                BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"
+                                Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}"/>
+                            <Button Grid.Column="2" Text="Definitions" Command="{Binding BindingContext.NavigateToTodoDefListView, Source={x:Reference myMainPage}}" 
+                                    BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"/>
+                        </Grid>
+                    </Border>
+                </CollectionView.Header>
             </CollectionView>
         </Border>
     </VerticalStackLayout>

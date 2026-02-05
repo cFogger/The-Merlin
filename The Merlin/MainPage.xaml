@@ -4,6 +4,10 @@
              xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Name="myMainPage"
              x:Class="The_Merlin.MainPage" Title="{Binding dateString}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding NavigateToDayList}" IconImageSource="calendaricon.png"></ToolbarItem>
+        <ToolbarItem Text="Timeline" Command="{Binding NavigateToTimelineLogsView}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>

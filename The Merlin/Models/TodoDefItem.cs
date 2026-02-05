@@ -54,14 +54,17 @@ namespace The_Merlin.Models
             }
         }
 
-        public void CreateTodoItem(TodoData _todoData)
+        public void CreateTodoItem(TodoData _todoData, DateTime? AssignedDate = null)
         {
+            if (AssignedDate == null)
+                AssignedDate = DateTime.Today;
+
             TodoItem todoItem = new()
             {
                 TodoDefId = this.Id,
                 TodoText = this.TodoDefText,
                 CreatedAt = DateTime.Now,
-                AssignedDate = DateTime.Today,
+                AssignedDate = AssignedDate.Value,
                 Status = TodoItemStatus.Pending,
                 CompletionType = this.DefaultCompletionType,
                 Duration = this.DefaultDuration

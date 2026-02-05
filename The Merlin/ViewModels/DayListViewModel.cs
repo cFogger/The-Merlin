@@ -16,6 +16,7 @@ namespace The_Merlin.ViewModels
             todoData.GetAssignedDates();
             _dayData.ItemChanged += onDayItemsChanged;
             onDayItemsChanged(this, EventArgs.Empty);
+            SelectedDate = DateTime.Today;
         }
 
         private void onDayItemsChanged(object? sender, EventArgs e)
@@ -31,5 +32,8 @@ namespace The_Merlin.ViewModels
             };
             await Shell.Current.GoToAsync("DayView", parameters);
         });
+
+        private DateTime _selectedDate;
+        public DateTime SelectedDate { get { return _selectedDate; } set { _selectedDate = value; OnPropertyChanged(); _dayData.AddItem(new DayItem() { Date = value, DayType = DayType.HomeDay }); } }
     }
 }
