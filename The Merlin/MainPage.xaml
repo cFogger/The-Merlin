@@ -5,8 +5,9 @@
              x:Name="myMainPage"
              x:Class="The_Merlin.MainPage" Title="{Binding dateString}">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding NavigateToDayList}" IconImageSource="calendaricon.png"></ToolbarItem>
+        <ToolbarItem Text="Days" Command="{Binding NavigateToDayList}"></ToolbarItem>
         <ToolbarItem Text="Timeline" Command="{Binding NavigateToTimelineLogsView}"></ToolbarItem>
+        <ToolbarItem Text="Todo Defs" Command="{Binding NavigateToTodoDefListView}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
@@ -19,6 +20,24 @@
                 <Label Text="{Binding dateString}"  FontAttributes="Bold" FontSize="14" VerticalOptions="Center"></Label>
                 <Button Command="{Binding NavigateToDayList}" Text="Day List" Margin="15,0,0,0" BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"></Button>
             </HorizontalStackLayout>
+            <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" IsTextPredictionEnabled="True"></SearchBar>
+                    <CollectionView Grid.Column="1" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Default">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" 
+                                            CommandParameter="{Binding .}" 
+                                            Text="{Binding TodoDefText}"></Button>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
             <CollectionView ItemsSource="{Binding todoItems}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -58,30 +77,6 @@
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <CollectionView.Footer>
-                    <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
-                        <Grid Padding="5,2,5,2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                <Label Margin="15,0" Text="Add " VerticalOptions="Center"></Label>
-                                <Picker Margin="10,0" VerticalOptions="Center" 
-                                    ItemsSource="{Binding BindingContext.TodoDefs, Source={x:Reference myMainPage}}" 
-                                    SelectedItem="{Binding BindingContext.SelectedTodoDef, Source={x:Reference myMainPage}}" 
-                                    ItemDisplayBinding="{Binding TodoDefText}"/>
-                            </HorizontalStackLayout>
-                            <Button 
-                                Grid.Column="1" Text="Add Todo"
-                                BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"
-                                Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}"/>
-                            <Button Grid.Column="2" Text="Definitions" Command="{Binding BindingContext.NavigateToTodoDefListView, Source={x:Reference myMainPage}}" 
-                                    BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"/>
-                        </Grid>
-                    </Border>
-                </CollectionView.Footer>
             </CollectionView>
         </VerticalStackLayout>
         <!-- Timeline Section -->
