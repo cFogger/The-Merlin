@@ -15,6 +15,8 @@ namespace The_Merlin.ViewModels
         ITimerService _timerService;
         TodoData _todoData;
 
+        public string dateString { get { return DateTime.Today.ToString("dd.MM.yy"); } }
+
         public FlyoutMiniTodoViewModel(ITimerService timerService, TodoData todoData)
         {
             _timerService = timerService;
@@ -30,13 +32,17 @@ namespace The_Merlin.ViewModels
                 IsVisible = true;
                 TodoTitle = ats.TodoText;
                 IsManualCompletion = ats.CompletionType == TodoCompletionType.Manual;
-                TodoTimer = _timerService.TimeString(ats);
+                GradBackgroundColor = ats.Status == TodoItemStatus.InProgress ? Colors.DarkSlateGray : Colors.DarkOliveGreen;
+                TodoTimer = _timerService.TimeString(ats);  
             }
             else
             {
                 IsVisible = false;
             }
         }
+
+        private Color _gradBackgroundColor = Colors.AliceBlue;
+        public Color GradBackgroundColor { get { return _gradBackgroundColor; } set { _gradBackgroundColor = value; OnPropertyChanged(); } }
 
         private string _todoTitle;
         public string TodoTitle { get { return _todoTitle; } set { _todoTitle = value; OnPropertyChanged(); } }

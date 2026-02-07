@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Name="myMainPage"
-             x:Class="The_Merlin.MainPage" Title="{Binding dateString}">
+             x:Class="The_Merlin.MainPage">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Days" Command="{Binding NavigateToDayList}"></ToolbarItem>
         <ToolbarItem Text="Timeline" Command="{Binding NavigateToTimelineLogsView}"></ToolbarItem>
@@ -16,18 +16,14 @@
         </Grid.RowDefinitions>
         <!-- Todo Section -->
         <VerticalStackLayout Grid.Row="0">
-            <HorizontalStackLayout Margin="10">
-                <Label Text="{Binding dateString}"  FontAttributes="Bold" FontSize="14" VerticalOptions="Center"></Label>
-                <Button Command="{Binding NavigateToDayList}" Text="Day List" Margin="15,0,0,0" BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"></Button>
-            </HorizontalStackLayout>
             <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" IsTextPredictionEnabled="True"></SearchBar>
-                    <CollectionView Grid.Column="1" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Default">
+                    <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="150"></SearchBar>
+                    <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Default">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Button Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" 

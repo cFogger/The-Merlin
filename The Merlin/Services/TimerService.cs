@@ -130,7 +130,7 @@ namespace The_Merlin.Services
         private async void HandleCompletionAlert(TodoItem todo)
         {
             _isAlerted = true;
-            if (await _messageService.ShowConfirmAsync("Todo Time Exceeded", $"The time spent on {todo.TodoText} has exceeded the expected duration of {todo.Duration}. Do you want to continue?"))
+            if (await _messageService.ShowConfirmAsync("Süre Aşıldı", $"{todo.TodoText} için süre aşıldı ({todo.Duration}). Devam edecek misin?", "Evet", "Hayır"))
             {
                 todo.Status = TodoItemStatus.Completed;
                 _todoData.UpdateItem(todo);
