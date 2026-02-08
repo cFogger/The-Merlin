@@ -10,18 +10,30 @@ namespace The_Merlin.ViewModels
         public ObservableCollection<DayItem> dayItems { get; } = [];
 
         private readonly DayData _dayData;
+        private readonly TodoData _todoData;
         public DayListViewModel(DayData dayData, TodoData todoData) 
         { 
             _dayData = dayData;
-            todoData.GetAssignedDates();
-            _dayData.ItemChanged += onDayItemsChanged;
-            onDayItemsChanged(this, EventArgs.Empty);
+            _todoData = todoData;
+            Load();
             SelectedDate = DateTime.Today;
         }
 
-        private void onDayItemsChanged(object? sender, EventArgs e)
+        private async void Load()
         {
-            _dayData.GetAllDays(dayItems);
+            await _todoData.GetAssignedDates();
+            _dayData.ItemChanged += onDayItemsChanged;
+            onDayItemsChanged(this, EventArgs.Empty);
+        }
+
+        private async void Save()
+        {
+            await _dayData.SaveItem(new DayItem() { Date = _selectedDate, DayType = DayType.HomeDay });
+        }
+
+        private async void onDayItemsChanged(object? sender, EventArgs e)
+        {
+            await _dayData.GetAllDays(dayItems);
         }
 
         public ICommand GoToDetail => new Command<DayItem>(async (di) =>
@@ -34,6 +46,8 @@ namespace The_Merlin.ViewModels
         });
 
         private DateTime _selectedDate;
-        public DateTime SelectedDate { get { return _selectedDate; } set { _selectedDate = value; OnPropertyChanged(); _dayData.AddItem(new DayItem() { Date = value, DayType = DayType.HomeDay }); } }
+        public DateTime SelectedDate { get { return _selectedDate; } set { _selectedDate = value; OnPropertyChanged(); Save(); } }
+        
+
     }
 }

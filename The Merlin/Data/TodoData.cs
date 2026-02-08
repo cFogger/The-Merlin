@@ -1,11 +1,8 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Net.Mime;
-using System.Numerics;
+﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
-using The_Merlin.Interfaces;
+using System.Text.Json;
 using The_Merlin.Models;
 
 namespace The_Merlin.Data
@@ -14,60 +11,60 @@ namespace The_Merlin.Data
     {
         private readonly DataManager dtm;
         private readonly DayData _dayData;
-        public TodoData(DataManager _dtm, DayData dayData) { 
-            dtm = _dtm; 
-            _dayData = dayData; }
-        
-        public List<TodoItem> GetTodaysTodos() => [.. dtm.dbConnection.Table<TodoItem>().Where(x=>x.AssignedDate == DateTime.Today)];
-
-        public List<TodoItem> GetItemsByTodoDefId(int tdi) => [.. dtm.dbConnection.Table<Models.TodoItem>().Where(x => x.TodoDefId == tdi)];
-
-        public void GetAssignedDates()
+        private string prefix = "TodoItems";
+        public TodoData(DataManager _dtm, DayData dayData)
         {
-            var que = dtm.dbConnection.Query<Models.TodoItem>("SELECT DISTINCT AssignedDate FROM TodoItem");
-            var dates = dtm.dbConnection.Query<DayItem>("SELECT DISTINCT Date FROM DayItem");
-            foreach (var dt in que)
-            {
-                if (!dates.Exists(x => x.Date == dt.AssignedDate))
-                    _dayData.AddItem(new DayItem
-                    {
-                        Date = dt.AssignedDate,
-                        DayType = DayType.HomeDay,
-                    });
-            }
+            dtm = _dtm;
+            _dayData = dayData;
+        }
 
-            if (dates.Exists(dates => dates.Date == DateTime.Today) == false)
-                _dayData.AddItem(new DayItem
-                {
-                    Date = DateTime.Today,
-                    DayType = DayType.HomeDay,
-                }); 
+        public async Task GetTodos(ObservableCollection<TodoItem> myObs, DateTime? date = null)
+        {
+            if (date == null) { date = DateTime.Today; }
+            myObs.Clear();
+            var mylist = await GetItemsByDate(date.Value);
+            foreach (TodoItem item in mylist)
+                myObs.Add(item);
+        }
+
+        public async Task<List<TodoItem>> GetItemsByDate(DateTime date)
+        {
+            var xd = await dtm.resolveRespond(prefix + "/GetItemsByDate?date=" + date.Date.ToBinary());
+            return JsonConvert.DeserializeObject<List<TodoItem>>(xd.ToString());
+        }
+
+        public async Task<List<TodoItem>> GetItemsByTodoDefId(int tdi)
+        {
+            var xd = await dtm.resolveRespond(prefix + "/GetItemsByTodoDefId?tdiid=" + tdi);
+            return JsonConvert.DeserializeObject<List<TodoItem>>(xd.ToString());
+        }
+
+        public async Task GetAssignedDates()
+        {
+            await dtm.HttpClient.GetAsync(dtm.Url + prefix + "/GetAssignedDates");
             AssignedDatesChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public TodoItem GetItem(int id)
+        public async Task<TodoItem> GetItem(int id)
         {
-            return dtm.dbConnection.Table<Models.TodoItem>().FirstOrDefault(x => x.Id == id);
+            var resolve = await dtm.resolveRespond(prefix + "/GetItem?id=" + id);
+            var myobj = JsonConvert.DeserializeObject<TodoItem>(resolve.ToString());
+            return myobj;
         }
 
-        public void AddItem(TodoItem ti)
+        public async Task SaveItem(TodoItem item)
         {
-            dtm.dbConnection.Insert(ti);
+            Debug.WriteLine("isitsave");
+            await dtm.resolveRespond(prefix + "/Save", JsonConvert.SerializeObject(item));
             TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void UpdateItem(TodoItem ti)
+        public async Task DeleteItem(int id)
         {
-            dtm.dbConnection.Update(ti);
-            TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
+            await dtm.resolveRespond(prefix + "/Delete?id=" + id);
+            TodoItemCollectionChanged.Invoke(this, EventArgs.Empty);
         }
 
-        public void DeleteItem(TodoItem ti)
-        {
-            dtm.dbConnection.Delete(ti);
-            TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
-        }
-        
         public event EventHandler TodoItemCollectionChanged;
         public event EventHandler AssignedDatesChanged;
     }

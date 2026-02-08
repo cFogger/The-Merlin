@@ -59,7 +59,7 @@ namespace The_Merlin.ViewModels
 
         public ICommand GoToActiveCommand => new Command((Action)async delegate
         {
-            var parameters = new Dictionary<string, object> { { "todo", _todoData.GetItem(_timerService.ActiveTodoSession().Id) } };
+            var parameters = new Dictionary<string, object> { { "todo", await _todoData.GetItem(_timerService.ActiveTodoSession().Id) } };
             await Shell.Current.GoToAsync("TodoDetailView", parameters);
         });
 

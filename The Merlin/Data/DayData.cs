@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 using The_Merlin.Models;
 
 namespace The_Merlin.Data
@@ -9,46 +11,40 @@ namespace The_Merlin.Data
     public class DayData
     {
         DataManager dtm;
+        string prefix = "DayItems";
         public DayData(DataManager _dtm)
         {
             dtm = _dtm;
         }
 
-        public void GetAllDays(ObservableCollection<DayItem> myObs)
+        public async Task<DayItem> GetItem(DateTime? date = null)
+        {
+            if (date == null)
+                date = DateTime.Today;
+
+            return (DayItem)await dtm.resolveRespond(prefix + "/GetItem?date=" + date.Value.ToBinary);
+        }
+
+        public async Task GetAllDays(ObservableCollection<DayItem> myObs)
         {
             myObs.Clear();
-            var mylist = dtm.dbConnection.Table<DayItem>().ToList();
+            var templist = await dtm.resolveRespond(prefix + "/GetAll");
+            List<DayItem> mylist = JsonConvert.DeserializeObject<List<DayItem>>(templist.ToString());
             foreach (DayItem item in mylist)
                 myObs.Add(item);
         }
 
-        public DayItem GetItem(DateTime? date = null)
+        public async Task SaveItem(DayItem item)
         {
-            if (date == null) { date = DateTime.Today; }
-            return dtm.dbConnection.Table<DayItem>().First(x => x.Date == date.Value.Date);
-        }
-
-        public void GetTodos(ObservableCollection<TodoItem> myObs, DateTime? date = null)
-        {
-            if (date == null) { date = DateTime.Today; }
-            myObs.Clear();
-            var mylist = dtm.dbConnection.Table<TodoItem>().Where(x => x.AssignedDate == date.Value.Date).ToList();
-            foreach (TodoItem item in mylist)
-                myObs.Add(item);
-        }
-
-        public void AddItem(DayItem item)
-        {
-            if (dtm.dbConnection.Table<DayItem>().Count(x => x.Date == item.Date) > 0)
-                return;
-            dtm.dbConnection.Insert(item);
+            await dtm.resolveRespond(prefix + "/Save", JsonConvert.SerializeObject(item));
             ItemChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void UpdateItem(DayItem item)
-        { dtm.dbConnection.Update(item); ItemChanged.Invoke(this, EventArgs.Empty); }
-        public void DeleteItem(DayItem item)
-        { dtm.dbConnection.Delete(item); ItemChanged.Invoke(this, EventArgs.Empty); }
+        public async Task DeleteItem(int id)
+        {
+            await dtm.resolveRespond(prefix + "/Delete?id=" + id);
+            ItemChanged.Invoke(this, EventArgs.Empty);
+        }
 
         public event EventHandler ItemChanged;
     }

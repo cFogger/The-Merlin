@@ -51,17 +51,23 @@ namespace The_Merlin.ViewModels
             {
                 _todo = value;
                 OnPropertyChanged();
-                TotalTimeString = _timelineData.GetTotalbyTodoId(value.Id).ToString(@"hh\:mm\:ss");
-                TodoDefText = _todoDefData.GetTodoDefItemById(value.TodoDefId).TodoDefText;
                 myTodoText = value.TodoText;
                 IsManualCompletion = value.CompletionType == TodoCompletionType.Manual;
                 TimerRunning = _timerService.IsTimerRunning();
-
+                Load();
                 if (_timerService.ActiveTodoSession() != null)
                     IsStartVisible = _timerService.ActiveTodoSession()?.Id == value.Id;
                 else
                     IsStartVisible = true;
             }
+        }
+
+        private async void Load()
+        {
+            var value1 = await _timelineData.GetTotalbyTodoId(_todo.Id);
+            TotalTimeString = value1.ToString(@"hh\:mm\:ss");
+            var value2 = await _todoDefData.GetTodoDefItemById(_todo.TodoDefId);
+            TodoDefText = value2.TodoDefText;
         }
 
         private bool _isManualCompletion;
@@ -73,11 +79,17 @@ namespace The_Merlin.ViewModels
             get { return _myTodoText; }
             set
             {
+                if (_myTodoText == value) return;
                 _myTodoText = value;
                 OnPropertyChanged();
                 Todo.TodoText = value;
-                _todoData.UpdateItem(Todo);
+                Save();
             }
+        }
+
+        private async void Save()
+        {
+            await _todoData.SaveItem(Todo);
         }
 
         private string _todoDefText;
@@ -96,14 +108,14 @@ namespace The_Merlin.ViewModels
         public string TimeString { get { return _timeString; } set { _timeString = value; OnPropertyChanged(); } }
 
         public ICommand DeleteCommand => new Command(async() => {
-            _todoData.DeleteItem(Todo);
+            await _todoData.DeleteItem(Todo.Id);
             await Shell.Current.Navigation.PopAsync();
         });
 
         public ICommand CompleteCommand => new Command((Action)async delegate
         {
             Todo.Status = TodoItemStatus.Completed;
-            _todoData.UpdateItem(Todo);
+            await _todoData.SaveItem(Todo);
             if (_timerService.ActiveTodoSession() != null && _timerService.ActiveTodoSession().Id == Todo.Id)
             {
                 await _timerService.StartStopTimer(Todo);
@@ -111,7 +123,7 @@ namespace The_Merlin.ViewModels
             else
             {
                 string cntxt = await _messageService.ShowPromptAsync(Todo.TodoText, "N'aptın?", "Fill Context");
-                _timelineData.AddANoTimeItem(new TimelineItem
+                await _timelineData.SaveItem(new TimelineItem
                 {
                     TodoId = Todo.Id,
                     Starts = DateTime.Now.AddSeconds(-1.0),

@@ -1,13 +1,8 @@
-﻿using SQLite;
-using System.Diagnostics;
-using System.Windows.Input;
-
-namespace The_Merlin.Models
+﻿namespace The_Merlin.Models
 {
     public class TodoItem
     {
-        [PrimaryKey]
-        [AutoIncrement]
+
         public int Id { get; set; }
         public int TodoDefId { get; set; }
         public string? TodoText { get; set; }
@@ -17,7 +12,6 @@ namespace The_Merlin.Models
         public TodoCompletionType CompletionType { get; set; }
         public TimeSpan Duration { get; set; } = TimeSpan.Zero; // Used if CompletionType is DurationBased
 
-        [Ignore]
         public bool IsCompleted
         {
             get

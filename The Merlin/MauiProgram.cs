@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using The_Merlin.CustomControls;
 using The_Merlin.Data;
 using The_Merlin.Interfaces;
@@ -15,6 +16,7 @@ namespace The_Merlin
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -24,6 +26,7 @@ namespace The_Merlin
             //services
             builder.Services.AddSingleton<IMessageService, MessageService>();
             builder.Services.AddSingleton<ITimerService, TimerService>();
+            builder.Services.AddSingleton<BusyService>();
 
             //datamanagers
             builder.Services.AddSingleton<DataManager>();

@@ -15,12 +15,18 @@ namespace The_Merlin.ViewModels
             {
                 _originalTdi = value;
                 rptType = value.RepeatType;
+                Fill();
                 OnPropertyChanged();
-                TotalDuration = "Total Duration: " + _todoDefData.GetTotalDurationByTodoDefId(tdi.Id).ToString(@"hh\:mm\:ss");
                 IsManualCompletion = tdi.DefaultCompletionType == TodoCompletionType.Manual;
             }
         }
         private TodoDefItem _originalTdi;
+
+        private async void Fill()
+        {
+            var resolve = await _todoDefData.GetTotalDurationByTodoDefId(tdi.Id);
+            TotalDuration = "Total Duration: " + resolve.ToString(@"hh\:mm\:ss");
+        }
 
         public TodoDefRepeatType rptType { get { return _rptType; } 
             set 
@@ -67,15 +73,10 @@ namespace The_Merlin.ViewModels
 
         public ICommand SaveCommand => new Command(async () =>
         {
-            Debug.WriteLine("test "+ tdi.Id);
+            Debug.WriteLine("test " + tdi.Id);
             tdi.RepeatType = rptType;
-            if (tdi.Id == 0)
-                _todoDefData.AddTodoDefItem(tdi);
-            else
-                _todoDefData.UpdateTodoDefItem(tdi);
+            await _todoDefData.AddTodoDefItem(tdi);
             await Shell.Current.GoToAsync("..");
         });
-
-
     }
 }

@@ -34,31 +34,28 @@ namespace The_Merlin.ViewModels
             onTimelineChanged(this, EventArgs.Empty);
             onTodoItemsChanged(this, EventArgs.Empty);
             onTodoDefsChanged(this, EventArgs.Empty);
-
-            DefSearchText = string.Empty;
         }
 
         public void onTimelineChanged(object? sender, EventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                _timelineData.GetLastxItems(TimelineIS, 5);
+                await _timelineData.GetLastxItems(TimelineIS, 5);
             });
         }
 
-        public void onTodoDefsChanged(object? sender, EventArgs e)
+        public async void onTodoDefsChanged(object? sender, EventArgs e)
         {
-            TodoDefs = _todoDefData.GetAllTodoDefItems();
+            TodoDefs = await _todoDefData.GetAllTodoDefItems();
+            DefSearchText = string.Empty;
         }
 
         public void onTodoItemsChanged(object? sender, EventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                var items = _todoData.GetTodaysTodos();
-                todoItems.Clear();
-                foreach (var item in items)
-                    todoItems.Add(item);
+                await _todoData.GetTodos(todoItems, DateTime.Today);
+                Debug.WriteLine("todo fill triggered");
             });
         }
 
@@ -86,11 +83,11 @@ namespace The_Merlin.ViewModels
             await Shell.Current.GoToAsync("TodoDefListView");
         });
 
-        public ICommand AddQuickTodoDefCommand => new Command(() =>
+        public ICommand AddQuickTodoDefCommand => new Command(async () =>
         {
             string temptext = DefSearchText;
             if (!string.IsNullOrEmpty(DefSearchText))
-                _todoDefData.AddTodoDefItem(new TodoDefItem
+                await _todoDefData.AddTodoDefItem(new TodoDefItem
                 {
                     TodoDefText = DefSearchText,
                     RepeatType = TodoDefRepeatType.None,
@@ -120,6 +117,7 @@ namespace The_Merlin.ViewModels
                 else
                     foreach (var item in TodoDefs)
                         FilteredTodoDefs.Add(item);
+
                 OnPropertyChanged();
             }
         }

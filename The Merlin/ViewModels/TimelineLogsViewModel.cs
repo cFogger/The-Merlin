@@ -22,15 +22,15 @@ namespace The_Merlin.ViewModels
 
         private void onTimelineChanged(object? sender, EventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                _timelineData.GetAllItems(TimelineIS);
+                await _timelineData.GetAllItems(TimelineIS);
             });
         }
 
-        public ICommand DeleteCommand => new Command<TimelineItem>((item) =>
+        public ICommand DeleteCommand => new Command<TimelineItem>(async (item) =>
         {
-            _timelineData.DeleteItem(item);
+            await _timelineData.DeleteItem(item.Id);
         });
     }
 }

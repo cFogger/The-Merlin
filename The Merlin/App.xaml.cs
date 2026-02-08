@@ -1,4 +1,6 @@
-﻿using The_Merlin.Data;
+﻿using Microsoft.Maui.Controls;
+using The_Merlin.Data;
+using The_Merlin.Services;
 
 namespace The_Merlin
 {

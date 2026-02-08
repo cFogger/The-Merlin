@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 using The_Merlin.Models;
 
 namespace The_Merlin.Data
@@ -8,51 +6,41 @@ namespace The_Merlin.Data
     public class TodoDefData
     {
         private readonly DataManager dtm;
+        private string prefix = "TodoDefItems";
+
         public TodoDefData(DataManager _dataManager)
         {
             dtm = _dataManager;
         }
 
-        public List<TodoDefItem> GetAllTodoDefItems()
+        public async Task<List<TodoDefItem>> GetAllTodoDefItems()
         {
-            return dtm.dbConnection.Table<TodoDefItem>().ToList();
+            var xd = await dtm.resolveRespond(prefix + "/GetAll");
+            return JsonConvert.DeserializeObject<List<TodoDefItem>>(xd.ToString());
         }
 
-        public TodoDefItem GetTodoDefItemById(int id)
+        public async Task<TodoDefItem> GetTodoDefItemById(int id)
         {
-            return dtm.dbConnection.Table<TodoDefItem>().FirstOrDefault(t => t.Id == id);
+            var temp = await dtm.resolveRespond(prefix + "/GetItem?id=" + id);
+            return JsonConvert.DeserializeObject<TodoDefItem>(temp.ToString());
         }
 
-        public TimeSpan GetTotalDurationByTodoDefId(int tdi)
+        public async Task<TimeSpan> GetTotalDurationByTodoDefId(int id)
         {
-            TimeSpan ts = TimeSpan.Zero;
-            var todoItems = dtm.dbConnection.Table<TodoItem>().Where(x => x.TodoDefId == tdi).ToList();
-            foreach (var ti in todoItems)
-            {
-                var timelines = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == ti.Id && x.Ends != null).ToList();
-                foreach (var tl in timelines)
-                {
-                    ts = ts.Add(tl.Ends.Value - tl.Starts);
-                }
-            }
-            return ts;
+            var test = await dtm.resolveRespond(prefix + "/GetTotalByTodoDef?id=" + id);
+            var tst2 = TimeSpan.Parse(test.ToString());
+            return tst2;
         }
 
-        public void AddTodoDefItem(TodoDefItem todoDef)
+        public async Task AddTodoDefItem(TodoDefItem todoDef)
         {
-            dtm.dbConnection.Insert(todoDef);
+            await dtm.resolveRespond(prefix + "/Save", JsonConvert.SerializeObject(todoDef));
             TodoDefItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void UpdateTodoDefItem(TodoDefItem todoDef)
+        public async Task DeleteTodoDefItem(int id)
         {
-            dtm.dbConnection.Update(todoDef);
-            TodoDefItemsChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void DeleteTodoDefItem(TodoDefItem todoDef)
-        {
-            dtm.dbConnection.Delete(todoDef);
+            await dtm.resolveRespond(prefix + "/Delete?id=" + id);
             TodoDefItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 

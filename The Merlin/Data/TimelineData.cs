@@ -1,109 +1,86 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using The_Merlin.Models;
-using The_Merlin.ViewModels;
 
 namespace The_Merlin.Data
 {
     public class TimelineData
     {
         private readonly DataManager dtm;
+        string prefix = "TimelineItems";
         public TimelineData(DataManager dataManager)
         {
             dtm = dataManager;
         }
 
-
-        public void GetAllItems(ObservableCollection<TimelineItem> timelinecoll)
+        public async Task GetAllItems(ObservableCollection<TimelineItem> timelinecoll)
         {
             timelinecoll.Clear();
-            var allItems = dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).ToList();
+            var temp = await dtm.resolveRespond(prefix + "/GetAll");
+            var allItems = JsonConvert.DeserializeObject<List<TimelineItem>>(temp.ToString());
             foreach (var item in allItems)
             {
                 timelinecoll.Add(item);
             }
         }
 
-        public void GetLastxItems(ObservableCollection<TimelineItem> timelinecoll, int Count)
+        public async Task GetLastxItems(ObservableCollection<TimelineItem> timelinecoll, int Count)
         {
             timelinecoll.Clear();
-            var items = dtm.dbConnection.Table<TimelineItem>().OrderByDescending(x => x.Starts).Take(Count).ToList();
-            foreach (var item in items)
-            {
-                timelinecoll.Add(item);
-            }
+            var temp = await dtm.resolveRespond(prefix + "/GetLastX?count=" + Count);
+            var items = JsonConvert.DeserializeObject<List<TimelineItem>>(temp.ToString());
+            if (items != null)
+                foreach (var item in items)
+                {
+                    timelinecoll.Add(item);
+                }
         }
 
-        public TimelineItem GetItem(int id)
+        public async Task<TimelineItem> GetItem(int id)
         {
-            return dtm.dbConnection.Table<TimelineItem>().FirstOrDefault(x => x.Id == id);
+            return (TimelineItem)await dtm.resolveRespond(prefix + "/GetItem?id=" + id);
         }
 
-        public TimeSpan GetTotalbyTodoId(int todoId)
+        public async Task<TimeSpan> GetTotalbyTodoId(int todoId)
         {
-            TimeSpan ts = TimeSpan.Zero;
-            List<TimelineItem> tli = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == todoId && x.Ends != null).ToList();
-            foreach (TimelineItem item in tli)
-            {
-                ts = ts.Add(item.Ends.Value - item.Starts);
-            }
-            return ts;
+            var respnd = await dtm.resolveRespond(prefix + "/GetTotalbyTodoId?id=" + todoId);
+            return TimeSpan.Parse(respnd.ToString());
         }
 
-        public TimeSpan GetTodays(int todoId, DateTime? date = null)
+        public async Task<TimelineItem?> checkRunningTodo()
         {
-            if (date == null)
-                date = DateTime.Today;
+            var test = await dtm.resolveRespond(prefix + "/checkRunningTodo");
 
-            TimeSpan ts = TimeSpan.Zero;
-            List<TimelineItem> tli = dtm.dbConnection.Table<TimelineItem>().Where(x => x.TodoId == todoId && x.Starts.Date == date.Value.Date && x.Ends != null).ToList();
-            foreach (TimelineItem item in tli)
-                ts = ts.Add(item.Ends.Value - item.Starts);
-            return ts;
+            if (test != null)
+                return JsonConvert.DeserializeObject<TimelineItem?>(test.ToString());
+            else
+                return null;
         }
 
-        public TimelineItem? checkRunningTodo()
+        public async Task EndItem(int todoId, DateTime? ends, string? context = null)
         {
-            return dtm.dbConnection.Table<TimelineItem>().Where(x => x.Ends == null).FirstOrDefault();
-        }
-
-        public int AddANoTimeItem(TimelineItem ti)
-        {
-            int xd = dtm.dbConnection.Insert(ti);
-            TimelineChanged?.Invoke(this, EventArgs.Empty);
-            return xd;
-        }
-
-        public void EndItem(int todoId, DateTime? ends, string? context = null)
-        {
-            var myItem = dtm.dbConnection.Table<Models.TimelineItem>().First(x => x.TodoId == todoId && x.Ends == null);
+            var myItem = new TimelineItem();
+            myItem.TodoId = todoId;
             myItem.Ends = ends;
             myItem.Context = context;
-            dtm.dbConnection.Update(myItem);
+            await dtm.resolveRespond(prefix +"/End", JsonConvert.SerializeObject(myItem));
             TimelineChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public int AddItem(TimelineItem ti)
+        public async Task<int> SaveItem(TimelineItem ti)
         {
-            if (checkRunningTodo() != null)
-            {
+            var temp = await dtm.resolveRespond(prefix + "/Save", JsonConvert.SerializeObject(ti));
+            TimelineChanged?.Invoke(this, EventArgs.Empty);
+
+            if (temp != null)
+                return 1;
+            else
                 return 0;
-            }
-            int xd = dtm.dbConnection.Insert(ti);
-            TimelineChanged?.Invoke(this, EventArgs.Empty);
-            return xd;
         }
 
-        public void UpdateItem(TimelineItem ti)
+        public async Task DeleteItem(int id)
         {
-            dtm.dbConnection.Update(ti);
-            TimelineChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void DeleteItem(TimelineItem ti)
-        {
-            Debug.WriteLine("Deleting Timeline Item ID " + ti.Id);
-            dtm.dbConnection.Delete(ti);
+            await dtm.resolveRespond(prefix + "/Delete?id=" + id);
             TimelineChanged?.Invoke(this, EventArgs.Empty);
         }
 

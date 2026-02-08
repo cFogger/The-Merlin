@@ -24,11 +24,16 @@ namespace The_Merlin.ViewModels
         private TodoDefData _todoDefData;
         public TodoDefListViewModel(TodoDefData todoDefData) { 
             _todoDefData = todoDefData;
-
-            TodoDefItems = _todoDefData.GetAllTodoDefItems();
-            _todoDefData.TodoDefItemsChanged += (s, e) => {
-                TodoDefItems = _todoDefData.GetAllTodoDefItems();
+            Load();
+            _todoDefData.TodoDefItemsChanged += async (s, e) =>
+            {
+                TodoDefItems = await _todoDefData.GetAllTodoDefItems();
             };
+        }
+
+        private async void Load()
+        {
+            TodoDefItems = await _todoDefData.GetAllTodoDefItems();
         }
 
         public ICommand AddNewTodoDefCommand => new Command(async () =>
@@ -43,9 +48,9 @@ namespace The_Merlin.ViewModels
             await Shell.Current.GoToAsync($"TodoDefDetailView", parameters);
         });
 
-        public ICommand DeleteCommand => new Command<TodoDefItem>((tdi) =>
+        public ICommand DeleteCommand => new Command<TodoDefItem>(async (tdi) =>
         {
-            _todoDefData.DeleteTodoDefItem(tdi);
+            await _todoDefData.DeleteTodoDefItem(tdi.Id);
         });
 
         public ICommand NavigateToDetail => new Command<TodoDefItem>(async (tdi) =>

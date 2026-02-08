@@ -41,9 +41,9 @@ namespace The_Merlin.ViewModels
 
         public void onTodoDefsChanged(object? sender, EventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                var items = _todoDefData.GetAllTodoDefItems();
+                var items = await _todoDefData.GetAllTodoDefItems();
                 TodoDefs.Clear();
                 foreach (var item in items)
                     TodoDefs.Add(item);
@@ -52,13 +52,14 @@ namespace The_Merlin.ViewModels
 
         public void onTodoItemsChanged(object? sender, EventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                _dayData.GetTodos(TodoItems, myDayItem.Date);
+                await _todoData.GetTodos(TodoItems, myDayItem.Date);
             });
         }
 
-        public ICommand TodoAddCommand => new Command(() => { if (SelectedTodoDef == null) return; SelectedTodoDef.CreateTodoItem(_todoData, myDayItem.Date.Date); });
+        public ICommand TodoAddCommand => new Command(() => { if (SelectedTodoDef == null) return; 
+            SelectedTodoDef.CreateTodoItem(_todoData, myDayItem.Date.Date); });
 
         public TodoDefItem SelectedTodoDef { get; set; }
 

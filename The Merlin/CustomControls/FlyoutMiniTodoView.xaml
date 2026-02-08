@@ -35,6 +35,5 @@
                 <Button Text="Complete" Command="{Binding CompleteCommand}" HeightRequest="44" IsVisible="{Binding IsManualCompletion}"/>
             </HorizontalStackLayout>
         </Border>
-
     </Grid>
 </ContentView>

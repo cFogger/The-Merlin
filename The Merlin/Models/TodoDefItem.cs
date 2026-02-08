@@ -1,5 +1,4 @@
-﻿using SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -9,8 +8,6 @@ namespace The_Merlin.Models
 {
     public class TodoDefItem
     {
-        [PrimaryKey]
-        [AutoIncrement]
         public int Id { get; set; }
         public string? TodoDefText { get; set; } // Short description of the todo
 
@@ -23,7 +20,6 @@ namespace The_Merlin.Models
         //public int CanBeDone { get; set; } = 0;
         //everywhere onlyhome atworkavailable nopc holiday
 
-        [Ignore]
         public int RepeatEveryXDays
         {
             get
@@ -40,7 +36,6 @@ namespace The_Merlin.Models
             }
         }
 
-        [Ignore]
         public int GetDefaultDurationInMinutes
         {
             get
@@ -54,7 +49,7 @@ namespace The_Merlin.Models
             }
         }
 
-        public void CreateTodoItem(TodoData _todoData, DateTime? AssignedDate = null)
+        public async void CreateTodoItem(TodoData _todoData, DateTime? AssignedDate = null)
         {
             if (AssignedDate == null)
                 AssignedDate = DateTime.Today;
@@ -69,7 +64,7 @@ namespace The_Merlin.Models
                 CompletionType = this.DefaultCompletionType,
                 Duration = this.DefaultDuration
             };
-            _todoData.AddItem(todoItem);
+            await _todoData.SaveItem(todoItem);
         }
     }
 

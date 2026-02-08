@@ -31,17 +31,20 @@ namespace The_Merlin.Services
             _timelineData = timelineData;
             _todoData = todoData;
             _messageService = msgService;
-
-            TimelineItem? tli = timelineData.checkRunningTodo();
+            TestAsync();
+            TodoTimer.Tick += TodoTimer_Tick;
+        }
+        
+        private async Task TestAsync()
+        {
+            TimelineItem? tli = await _timelineData.checkRunningTodo();
             if (tli != null)
             {
-                _ActiveTodoSession = todoData.GetItem(tli.TodoId);
+                _ActiveTodoSession = await _todoData.GetItem(tli.TodoId);
                 IsChronoRunning = true;
                 TodoTimeSpan = DateTime.Now - tli.Starts;
                 TimerStarted?.Invoke(this, new EventArgs());
             }
-
-            TodoTimer.Tick += TodoTimer_Tick;
         }
 
         private void TodoTimer_Tick(object? sender, EventArgs e)
@@ -51,37 +54,45 @@ namespace The_Merlin.Services
                 TodoTimerText = TodoTimeSpan.ToString(@"hh\:mm\:ss"); }
         }
 
+
+        public async Task StartTimer(TodoItem todo)
+        {
+            int startingitem = await _timelineData.SaveItem(new TimelineItem
+            {
+                Starts = DateTime.Now,
+                TodoId = todo.Id
+            });
+
+            if (startingitem == 1)
+            {
+                _isAlerted = false;
+                IsChronoRunning = true;
+                _ActiveTodoSession = todo;
+                TodoTimeSpan = TimeSpan.Zero;
+                _lastTotal = await _timelineData.GetTotalbyTodoId(todo.Id);
+                if (todo.Status == TodoItemStatus.Pending)
+                {
+                    todo.Status = TodoItemStatus.InProgress;
+                }
+                await _todoData.SaveItem(todo);
+                TimerStarted?.Invoke(this, new EventArgs());
+            }
+            else
+            {
+                await _messageService.ShowAsync("Problem", "Another todo running - " + _ActiveTodoSession.TodoText);
+            }
+        }
+
         public async Task StartStopTimer(TodoItem todo)
         {
             if (!IsChronoRunning)
             {
-                if (_timelineData.AddItem(new TimelineItem
-                {
-                    Starts = DateTime.Now,
-                    TodoId = todo.Id
-                }) == 1)
-                {
-                    _isAlerted = false;
-                    IsChronoRunning = true;
-                    _ActiveTodoSession = todo;
-                    TodoTimeSpan = TimeSpan.Zero;
-                    _lastTotal = _timelineData.GetTotalbyTodoId(todo.Id);
-                    if (todo.Status == TodoItemStatus.Pending)
-                    {
-                        todo.Status = TodoItemStatus.InProgress;
-                    }
-                    _todoData.UpdateItem(todo);
-                    TimerStarted?.Invoke(this, new EventArgs());
-                }
-                else
-                {
-                    await _messageService.ShowAsync("Problem", "Another todo running - " + _ActiveTodoSession.TodoText);
-                }
+                await StartTimer(todo);
             }
             else if (_ActiveTodoSession.Id == todo.Id)
             {
                 string cntxt = await _messageService.ShowPromptAsync(todo.TodoText, "N'aptın?", "Fill Context");
-                _timelineData.EndItem(todo.Id, DateTime.Now, cntxt);
+                await _timelineData.EndItem(todo.Id, DateTime.Now, cntxt);
                 if (todo.CompletionType == TodoCompletionType.DurationBased)
                 {
                     if (todo.Duration > _lastTotal.Add(TodoTimeSpan))
@@ -93,7 +104,7 @@ namespace The_Merlin.Services
                         todo.Status = TodoItemStatus.Completed;
                     }
                 }
-                _todoData.UpdateItem(todo);
+                await _todoData.SaveItem(todo);
                 IsChronoRunning = false;
                 _ActiveTodoSession = null;
                 TodoTimeSpan = TimeSpan.Zero; 
@@ -133,7 +144,7 @@ namespace The_Merlin.Services
             if (await _messageService.ShowConfirmAsync("Süre Aşıldı", $"{todo.TodoText} için süre aşıldı ({todo.Duration}). Devam edecek misin?", "Evet", "Hayır"))
             {
                 todo.Status = TodoItemStatus.Completed;
-                _todoData.UpdateItem(todo);
+                await _todoData.SaveItem(todo);
             }
             else
             {
