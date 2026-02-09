@@ -22,13 +22,13 @@ namespace The_Merlin.Data
             if (date == null)
                 date = DateTime.Today;
 
-            return (DayItem)await dtm.resolveRespond(prefix + "/GetItem?date=" + date.Value.ToBinary);
+            return (DayItem)await dtm.resolveRespond(prefix + "/GetItem?date=" + date.Value.ToBinary());
         }
 
         public async Task GetAllDays(ObservableCollection<DayItem> myObs)
         {
             myObs.Clear();
-            var templist = await dtm.resolveRespond(prefix + "/GetAll");
+            object templist = await dtm.resolveRespond(prefix + "/GetAll");
             List<DayItem> mylist = JsonConvert.DeserializeObject<List<DayItem>>(templist.ToString());
             foreach (DayItem item in mylist)
                 myObs.Add(item);
@@ -43,9 +43,9 @@ namespace The_Merlin.Data
         public async Task DeleteItem(int id)
         {
             await dtm.resolveRespond(prefix + "/Delete?id=" + id);
-            ItemChanged.Invoke(this, EventArgs.Empty);
+            ItemChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler ItemChanged;
+        public event EventHandler? ItemChanged;
     }
 }

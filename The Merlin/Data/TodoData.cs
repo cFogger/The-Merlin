@@ -65,7 +65,7 @@ namespace The_Merlin.Data
             TodoItemCollectionChanged.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler TodoItemCollectionChanged;
-        public event EventHandler AssignedDatesChanged;
+        public event EventHandler? TodoItemCollectionChanged;
+        public event EventHandler? AssignedDatesChanged;
     }
 }

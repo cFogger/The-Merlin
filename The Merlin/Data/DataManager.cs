@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Extensions;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 using The_Merlin.Models;
@@ -29,14 +31,15 @@ namespace The_Merlin.Data
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             HttpClient.Timeout = TimeSpan.FromSeconds(15);
-            _busy = busy;
         }
+
+        bool isBusy = false;
 
         public async Task<object> resolveRespond(string url, string JsonContent = "nulloğlunull")
         {
+            object result = null;
             try
             {
-                _busy.Begin();
                 HttpResponseMessage response;
                 if (JsonContent == "nulloğlunull")
                     response = await HttpClient.GetAsync(Url + url);
@@ -45,27 +48,26 @@ namespace The_Merlin.Data
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var resp = await response.Content.ReadAsStringAsync();
-                    MobileResult mResult = JsonConvert.DeserializeObject<MobileResult>(resp);
+                    string? resp = await response.Content.ReadAsStringAsync();
+                    MobileResult? mResult = JsonConvert.DeserializeObject<MobileResult>(resp);
                     if (mResult.Result)
-                        return mResult.Data;
+                    {
+                        Debug.WriteLine("OnDB: " + mResult.Message);
+                        result = mResult.Data;
+                    }
                     else
                         Debug.WriteLine(mResult.Message);
                 }
                 else
                 {
-                    Debug.WriteLine($"Response: {response.StatusCode}");
+                    Debug.WriteLine($"Response Fail: {response.StatusCode}");
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Exc: " + e.Message);
             }
-            finally
-            {
-                _busy.End();
-            }
-            return null;
-        }
+            return result;
+        }        
     }
 }

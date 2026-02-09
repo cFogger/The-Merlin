@@ -21,7 +21,6 @@ namespace The_Merlin.ViewModels
 
         private async void Load()
         {
-            await _todoData.GetAssignedDates();
             _dayData.ItemChanged += onDayItemsChanged;
             onDayItemsChanged(this, EventArgs.Empty);
         }
