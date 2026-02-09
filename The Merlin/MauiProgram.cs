@@ -26,7 +26,6 @@ namespace The_Merlin
             //services
             builder.Services.AddSingleton<IMessageService, MessageService>();
             builder.Services.AddSingleton<ITimerService, TimerService>();
-            builder.Services.AddSingleton<BusyService>();
 
             //datamanagers
             builder.Services.AddSingleton<DataManager>();

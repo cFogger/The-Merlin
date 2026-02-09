@@ -22,7 +22,6 @@ namespace The_Merlin.ViewModels
         private async void Load()
         {
             _dayData.ItemChanged += onDayItemsChanged;
-            onDayItemsChanged(this, EventArgs.Empty);
         }
 
         private async void Save()

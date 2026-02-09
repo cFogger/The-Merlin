@@ -24,8 +24,7 @@ namespace The_Merlin.Data
         public HttpClient HttpClient { get; set; }
         bool isDebug = false;
         public string Url;
-        BusyService _busy;
-        public DataManager(BusyService busy)
+        public DataManager()
         {
             Url = isDebug ? "https://localhost:44387/" : "https://www.cfogger.me/";
             HttpClient = new HttpClient();
@@ -33,7 +32,6 @@ namespace The_Merlin.Data
             HttpClient.Timeout = TimeSpan.FromSeconds(15);
         }
 
-        bool isBusy = false;
 
         public async Task<object> resolveRespond(string url, string JsonContent = "nulloğlunull")
         {
