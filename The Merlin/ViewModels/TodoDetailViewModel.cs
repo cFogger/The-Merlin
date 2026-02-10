@@ -68,6 +68,8 @@ namespace The_Merlin.ViewModels
             TotalTimeString = value1.ToString(@"hh\:mm\:ss");
             var value2 = await _todoDefData.GetTodoDefItemById(_todo.TodoDefId);
             TodoDefText = value2.TodoDefText;
+
+            StartTimeSelected = EndTimeSelected = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
         }
 
         private bool _isManualCompletion;
@@ -106,6 +108,23 @@ namespace The_Merlin.ViewModels
 
         private string _timeString;
         public string TimeString { get { return _timeString; } set { _timeString = value; OnPropertyChanged(); } }
+
+        private TimeSpan _startTimeSelected;
+        private TimeSpan _endTimeSelected;
+        public TimeSpan StartTimeSelected { get { return _startTimeSelected; } set { _startTimeSelected = value; OnPropertyChanged(); } }
+        public TimeSpan EndTimeSelected { get { return _endTimeSelected; } set { _endTimeSelected = value; OnPropertyChanged(); } }
+
+        public ICommand AddManualLogCommand => new Command(async () =>
+        {
+            string cntxt = await _messageService.ShowPromptAsync(Todo.TodoText, "N'aptın?", "Fill Context");
+            await _timelineData.SaveItem(new TimelineItem
+            {
+                TodoId = Todo.Id,
+                Starts = Todo.AssignedDate.Date + StartTimeSelected,
+                Ends = Todo.AssignedDate.Date + EndTimeSelected,
+                Context = cntxt
+            });
+        });
 
         public ICommand DeleteCommand => new Command(async() => {
             await _todoData.DeleteItem(Todo.Id);

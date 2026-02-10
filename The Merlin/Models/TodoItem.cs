@@ -2,15 +2,15 @@
 {
     public class TodoItem
     {
-
         public int Id { get; set; }
         public int TodoDefId { get; set; }
         public string? TodoText { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime AssignedDate { get; set; }
-        public TodoItemStatus Status { get; set; } = 0; // 0 Pending 1 InProgress 2 Success 3 Failed/Delayed
+        public TodoItemStatus Status { get; set; } = 0;
         public TodoCompletionType CompletionType { get; set; }
-        public TimeSpan Duration { get; set; } = TimeSpan.Zero; // Used if CompletionType is DurationBased
+        public TimeSpan Duration { get; set; } = TimeSpan.Zero;
+
 
         public bool IsCompleted
         {

@@ -73,7 +73,6 @@ namespace The_Merlin.ViewModels
 
         public ICommand SaveCommand => new Command(async () =>
         {
-            Debug.WriteLine("test " + tdi.Id);
             tdi.RepeatType = rptType;
             await _todoDefData.AddTodoDefItem(tdi);
             await Shell.Current.GoToAsync("..");

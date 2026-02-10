@@ -5,15 +5,34 @@
              Title="DayDetailView" x:Name="myMainPage">
     <VerticalStackLayout>
         <Label 
-            Text="{Binding myItem.Id}"
+            Text="{Binding myDayItem.Id}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label Text="{Binding myItem.Date}"
+        <Label Text="{Binding myDayItem.Date, StringFormat='{0:dd.MM.yy}'}"
                VerticalOptions="Center"
                HorizontalOptions="Center"/>
-        <Label Text="{Binding myItem.DayType}"
+        <Label Text="{Binding myDayItem.DayType}"
                VerticalOptions="Center"
                HorizontalOptions="Center"/>
+        
+        <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="200"></SearchBar>
+                <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" 
+                                            CommandParameter="{Binding .}" 
+                                            Text="{Binding TodoDefText}"></Button>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
         <Border Padding="10" Margin="5" BackgroundColor="{StaticResource Gray950}">
             <CollectionView ItemsSource="{Binding TodoItems}">
                 <CollectionView.ItemTemplate>
@@ -26,30 +45,6 @@
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <CollectionView.Header>
-                    <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
-                        <Grid Padding="5,2,5,2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                <Label Margin="15,0" Text="Add " VerticalOptions="Center"></Label>
-                                <Picker Margin="10,0" VerticalOptions="Center" 
-                                    ItemsSource="{Binding BindingContext.TodoDefs, Source={x:Reference myMainPage}}" 
-                                    SelectedItem="{Binding BindingContext.SelectedTodoDef, Source={x:Reference myMainPage}}" 
-                                    ItemDisplayBinding="{Binding TodoDefText}"/>
-                            </HorizontalStackLayout>
-                            <Button 
-                                Grid.Column="1" Text="Add Todo"
-                                BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"
-                                Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}"/>
-                            <Button Grid.Column="2" Text="Definitions" Command="{Binding BindingContext.NavigateToTodoDefListView, Source={x:Reference myMainPage}}" 
-                                    BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"/>
-                        </Grid>
-                    </Border>
-                </CollectionView.Header>
             </CollectionView>
         </Border>
     </VerticalStackLayout>

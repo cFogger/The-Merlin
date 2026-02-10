@@ -30,7 +30,7 @@ namespace The_Merlin.Models
                     return 0;
             }
             set
-            {
+            {   
                 if (RepeatType == TodoDefRepeatType.Custom && value >= 1)
                     RepeatSpan = TimeSpan.FromDays(value);
             }

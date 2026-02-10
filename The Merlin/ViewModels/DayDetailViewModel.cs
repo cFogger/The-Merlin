@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using The_Merlin.Data;
@@ -22,7 +23,7 @@ namespace The_Merlin.ViewModels
         private DayItem _myDayItem;
 
         public ObservableCollection<TodoItem> TodoItems { get; } = [];
-        public ObservableCollection<TodoDefItem> TodoDefs { get; } = [];
+        public List<TodoDefItem> TodoDefs;
 
 
         private TodoData _todoData;
@@ -39,15 +40,10 @@ namespace The_Merlin.ViewModels
             _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
         }
 
-        public void onTodoDefsChanged(object? sender, EventArgs e)
+        public async void onTodoDefsChanged(object? sender, EventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                var items = await _todoDefData.GetAllTodoDefItems();
-                TodoDefs.Clear();
-                foreach (var item in items)
-                    TodoDefs.Add(item);
-            });
+            TodoDefs = await _todoDefData.GetAllTodoDefItems();
+            DefSearchText = string.Empty;
         }
 
         public void onTodoItemsChanged(object? sender, EventArgs e)
@@ -58,14 +54,47 @@ namespace The_Merlin.ViewModels
             });
         }
 
-        public ICommand TodoAddCommand => new Command(() => { if (SelectedTodoDef == null) return; 
-            SelectedTodoDef.CreateTodoItem(_todoData, myDayItem.Date.Date); });
+        public ICommand AddQuickTodoDefCommand => new Command(async () =>
+        {
+            string temptext = DefSearchText;
+            if (!string.IsNullOrEmpty(DefSearchText))
+                await _todoDefData.AddTodoDefItem(new TodoDefItem
+                {
+                    TodoDefText = DefSearchText,
+                    RepeatType = TodoDefRepeatType.None,
+                    DefaultCompletionType = TodoCompletionType.Manual,
+                    DefaultDuration = TimeSpan.FromMinutes(25),
+                });
+            DefSearchText = string.Empty;
+            DefSearchText = temptext;
+        });
 
-        public TodoDefItem SelectedTodoDef { get; set; }
+        public ICommand TodoAddCommand => new Command<TodoDefItem>((tdi) => { if (tdi == null) return; tdi.CreateTodoItem(_todoData, _myDayItem.Date.Date); });
 
         public ICommand NavigateToTodoDefListView => new Command(async () =>
         {
             await Shell.Current.GoToAsync("TodoDefListView");
         });
+
+        public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
+
+        private string _defSearchText;
+        public string DefSearchText
+        {
+            get { return _defSearchText; }
+            set
+            {
+                _defSearchText = value;
+                FilteredTodoDefs.Clear();
+                if (_defSearchText != string.Empty)
+                    foreach (var item in TodoDefs.Where(x => x.TodoDefText.Contains(_defSearchText, StringComparison.OrdinalIgnoreCase)))
+                        FilteredTodoDefs.Add(item);
+                else
+                    foreach (var item in TodoDefs)
+                        FilteredTodoDefs.Add(item);
+
+                OnPropertyChanged();
+            }
+        }
     }
 }

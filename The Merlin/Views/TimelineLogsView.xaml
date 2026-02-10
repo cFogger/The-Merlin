@@ -41,17 +41,11 @@
                             </Grid.ColumnDefinitions>
                             <Button HeightRequest="22" FontAttributes="Bold" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}" CornerRadius="15" Grid.Column="0"/>
                             <VerticalStackLayout Grid.Column="1" Margin="5,0">
-                                <Label Text="{Binding Path=GetTodoName}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Bold"></Label>
                                 <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="2" VerticalOptions="Center">
-                                <VerticalStackLayout.Resources>
-                                    <Style TargetType="Label">
-                                        <Setter Property="TextColor" Value="#ccffdd"></Setter>
-                                    </Style>
-                                </VerticalStackLayout.Resources>
-                                <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14"></Label>
-                                <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10">
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ccffdd"></Label>
+                                <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ccffdd">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
                                             <Setter Property="IsVisible" Value="False"/>
@@ -62,13 +56,8 @@
                             <Label Text="{Binding Path=GetDurationString}" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Start" FontAttributes="Bold" FontSize="14"></Label>
                             <Label Text="→" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="End" TextColor="DimGrey"></Label>
                             <VerticalStackLayout Grid.Column="4" VerticalOptions="Center">
-                                <VerticalStackLayout.Resources>
-                                    <Style TargetType="Label">
-                                        <Setter Property="TextColor" Value="#ffe6dd"></Setter>
-                                    </Style>
-                                </VerticalStackLayout.Resources>
-                                <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14"></Label>
-                                <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10">
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ffe6dd"></Label>
+                                <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ffe6dd">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
                                             <Setter Property="IsVisible" Value="False"/>

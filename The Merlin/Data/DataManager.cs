@@ -49,12 +49,8 @@ namespace The_Merlin.Data
                     string? resp = await response.Content.ReadAsStringAsync();
                     MobileResult? mResult = JsonConvert.DeserializeObject<MobileResult>(resp);
                     if (mResult.Result)
-                    {
-                        Debug.WriteLine("OnDB: " + mResult.Message);
                         result = mResult.Data;
-                    }
-                    else
-                        Debug.WriteLine(mResult.Message);
+                        Debug.WriteLine("On DB: " + mResult.Message);
                 }
                 else
                 {

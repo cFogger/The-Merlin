@@ -15,13 +15,8 @@ namespace The_Merlin.ViewModels
         { 
             _dayData = dayData;
             _todoData = todoData;
-            Load();
-            SelectedDate = DateTime.Today;
-        }
-
-        private async void Load()
-        {
             _dayData.ItemChanged += onDayItemsChanged;
+            SelectedDate = DateTime.Today;
         }
 
         private async void Save()

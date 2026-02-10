@@ -73,5 +73,20 @@ namespace The_Merlin.ViewModels
             _timerService.ActiveTodoSession().Status = TodoItemStatus.Completed;
             await _timerService.StartStopTimer(_timerService.ActiveTodoSession());
         });
+
+        public ICommand NavigateToDayList => new Command(async () =>
+        {
+            await Shell.Current.GoToAsync("DayListView");
+        });
+
+        public ICommand NavigateToTimelineLogsView => new Command(async () =>
+        {
+            await Shell.Current.GoToAsync("TimelineLogsView");
+        });
+
+        public ICommand NavigateToTodoDefListView => new Command(async () =>
+        {
+            await Shell.Current.GoToAsync("TodoDefListView");
+        });
     }
 }

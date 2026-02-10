@@ -4,11 +4,6 @@
              xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Name="myMainPage"
              x:Class="The_Merlin.MainPage">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Days" Command="{Binding NavigateToDayList}"></ToolbarItem>
-        <ToolbarItem Text="Timeline" Command="{Binding NavigateToTimelineLogsView}"></ToolbarItem>
-        <ToolbarItem Text="Todo Defs" Command="{Binding NavigateToTodoDefListView}"></ToolbarItem>
-    </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -22,13 +17,11 @@
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="150"></SearchBar>
+                    <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="200" Margin="5,0"></SearchBar>
                     <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Button Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" 
-                                            CommandParameter="{Binding .}" 
-                                            Text="{Binding TodoDefText}"></Button>
+                                <Button Text="{Binding TodoDefText}" Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
@@ -38,18 +31,8 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                            <Grid Padding="5,2,5,2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Label
-                                    Grid.Column="0"
-                                    Text="{Binding TodoText}"
-                                    VerticalOptions="Center" 
-                                    HorizontalOptions="Fill"
-                                    Margin="25,5,25,5"/>
+                            <Grid Padding="5,2,5,2" ColumnDefinitions="*,auto,auto">
+                                <Label Grid.Column="0" Text="{Binding TodoText}" VerticalOptions="Center"  HorizontalOptions="Fill" Margin="25,5,25,5"/>
                                 <Border Margin="15,0" BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="1">
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="InProgress">
@@ -62,11 +45,7 @@
                                             <Setter Property="BackgroundColor" Value="DarkOliveGreen"></Setter>
                                         </DataTrigger>
                                     </Border.Triggers>
-                                    <Label
-                                        Text="{Binding Status}"
-                                        VerticalOptions="Center" 
-                                        HorizontalOptions="Fill"
-                                        Margin="15,0"/>
+                                    <Label Text="{Binding Status}" VerticalOptions="Center"  HorizontalOptions="Fill" Margin="15,0"/>
                                 </Border>
                                 <Button Grid.Column="2" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}" WidthRequest="44"></Button>
                             </Grid>
@@ -77,29 +56,19 @@
         </VerticalStackLayout>
         <!-- Timeline Section -->
         <VerticalStackLayout Grid.Row="1">
-            <HorizontalStackLayout Margin="10">
-                <Label Text="Son 5 aktivite" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"></Label>
-                <Button Command="{Binding NavigateToTimelineLogsView}" Text="Timeline Logs" Margin="15,0,0,0" BorderWidth="1" VerticalOptions="Center" BackgroundColor="Transparent" TextColor="AliceBlue"></Button>
-            </HorizontalStackLayout>
             <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None">
                 <CollectionView.Header>
                     <Grid>
-                        <Grid.Resources>
-                            <Style TargetType="Label">
-                                <Setter Property="TextColor" Value="{StaticResource Gray400}"></Setter>
-                                <Setter Property="FontSize" Value="10"></Setter>
-                            </Style>
-                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="60"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Text="Todo" Grid.Column="0" HorizontalOptions="Start" Margin="15,0"></Label>
-                        <Label Text="Starts" Grid.Column="1" HorizontalOptions="Center"></Label>
-                        <Label Text="Time" Grid.Column="2" HorizontalOptions="Center"></Label>
-                        <Label Text="Ends" Grid.Column="3" HorizontalOptions="Center"></Label>
+                        <Label Text="Son 5 aktivite" Grid.Column="0" HorizontalOptions="Start" Margin="15,0" TextColor="AliceBlue" FontSize="10"></Label>
+                        <Label Text="Starts" Grid.Column="1" HorizontalOptions="Center" TextColor="{StaticResource Gray400}" FontSize="10"></Label>
+                        <Label Text="Time" Grid.Column="2" HorizontalOptions="Center" TextColor="{StaticResource Gray400}" FontSize="10"></Label>
+                        <Label Text="Ends" Grid.Column="3" HorizontalOptions="Center" TextColor="{StaticResource Gray400}" FontSize="10"></Label>
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
@@ -113,17 +82,11 @@
                                     <ColumnDefinition Width="50"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <VerticalStackLayout Grid.Column="0" Margin="5,0">
-                                    <Label Text="{Binding Path=GetTodoName}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Bold"></Label>
                                     <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
                                 </VerticalStackLayout>
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                    <VerticalStackLayout.Resources>
-                                        <Style TargetType="Label">
-                                            <Setter Property="TextColor" Value="#ccffdd"></Setter>
-                                        </Style>
-                                    </VerticalStackLayout.Resources>
-                                    <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14"></Label>
-                                    <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10">
+                                    <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ccffdd"></Label>
+                                    <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ccffdd">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
                                                 <Setter Property="IsVisible" Value="False"/>
@@ -134,13 +97,8 @@
                                 <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Start" FontAttributes="Bold" FontSize="14"></Label>
                                 <Label Text="→" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="End" TextColor="DimGrey"></Label>
                                 <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
-                                    <VerticalStackLayout.Resources>
-                                        <Style TargetType="Label">
-                                            <Setter Property="TextColor" Value="#ffe6dd"></Setter>
-                                        </Style>
-                                    </VerticalStackLayout.Resources>
-                                    <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14"></Label>
-                                    <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10">
+                                    <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ffe6dd"></Label>
+                                    <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ffe6dd">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
                                                 <Setter Property="IsVisible" Value="False"/>

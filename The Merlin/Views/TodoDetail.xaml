@@ -10,57 +10,61 @@
         </Style>
     </ContentPage.Resources>
     <VerticalStackLayout>
-        <Grid ColumnSpacing="10" RowSpacing="10">
+        <Grid ColumnSpacing="10" RowSpacing="10" Margin="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Label Text="Todo:" Grid.Row="0" Grid.Column="0"></Label>
-            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding myTodoText}"/>
-
-            <Label Grid.Row="1" Grid.Column="1" Text="{Binding TodoDefText, StringFormat='Def: {0}'}" HeightRequest="32"/>
-            <Label Grid.Row="0" Grid.Column="2" Text="{Binding Todo.CreatedAt, StringFormat='Created: {0}'}" HeightRequest="32"/>
-            <Label Grid.Row="1" Grid.Column="2" Text="{Binding TotalTimeString, StringFormat='Total: {0}'}" HeightRequest="32"/>
-            <Label Grid.Row="2" Grid.Column="2" Text="{Binding Todo.AssignedDate, StringFormat='Assigned Date: {0:dd.MM.yy}'}" HeightRequest="32"></Label>
-
-            
-            <!-- To Remove -->
-            <HorizontalStackLayout Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="Center">
-                <Button Command="{Binding StartStopCommand}" IsVisible="{Binding IsStartVisible}" FontAttributes="Bold" HeightRequest="44">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button"
+            <Border Grid.Column="0" Padding="10" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Grid.Column="0">
+                    <Entry Text="{Binding myTodoText}"/>
+                    <Label Text="{Binding TodoDefText, StringFormat='Def: {0}'}" HeightRequest="32"/>
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Button Command="{Binding StartStopCommand}" IsVisible="{Binding IsStartVisible}" FontAttributes="Bold" HeightRequest="44">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
                                      Value="true">
-                            <Setter Property="Text" Value="Stop"></Setter>
-                            <Setter Property="BackgroundColor" Value="DarkRed"></Setter>
-                        </DataTrigger>
-                        <DataTrigger TargetType="Button"
+                                    <Setter Property="Text" Value="Stop"></Setter>
+                                    <Setter Property="BackgroundColor" Value="DarkRed"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Button"
                                      Binding="{Binding TimerRunning}"
                                      Value="false">
-                            <Setter Property="Text" Value="Start"></Setter>
-                            <Setter Property="BackgroundColor" Value="DarkGreen"></Setter>
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
-                <Button Text="Complete" Command="{Binding CompleteCommand}" IsVisible="{Binding IsManualCompletion}" HeightRequest="44"/>
-            </HorizontalStackLayout>
+                                    <Setter Property="Text" Value="Start"></Setter>
+                                    <Setter Property="BackgroundColor" Value="DarkGreen"></Setter>
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                        <Button Text="Complete" Command="{Binding CompleteCommand}" IsVisible="{Binding IsManualCompletion}" HeightRequest="44"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+            <VerticalStackLayout Grid.Column="1">
+                <Border Margin="0,0,0,10" Padding="10" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Todo.CreatedAt, StringFormat='Created: {0}'}" HeightRequest="32"/>
+                        <Label Text="{Binding TotalTimeString, StringFormat='Total: {0}'}" HeightRequest="32"/>
+                        <Label Text="{Binding Todo.AssignedDate, StringFormat='Assigned Date: {0:dd.MM.yy}'}" HeightRequest="32"></Label>
+                        <HorizontalStackLayout HeightRequest="32">
+                            <Label Text="{Binding Todo.CompletionType}"/>
+                            <Label Text="{Binding Todo.Status}"/>
+                        </HorizontalStackLayout>
+                        <Label Grid.Row="5" Grid.Column="2" Text="{Binding Todo.Duration}"/>
+                    </VerticalStackLayout>
+                </Border>
 
-            <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HeightRequest="32">
-                <Label Text="{Binding Todo.CompletionType}"/>
-                <Label Text="{Binding Todo.Status}"/>
-            </HorizontalStackLayout>
-            <Button Grid.Row="4" Grid.Column="2" WidthRequest="66" HeightRequest="44" Command="{Binding DeleteCommand}" Text="Delete" BackgroundColor="DarkRed" Opacity="0.8"></Button>
-            <Label Grid.Row="5" Grid.Column="2" Text="{Binding Todo.Duration}"/>
+                <Border Margin="0,0,0,10" Padding="10" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout>
+                        <Label Text="Starts: "/>
+                            <TimePicker Time="{Binding StartTimeSelected}"></TimePicker>
+                            <Label Text="Ends: "/>
+                            <TimePicker Time="{Binding EndTimeSelected}"></TimePicker>
+                        <Button Text="Add Manual Log" Command="{Binding AddManualLogCommand}" HeightRequest="44"></Button>
+                    </VerticalStackLayout>
+                </Border>
+                <Button Grid.Row="4" Grid.Column="2" WidthRequest="66" HeightRequest="44" Command="{Binding DeleteCommand}" Text="Delete" BackgroundColor="DarkRed" Opacity="0.8"></Button>
+            </VerticalStackLayout>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

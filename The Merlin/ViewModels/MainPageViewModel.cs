@@ -55,7 +55,6 @@ namespace The_Merlin.ViewModels
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await _todoData.GetTodos(todoItems, DateTime.Today);
-                Debug.WriteLine("todo fill triggered");
             });
         }
 
@@ -66,21 +65,6 @@ namespace The_Merlin.ViewModels
                     { "todo", ti }
                 };
             await Shell.Current.GoToAsync("TodoDetailView", parameters);
-        });
-
-        public ICommand NavigateToDayList => new Command(async () =>
-        {
-            await Shell.Current.GoToAsync("DayListView");
-        });
-
-        public ICommand NavigateToTimelineLogsView => new Command(async () =>
-        {
-            await Shell.Current.GoToAsync("TimelineLogsView");
-        });
-
-        public ICommand NavigateToTodoDefListView => new Command(async () =>
-        {
-            await Shell.Current.GoToAsync("TodoDefListView");
         });
 
         public ICommand AddQuickTodoDefCommand => new Command(async () =>
@@ -110,7 +94,6 @@ namespace The_Merlin.ViewModels
             {
                 _defSearchText = value;
                 FilteredTodoDefs.Clear();
-                Debug.WriteLine("triggered via " + value);
                 if (_defSearchText != string.Empty)
                     foreach (var item in TodoDefs.Where(x => x.TodoDefText.Contains(_defSearchText, StringComparison.OrdinalIgnoreCase)))
                         FilteredTodoDefs.Add(item);

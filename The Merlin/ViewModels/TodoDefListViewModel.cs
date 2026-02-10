@@ -38,7 +38,6 @@ namespace The_Merlin.ViewModels
 
         public ICommand AddNewTodoDefCommand => new Command(async () =>
         {
-            Debug.WriteLine("Navigating to TodoDefDetail");
             if (AppShell.Current.FlyoutBehavior != FlyoutBehavior.Locked)
                 AppShell.Current.FlyoutIsPresented = false;
             IDictionary<string, object> parameters = new Dictionary<string, object>

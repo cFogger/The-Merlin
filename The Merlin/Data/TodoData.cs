@@ -54,7 +54,6 @@ namespace The_Merlin.Data
 
         public async Task SaveItem(TodoItem item)
         {
-            Debug.WriteLine("isitsave");
             await dtm.resolveRespond(prefix + "/Save", JsonConvert.SerializeObject(item));
             TodoItemCollectionChanged?.Invoke(this, EventArgs.Empty);
         }

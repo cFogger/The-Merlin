@@ -22,15 +22,6 @@ namespace The_Merlin.Models
             }
         }
 
-        public string GetTodoName
-        {
-            get 
-            {
-                return "Deleted Todo";
-                //to be fixed
-            }
-        }
-
         public string GetDurationString
         {
             get

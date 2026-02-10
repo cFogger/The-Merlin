@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="The_Merlin.CustomControls.FlyoutMiniTodoView" HeightRequest="48">
-    <Grid Margin="2" HorizontalOptions="Fill" ColumnSpacing="44">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Text="{Binding dateString}" HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" FontSize="20"></Label>
+             x:Class="The_Merlin.CustomControls.FlyoutMiniTodoView">
+    <Grid Margin="2" ColumnSpacing="44" ColumnDefinitions="auto,*,auto">
+            <Label Grid.Column="0" Text="{Binding dateString}" HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" FontSize="20"></Label>
         <Border StrokeShape="RoundRectangle 10" Padding="15,0" Grid.Column="1" IsVisible="{Binding IsVisible}">
             <Border.Background>
                 <LinearGradientBrush>
@@ -35,5 +31,11 @@
                 <Button Text="Complete" Command="{Binding CompleteCommand}" HeightRequest="44" IsVisible="{Binding IsManualCompletion}"/>
             </HorizontalStackLayout>
         </Border>
+        <!-- Popup navigation on 3 point, device screen size -->
+        <HorizontalStackLayout Grid.Column="2">
+            <Button Grid.Column="0" Text="Days" Command="{Binding NavigateToDayList}"></Button>
+            <Button Grid.Column="1" Text="Timeline" Command="{Binding NavigateToTimelineLogsView}"></Button>
+            <Button Grid.Column="2" Text="Todo Defs" Command="{Binding NavigateToTodoDefListView}"></Button>
+        </HorizontalStackLayout>
     </Grid>
 </ContentView>
