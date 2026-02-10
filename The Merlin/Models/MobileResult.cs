@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace The_Merlin.Models
+﻿namespace The_Merlin.Models
 {
     public class MobileResult
     {

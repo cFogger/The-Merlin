@@ -4,13 +4,10 @@
              xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Name="myMainPage"
              x:Class="The_Merlin.MainPage">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-        </Grid.RowDefinitions>
+    <Grid RowDefinitions="auto,*,auto">
+        <Editor Grid.Row="0" Text="{Binding DayDesc}" VerticalOptions="Center" AutoSize="TextChanges"></Editor>
         <!-- Todo Section -->
-        <VerticalStackLayout Grid.Row="0">
+        <VerticalStackLayout Grid.Row="1">
             <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -55,7 +52,7 @@
             </CollectionView>
         </VerticalStackLayout>
         <!-- Timeline Section -->
-        <VerticalStackLayout Grid.Row="1">
+        <VerticalStackLayout Grid.Row="2">
             <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None">
                 <CollectionView.Header>
                     <Grid>

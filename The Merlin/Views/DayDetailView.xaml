@@ -14,7 +14,8 @@
         <Label Text="{Binding myDayItem.DayType}"
                VerticalOptions="Center"
                HorizontalOptions="Center"/>
-        
+        <Button Text="Delete" BackgroundColor="DarkRed" Command="{Binding DeleteCommand}"></Button>
+
         <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
             <Grid>
                 <Grid.ColumnDefinitions>

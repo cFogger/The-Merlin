@@ -19,13 +19,15 @@ namespace The_Merlin.ViewModels
         private TimelineData _timelineData;
         private TodoData _todoData;
         private TodoDefData _todoDefData;
+        private DayData _dayData;
         private ITimerService _timer;
 
-        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, ITimerService timerService)
+        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData)
         {
             _timelineData = timelineData;
             _todoData = todoData;
             _todoDefData = todoDefData;
+            _dayData = dayData;
 
             _timelineData.TimelineChanged += onTimelineChanged;
             _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
@@ -34,6 +36,14 @@ namespace The_Merlin.ViewModels
             onTimelineChanged(this, EventArgs.Empty);
             onTodoItemsChanged(this, EventArgs.Empty);
             onTodoDefsChanged(this, EventArgs.Empty);
+
+            Load();
+        }
+
+        public async void Load()
+        {
+            MyDayItem = await _dayData.GetToday();
+            DayDesc = MyDayItem.Content;
         }
 
         public void onTimelineChanged(object? sender, EventArgs e)
@@ -102,6 +112,31 @@ namespace The_Merlin.ViewModels
                         FilteredTodoDefs.Add(item);
 
                 OnPropertyChanged();
+            }
+        }
+
+        private DayItem _myDayItem;
+        public DayItem MyDayItem { get { return _myDayItem; } set { _myDayItem = value; OnPropertyChanged(); } }
+
+        //debounce
+        CancellationTokenSource cts;
+        private string _dayDesc;
+        public string DayDesc
+        {
+            get { return _dayDesc; }
+            set
+            {
+                _dayDesc = value;
+
+                cts?.Cancel();
+                cts = new CancellationTokenSource();
+                MyDayItem.Content = _dayDesc;
+                OnPropertyChanged();
+                Task.Delay(1000, cts.Token).ContinueWith(async t =>
+                {
+                    if (!t.IsCanceled)
+                        await _dayData.UpdateItem(MyDayItem);
+                });
             }
         }
     }

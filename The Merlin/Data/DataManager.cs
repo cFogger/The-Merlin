@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Extensions;
+using Java.Net;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
@@ -22,11 +23,15 @@ namespace The_Merlin.Data
         //}
 
         public HttpClient HttpClient { get; set; }
-        bool isDebug = false;
         public string Url;
         public DataManager()
         {
-            Url = isDebug ? "https://localhost:44387/" : "https://www.cfogger.me/";
+
+            Url = "https://www.cfogger.me/";
+            //PC url
+            //Url = "https://localhost:44387/";
+            //Laptop url
+            //Url = "http://localhost:50173/";
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             HttpClient.Timeout = TimeSpan.FromSeconds(15);

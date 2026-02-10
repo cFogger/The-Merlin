@@ -71,6 +71,8 @@ namespace The_Merlin.ViewModels
 
         public ICommand TodoAddCommand => new Command<TodoDefItem>((tdi) => { if (tdi == null) return; tdi.CreateTodoItem(_todoData, _myDayItem.Date.Date); });
 
+        public ICommand DeleteCommand => new Command(async () => { await _dayData.DeleteItem(myDayItem.Id); await Shell.Current.GoToAsync(".."); });
+
         public ICommand NavigateToTodoDefListView => new Command(async () =>
         {
             await Shell.Current.GoToAsync("TodoDefListView");

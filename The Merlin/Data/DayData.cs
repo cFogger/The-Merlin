@@ -34,6 +34,13 @@ namespace The_Merlin.Data
                 myObs.Add(item);
         }
 
+        public async Task<DayItem> GetToday()
+        {
+            var respons = await dtm.resolveRespond(prefix + "/GetToday");
+            var item = JsonConvert.DeserializeObject<DayItem>(respons.ToString());
+            return item;
+        }
+
         public async Task SaveItem(DayItem item)
         {
             await dtm.resolveRespond(prefix + "/Save", JsonConvert.SerializeObject(item));
@@ -44,6 +51,11 @@ namespace The_Merlin.Data
         {
             await dtm.resolveRespond(prefix + "/Delete?id=" + id);
             ItemChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public async Task UpdateItem(DayItem item)
+        {
+            await dtm.resolveRespond(prefix + "/Update", JsonConvert.SerializeObject(item));
         }
 
         public event EventHandler? ItemChanged;

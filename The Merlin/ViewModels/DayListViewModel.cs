@@ -15,6 +15,7 @@ namespace The_Merlin.ViewModels
         { 
             _dayData = dayData;
             _todoData = todoData;
+
             _dayData.ItemChanged += onDayItemsChanged;
             SelectedDate = DateTime.Today;
         }
@@ -40,7 +41,5 @@ namespace The_Merlin.ViewModels
 
         private DateTime _selectedDate;
         public DateTime SelectedDate { get { return _selectedDate; } set { _selectedDate = value; OnPropertyChanged(); Save(); } }
-        
-
     }
 }
