@@ -10,7 +10,9 @@
         public TodoItemStatus Status { get; set; } = 0;
         public TodoCompletionType CompletionType { get; set; }
         public TimeSpan Duration { get; set; } = TimeSpan.Zero;
+        public string Color { get; set; }
 
+        public string TodoDefText { get; set; }
 
         public bool IsCompleted
         {

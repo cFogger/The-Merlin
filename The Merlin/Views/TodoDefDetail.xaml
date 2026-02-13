@@ -55,6 +55,27 @@
             </Label>
             <Switch IsToggled="{Binding IsManualCompletion}" HorizontalOptions="Center"></Switch>
         </VerticalStackLayout>
+        <VerticalStackLayout HorizontalOptions="Center">
+            <CollectionView ItemsSource="{Binding usedColors}"
+                SelectionMode="Single"
+                SelectedItem="{Binding colorOpt}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="{Binding Hex}" 
+                           WidthRequest="40" 
+                           HeightRequest="40" 
+                           StrokeShape="Rectangle 20"
+                           Padding="0" 
+                           Shadow="0">
+                            <Label Text="{Binding Name}" FontSize="8" FontAutoScalingEnabled="True"/>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
         <!--<VerticalStackLayout HorizontalOptions="Center">
             <Label x:Name="cbdlabel" Text="Everywhere"></Label>
             <Slider 

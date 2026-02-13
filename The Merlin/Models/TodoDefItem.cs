@@ -17,6 +17,8 @@ namespace The_Merlin.Models
         public TimeSpan DefaultDuration { get; set; } = TimeSpan.FromMinutes(25);
         public TodoCompletionType DefaultCompletionType { get; set; } = TodoCompletionType.DurationBased;
 
+        public string DefaultColor { get; set; }
+
         //public int CanBeDone { get; set; } = 0;
         //everywhere onlyhome atworkavailable nopc holiday
 
@@ -62,7 +64,9 @@ namespace The_Merlin.Models
                 AssignedDate = AssignedDate.Value,
                 Status = TodoItemStatus.Pending,
                 CompletionType = this.DefaultCompletionType,
-                Duration = this.DefaultDuration
+                Duration = this.DefaultDuration,
+                Color = this.DefaultColor,
+                
             };
             await _todoData.SaveItem(todoItem);
         }

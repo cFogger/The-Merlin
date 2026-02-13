@@ -66,8 +66,6 @@ namespace The_Merlin.ViewModels
         {
             var value1 = await _timelineData.GetTotalbyTodoId(_todo.Id);
             TotalTimeString = value1.ToString(@"hh\:mm\:ss");
-            var value2 = await _todoDefData.GetTodoDefItemById(_todo.TodoDefId);
-            TodoDefText = value2.TodoDefText;
 
             StartTimeSelected = EndTimeSelected = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
         }
@@ -96,9 +94,6 @@ namespace The_Merlin.ViewModels
                 });
             }
         }
-
-        private string _todoDefText;
-        public string TodoDefText { get { return _todoDefText; } set { _todoDefText = value; OnPropertyChanged(); } }
 
         private string _totalTimeString;
         public string TotalTimeString { get { return _totalTimeString; } set { _totalTimeString = value; OnPropertyChanged(); } }

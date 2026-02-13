@@ -29,7 +29,10 @@
                     <DataTemplate>
                         <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
                             <Grid Padding="5,2,5,2" ColumnDefinitions="*,auto,auto">
-                                <Label Grid.Column="0" Text="{Binding TodoText}" VerticalOptions="Center"  HorizontalOptions="Fill" Margin="25,5,25,5"/>
+                                <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center"  HorizontalOptions="Fill" Margin="25,5,25,5">
+                                    <Border Margin="0,2,0,0" VerticalOptions="Center" BackgroundColor="{Binding Color}" HeightRequest="12" WidthRequest="12" StrokeThickness=".1"></Border>
+                                    <Label Margin="5,0" VerticalOptions="Center" Text="{Binding TodoText}"/>
+                                </HorizontalStackLayout>
                                 <Border Margin="15,0" BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="1">
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="InProgress">
@@ -53,7 +56,7 @@
         </VerticalStackLayout>
         <!-- Timeline Section -->
         <VerticalStackLayout Grid.Row="2">
-            <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="60" HorizontalOptions="Fill"></customcontrols:TimelineView>
+            <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="45" HorizontalOptions="Fill"></customcontrols:TimelineView>
             <CollectionView ItemsSource="{Binding TimelineLast5}" SelectionMode="None">
                 <CollectionView.Header>
                     <Grid>

@@ -18,7 +18,7 @@
             <Border Grid.Column="0" Padding="10" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 10">
                 <VerticalStackLayout Grid.Column="0">
                     <Entry Text="{Binding myTodoText}"/>
-                    <Label Text="{Binding TodoDefText, StringFormat='Def: {0}'}" HeightRequest="32"/>
+                    <Label Text="{Binding Todo.TodoDefText, StringFormat='Def: {0}'}" HeightRequest="32" TextColor="{Binding Todo.Color}" FontAttributes="Bold"/>
                     <HorizontalStackLayout HorizontalOptions="Center">
                         <Button Command="{Binding StartStopCommand}" IsVisible="{Binding IsStartVisible}" FontAttributes="Bold" HeightRequest="44">
                             <Button.Triggers>

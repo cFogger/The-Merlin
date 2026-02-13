@@ -96,7 +96,7 @@ namespace The_Merlin.ViewModels
                     TodoDefText = DefSearchText,
                     RepeatType = TodoDefRepeatType.None,
                     DefaultCompletionType = TodoCompletionType.Manual,
-                    DefaultDuration = TimeSpan.FromMinutes(25),
+                    DefaultDuration = TimeSpan.FromMinutes(25)
                 });
             DefSearchText = string.Empty;
             DefSearchText = temptext;
