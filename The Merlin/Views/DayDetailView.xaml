@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Class="The_Merlin.Views.DayDetailView"
-             Title="DayDetailView" x:Name="myMainPage">
+             Title="DayDetailView"
+             
+             x:Name="myMainPage">
     <VerticalStackLayout>
         <Label 
             Text="{Binding myDayItem.Id}"
@@ -15,7 +18,7 @@
                VerticalOptions="Center"
                HorizontalOptions="Center"/>
         <Button Text="Delete" BackgroundColor="DarkRed" Command="{Binding DeleteCommand}"></Button>
-
+        <customcontrols:TimelineView Items="{Binding TimelineItems}" x:Name="timelineDraw" HeightRequest="60" HorizontalOptions="Fill"></customcontrols:TimelineView>
         <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
             <Grid>
                 <Grid.ColumnDefinitions>

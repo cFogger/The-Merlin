@@ -75,6 +75,8 @@ namespace The_Merlin.ViewModels
         private bool _isManualCompletion;
         public bool IsManualCompletion { get { return _isManualCompletion; } set { _isManualCompletion = value; OnPropertyChanged(); } }
 
+
+        CancellationTokenSource cts;
         private string _myTodoText;
         public string myTodoText
         {
@@ -84,14 +86,15 @@ namespace The_Merlin.ViewModels
                 if (_myTodoText == value) return;
                 _myTodoText = value;
                 OnPropertyChanged();
+                cts?.Cancel();
+                cts = new CancellationTokenSource();
                 Todo.TodoText = value;
-                Save();
+                Task.Delay(1000, cts.Token).ContinueWith(async t =>
+                {
+                    if (!t.IsCanceled)
+                        await _todoData.SaveItem(Todo);
+                });
             }
-        }
-
-        private async void Save()
-        {
-            await _todoData.SaveItem(Todo);
         }
 
         private string _todoDefText;

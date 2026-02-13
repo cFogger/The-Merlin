@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Class="The_Merlin.Views.TimelineLogsView"
              Title="Timeline Logs" 
              x:Name="timelineLogsView">
     <VerticalStackLayout>
         <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10" VerticalScrollBarVisibility="Always">
             <CollectionView.Header>
-                <Grid ColumnSpacing="10">
+                <Grid ColumnSpacing="10" ColumnDefinitions="44,*,50,60,50">
                     <Grid.Resources>
                         <Style TargetType="Label">
                             <Setter Property="TextColor" Value="{StaticResource Gray400}"></Setter>
                             <Setter Property="FontSize" Value="10"></Setter>
                         </Style>
                     </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="44"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="50"></ColumnDefinition>
-                        <ColumnDefinition Width="60"></ColumnDefinition>
-                        <ColumnDefinition Width="50"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
                     <Label Text="..." Grid.Column="0" HorizontalTextAlignment="Center"></Label>
                     <Label Text="Todo" Grid.Column="1" HorizontalOptions="Start" Margin="15,0"></Label>
                     <Label Text="Starts" Grid.Column="2" HorizontalOptions="Center"></Label>
@@ -31,17 +24,15 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="44"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                <ColumnDefinition Width="60"></ColumnDefinition>
-                                <ColumnDefinition Width="50"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Button HeightRequest="22" FontAttributes="Bold" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}" CornerRadius="15" Grid.Column="0"/>
+                        <Grid ColumnDefinitions="44,*,50,60,50">
+                            <Label HeightRequest="22" FontAttributes="Bold" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Grid.Column="0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                </Label.GestureRecognizers>
+                            </Label>
                             <VerticalStackLayout Grid.Column="1" Margin="5,0">
-                                <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
+                                <Label Text="{Binding Path=TodoName}" HorizontalOptions="Start" VerticalOptions="Start" FontAttributes="Bold" FontSize="10"/>
+                                <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"/>
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="2" VerticalOptions="Center">
                                 <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ccffdd"></Label>

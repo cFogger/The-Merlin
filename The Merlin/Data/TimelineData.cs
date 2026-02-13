@@ -24,6 +24,18 @@ namespace The_Merlin.Data
             }
         }
 
+        public async Task GetItemsByDate(ObservableCollection<TimelineItem> timelinecoll, DateTime? _date = null)
+        {
+            timelinecoll.Clear();
+            string myUrl = _date.HasValue ? "/GetTimelineItemsByDate?date=" + _date.Value.ToBinary() : "/GetTimelineItemsByDate";
+            var temp = await dtm.resolveRespond(prefix + myUrl);
+            var allItems = JsonConvert.DeserializeObject<List<TimelineItem>>(temp.ToString());
+            foreach (var item in allItems)
+            {
+                timelinecoll.Add(item);
+            }
+        }
+
         public async Task GetLastxItems(ObservableCollection<TimelineItem> timelinecoll, int Count)
         {
             timelinecoll.Clear();

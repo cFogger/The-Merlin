@@ -5,16 +5,19 @@ using The_Merlin.CustomControls;
 using The_Merlin.Data;
 using The_Merlin.Interfaces;
 using The_Merlin.Models;
+using The_Merlin.Services;
 
 namespace The_Merlin.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        public ObservableCollection<TimelineItem> TimelineIS { get; } = [];
+        public ObservableCollection<TimelineItem> TimelineLast5 { get; } = [];
+        public ObservableCollection<TimelineItem> TodaysTimelineItems { get; } = [];
         public ObservableCollection<TodoItem> todoItems { get; } = [];
         public List<TodoDefItem> TodoDefs;
 
         public string dateString { get { return DateTime.Today.ToString("dd.MM.yy"); } }
+        public IDispatcherTimer myDispatcher { get { return _timer.Dispatcher(); } }
 
         private TimelineData _timelineData;
         private TodoData _todoData;
@@ -22,13 +25,17 @@ namespace The_Merlin.ViewModels
         private DayData _dayData;
         private ITimerService _timer;
 
-        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData)
+        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData, ITimerService timer)
         {
             _timelineData = timelineData;
             _todoData = todoData;
             _todoDefData = todoDefData;
             _dayData = dayData;
+            _timer = timer;
+        }
 
+        public async void Load()
+        {
             _timelineData.TimelineChanged += onTimelineChanged;
             _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
             _todoDefData.TodoDefItemsChanged += onTodoDefsChanged;
@@ -37,20 +44,23 @@ namespace The_Merlin.ViewModels
             onTodoItemsChanged(this, EventArgs.Empty);
             onTodoDefsChanged(this, EventArgs.Empty);
 
-            Load();
-        }
-
-        public async void Load()
-        {
             MyDayItem = await _dayData.GetToday();
             DayDesc = MyDayItem.Content;
+        }
+
+        public async void Unload()
+        {
+            _timelineData.TimelineChanged -= onTimelineChanged;
+            _todoData.TodoItemCollectionChanged -= onTodoItemsChanged;
+            _todoDefData.TodoDefItemsChanged -= onTodoDefsChanged;
         }
 
         public void onTimelineChanged(object? sender, EventArgs e)
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await _timelineData.GetLastxItems(TimelineIS, 5);
+                await _timelineData.GetLastxItems(TimelineLast5, 5);
+                await _timelineData.GetItemsByDate(TodaysTimelineItems);
             });
         }
 

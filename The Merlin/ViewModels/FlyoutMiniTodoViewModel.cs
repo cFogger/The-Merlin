@@ -21,7 +21,9 @@ namespace The_Merlin.ViewModels
         {
             _timerService = timerService;
             _todoData = todoData;
+            HideOnSmallScreen = false;
             timerService.Dispatcher().Tick += FlyoutMiniTodoViewModel_Tick;
+            
         }
 
         private void FlyoutMiniTodoViewModel_Tick(object? sender, EventArgs e)
@@ -30,13 +32,17 @@ namespace The_Merlin.ViewModels
             {
                 TodoItem ats = _timerService.ActiveTodoSession();
                 IsVisible = true;
+                if (DeviceDisplay.MainDisplayInfo.Density > 2)
+                    HideOnSmallScreen = true;
                 TodoTitle = ats.TodoText;
                 IsManualCompletion = ats.CompletionType == TodoCompletionType.Manual;
                 GradBackgroundColor = ats.Status == TodoItemStatus.InProgress ? Colors.DarkSlateGray : Colors.DarkOliveGreen;
-                TodoTimer = _timerService.TimeString(ats);  
+                TodoTimer = _timerService.TimeString(ats); 
             }
             else
             {
+                if (DeviceDisplay.MainDisplayInfo.Density > 2)
+                    HideOnSmallScreen = false;
                 IsVisible = false;
             }
         }
@@ -52,6 +58,9 @@ namespace The_Merlin.ViewModels
 
         private bool _isVisible;
         public bool IsVisible { get { return _isVisible; } set { _isVisible = value; OnPropertyChanged(); } }
+
+        private bool _hideOnSmallScreen;
+        public bool HideOnSmallScreen { get { return _hideOnSmallScreen; } set { _hideOnSmallScreen = value; OnPropertyChanged(); } }
 
         private bool _isManualCompletion;
         public bool IsManualCompletion { get { return _isManualCompletion; } set { _isManualCompletion = value; OnPropertyChanged("IsManualCompletion"); } }

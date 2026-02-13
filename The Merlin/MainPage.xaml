@@ -53,7 +53,8 @@
         </VerticalStackLayout>
         <!-- Timeline Section -->
         <VerticalStackLayout Grid.Row="2">
-            <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None">
+            <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="60" HorizontalOptions="Fill"></customcontrols:TimelineView>
+            <CollectionView ItemsSource="{Binding TimelineLast5}" SelectionMode="None">
                 <CollectionView.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -79,7 +80,8 @@
                                     <ColumnDefinition Width="50"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <VerticalStackLayout Grid.Column="0" Margin="5,0">
-                                    <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"></Label>
+                                    <Label Text="{Binding Path=TodoName}" HorizontalOptions="Start" VerticalOptions="Start" FontAttributes="Bold" FontSize="10"/>
+                                    <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"/>
                                 </VerticalStackLayout>
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                                     <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ccffdd"></Label>

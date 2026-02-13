@@ -7,9 +7,12 @@ namespace The_Merlin.Models
 
         public int Id { get; set; }
         public int TodoId { get; set; }
-        public string? Context { get; set; }
+        public string Context { get; set; }
         public DateTime Starts { get; set; } = DateTime.Now;
         public DateTime? Ends { get; set; }
+
+        public string TodoColor { get; set; }
+        public string TodoName { get; set; }
 
         public TimeSpan Duration
         {
@@ -43,5 +46,7 @@ namespace The_Merlin.Models
                 return Starts.Date == DateTime.Now.Date;
             }
         }
+
+        public Color Color { get { return Color.FromArgb(TodoColor); } }
     }
 }

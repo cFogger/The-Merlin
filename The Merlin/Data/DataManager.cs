@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Extensions;
-using Java.Net;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 using The_Merlin.Models;
@@ -27,9 +24,9 @@ namespace The_Merlin.Data
         public DataManager()
         {
 
-            Url = "https://www.cfogger.me/";
+            //Url = "https://www.cfogger.me/";
             //PC url
-            //Url = "https://localhost:44387/";
+            Url = "https://localhost:44387/";
             //Laptop url
             //Url = "http://localhost:50173/";
             HttpClient = new HttpClient();
@@ -44,10 +41,18 @@ namespace The_Merlin.Data
             try
             {
                 HttpResponseMessage response;
-                if (JsonContent == "nulloğlunull")
-                    response = await HttpClient.GetAsync(Url + url);
-                else
-                    response = await HttpClient.PostAsync(Url + url, new StringContent(JsonContent, Encoding.UTF8, "application/json"));
+                LoadingService.Instance.IsLoading = true; // Ekran kararır, çark döner
+                try
+                {
+                    if (JsonContent == "nulloğlunull")
+                        response = await HttpClient.GetAsync(Url + url);
+                    else
+                        response = await HttpClient.PostAsync(Url + url, new StringContent(JsonContent, Encoding.UTF8, "application/json"));
+                }
+                finally
+                {
+                    LoadingService.Instance.IsLoading = false; // Her şey normale döner
+                }
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -55,7 +60,7 @@ namespace The_Merlin.Data
                     MobileResult? mResult = JsonConvert.DeserializeObject<MobileResult>(resp);
                     if (mResult.Result)
                         result = mResult.Data;
-                        Debug.WriteLine("On DB: " + mResult.Message);
+                    Debug.WriteLine("On DB: " + mResult.Message);
                 }
                 else
                 {
@@ -67,6 +72,6 @@ namespace The_Merlin.Data
                 Debug.WriteLine("Exc: " + e.Message);
             }
             return result;
-        }        
+        }
     }
 }

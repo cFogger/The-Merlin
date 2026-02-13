@@ -18,23 +18,26 @@ namespace The_Merlin.ViewModels
 
                 onTodoDefsChanged(this, EventArgs.Empty);
                 onTodoItemsChanged(this, EventArgs.Empty);
+                loadTimelineItems();
             }
         }
         private DayItem _myDayItem;
 
         public ObservableCollection<TodoItem> TodoItems { get; } = [];
         public List<TodoDefItem> TodoDefs;
-
+        public ObservableCollection<TimelineItem> TimelineItems { get; } = [];
 
         private TodoData _todoData;
         private DayData _dayData;
         private TodoDefData _todoDefData;
+        private TimelineData _timelineData;
 
-        public DayDetailViewModel(DayData dayData, TodoDefData todoDefData, TodoData todoData) 
+        public DayDetailViewModel(DayData dayData, TodoDefData todoDefData, TodoData todoData, TimelineData timelineData) 
         { 
             _dayData = dayData;
             _todoDefData = todoDefData;
             _todoData = todoData;
+            _timelineData = timelineData;
 
             _todoDefData.TodoDefItemsChanged += onTodoDefsChanged;
             _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
@@ -51,6 +54,14 @@ namespace The_Merlin.ViewModels
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await _todoData.GetTodos(TodoItems, myDayItem.Date);
+            });
+        }
+
+        public void loadTimelineItems()
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _timelineData.GetItemsByDate(TimelineItems, myDayItem.Date);
             });
         }
 
