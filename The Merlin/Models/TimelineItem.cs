@@ -30,7 +30,7 @@ namespace The_Merlin.Models
             get
             {
                 TimeSpan ts = Duration;
-                if (ts.TotalMinutes > 60)
+                if (ts.TotalMinutes >= 60)
                     return string.Format("{0:D2}:{1:D2}:{2:D2}", (int)ts.TotalHours, ts.Minutes, ts.Seconds);
                 else if (ts.TotalMinutes >= 1)
                     return string.Format("{0:D2}:{1:D2}", ts.Minutes, ts.Seconds);

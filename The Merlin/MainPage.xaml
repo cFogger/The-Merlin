@@ -4,35 +4,35 @@
              xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Name="myMainPage"
              x:Class="The_Merlin.MainPage">
-    <Grid RowDefinitions="*,auto,auto">
+    <Grid RowDefinitions="*,auto">
         <!-- Todo Section -->
-        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-            <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+        <Grid RowDefinitions="auto,*" Grid.Row="0">
+            <Border Grid.Row="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
+                <Grid ColumnDefinitions="auto,*">
                     <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="200" Margin="5,0"></SearchBar>
                     <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Button Text="{Binding TodoDefText}" Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
+                                <Button Text="{Binding TodoDefText}" BorderColor="{Binding DefaultColor}" BorderWidth="1" Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </Grid>
             </Border>
-            <CollectionView ItemsSource="{Binding todoItems}" SelectionMode="None">
+            <CollectionView Grid.Row="1" ItemsSource="{Binding todoItems}" HorizontalOptions="Center" SelectionMode="None" ItemsLayout="VerticalList" VerticalScrollBarVisibility="Default">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                            <Grid Padding="5,2,5,2" ColumnDefinitions="*,auto,auto">
-                                <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center"  HorizontalOptions="Fill" Margin="25,5,25,5">
-                                    <Border Margin="0,2,0,0" VerticalOptions="Center" BackgroundColor="{Binding Color}" HeightRequest="12" WidthRequest="12" StrokeThickness=".1"></Border>
-                                    <Label Margin="5,0" VerticalOptions="Center" Text="{Binding TodoText}"/>
+                        <Border Padding="5,2" HeightRequest="44" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
+                            <Grid ColumnDefinitions="*,auto,auto">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                </Grid.GestureRecognizers>
+                                <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Fill">
+                                    <Border Margin="0,2,5,0" VerticalOptions="Center" BackgroundColor="{Binding Color}" HeightRequest="12" WidthRequest="12" StrokeThickness=".1"></Border>
+                                    <Label VerticalOptions="Center" Text="{Binding TodoText}"/>
+                                    <Label VerticalOptions="Start" Text="{Binding TodoDefText}" FontSize="8" TextColor="{Binding Color}" IsVisible="{Binding isDifferentFromDef}"/>
                                 </HorizontalStackLayout>
-                                <Border Margin="15,0" BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="1">
+                                <Border BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="2" WidthRequest="65">
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="InProgress">
                                             <Setter Property="BackgroundColor" Value="DarkSlateGrey"></Setter>
@@ -44,21 +44,25 @@
                                             <Setter Property="BackgroundColor" Value="DarkOliveGreen"></Setter>
                                         </DataTrigger>
                                     </Border.Triggers>
-                                    <Label Text="{Binding Status}" VerticalOptions="Center"  HorizontalOptions="Fill" Margin="15,0"/>
+                                    <!-- Status Triggers -->
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="10" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding getTotalTimeString}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10"/>
+                                    </VerticalStackLayout>
                                 </Border>
-                                <Button Grid.Column="2" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}" WidthRequest="44"></Button>
+                                <!--<Button Grid.Column="3" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}" WidthRequest="44"></Button>-->
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </VerticalStackLayout>
+        </Grid>
         <!-- Timeline Section -->
-        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+        <VerticalStackLayout Grid.Row="1">
             <Border BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 15 15 0 0">
-            <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="45" HorizontalOptions="Fill"></customcontrols:TimelineView>
+                <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="45" HorizontalOptions="Fill"></customcontrols:TimelineView>
             </Border>
+            <Editor BackgroundColor="{StaticResource Gray600}" Text="{Binding DayDesc}" Placeholder="Add daily notes" VerticalOptions="Center" AutoSize="TextChanges"></Editor>
         </VerticalStackLayout>
-        <Editor BackgroundColor="{StaticResource Gray600}" Grid.Row="2" Grid.Column="1" Text="{Binding DayDesc}" Placeholder="Add daily notes" VerticalOptions="Center" AutoSize="TextChanges"></Editor>
     </Grid>
 </ContentPage>

@@ -23,7 +23,7 @@ namespace The_Merlin.Data
             if (date == null) { date = DateTime.Today; }
             myObs.Clear();
             var mylist = await GetItemsByDate(date.Value);
-            foreach (TodoItem item in mylist)
+            foreach (TodoItem item in mylist.OrderBy(x=>x.Status))
                 myObs.Add(item);
         }
 
@@ -48,8 +48,7 @@ namespace The_Merlin.Data
         public async Task<TodoItem> GetItem(int id)
         {
             var resolve = await dtm.resolveRespond(prefix + "/GetItem?id=" + id);
-            var myobj = JsonConvert.DeserializeObject<TodoItem>(resolve.ToString());
-            return myobj;
+            return JsonConvert.DeserializeObject<TodoItem>(resolve.ToString());
         }
 
         public async Task SaveItem(TodoItem item)
