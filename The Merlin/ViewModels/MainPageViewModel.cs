@@ -11,10 +11,10 @@ namespace The_Merlin.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        public ObservableCollection<TimelineItem> TimelineLast5 { get; } = [];
         public ObservableCollection<TimelineItem> TodaysTimelineItems { get; } = [];
         public ObservableCollection<TodoItem> todoItems { get; } = [];
-        public List<TodoDefItem> TodoDefs;
+        public ObservableCollection<TodoDefItem> TodoDefs { get; } = [];
+        public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
 
         public string dateString { get { return DateTime.Today.ToString("dd.MM.yy"); } }
         public IDispatcherTimer myDispatcher { get { return _timer.Dispatcher(); } }
@@ -24,6 +24,8 @@ namespace The_Merlin.ViewModels
         private TodoDefData _todoDefData;
         private DayData _dayData;
         private ITimerService _timer;
+
+        bool isFirstLoad = true;
 
         public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData, ITimerService timer)
         {
@@ -36,37 +38,33 @@ namespace The_Merlin.ViewModels
 
         public async void Load()
         {
-            _timelineData.TimelineChanged += onTimelineChanged;
-            _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
-            _todoDefData.TodoDefItemsChanged += onTodoDefsChanged;
+            if (isFirstLoad)
+            {
+                _timelineData.TimelineChanged += onTimelineChanged;
+                _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
+                _todoDefData.TodoDefItemsChanged += onTodoDefsChanged;
 
-            onTimelineChanged(this, EventArgs.Empty);
-            onTodoItemsChanged(this, EventArgs.Empty);
-            onTodoDefsChanged(this, EventArgs.Empty);
+                onTimelineChanged(this, EventArgs.Empty);
+                onTodoItemsChanged(this, EventArgs.Empty);
+                onTodoDefsChanged(this, EventArgs.Empty);
 
-            MyDayItem = await _dayData.GetToday();
+                isFirstLoad = false;
+                MyDayItem = await _dayData.GetToday();
+            }
             DayDesc = MyDayItem.Content;
-        }
-
-        public async void Unload()
-        {
-            _timelineData.TimelineChanged -= onTimelineChanged;
-            _todoData.TodoItemCollectionChanged -= onTodoItemsChanged;
-            _todoDefData.TodoDefItemsChanged -= onTodoDefsChanged;
         }
 
         public void onTimelineChanged(object? sender, EventArgs e)
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await _timelineData.GetLastxItems(TimelineLast5, 5);
                 await _timelineData.GetItemsByDate(TodaysTimelineItems);
             });
         }
 
         public async void onTodoDefsChanged(object? sender, EventArgs e)
         {
-            TodoDefs = await _todoDefData.GetAllTodoDefItems();
+            await _todoDefData.GetTodoDefItems(TodoDefs);
             DefSearchText = string.Empty;
         }
 
@@ -104,7 +102,6 @@ namespace The_Merlin.ViewModels
 
         public ICommand TodoAddCommand => new Command<TodoDefItem>((tdi) => { if (tdi == null) return; tdi.CreateTodoItem(_todoData); });
 
-        public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
 
         private string _defSearchText;
         public string DefSearchText
@@ -136,6 +133,8 @@ namespace The_Merlin.ViewModels
             get { return _dayDesc; }
             set
             {
+                if (_dayDesc == value) return;
+
                 _dayDesc = value;
 
                 cts?.Cancel();

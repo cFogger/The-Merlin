@@ -4,10 +4,9 @@
              xmlns:customcontrols="clr-namespace:The_Merlin.CustomControls"
              x:Name="myMainPage"
              x:Class="The_Merlin.MainPage">
-    <Grid RowDefinitions="auto,*,auto">
-        <Editor Grid.Row="0" Text="{Binding DayDesc}" VerticalOptions="Center" AutoSize="TextChanges"></Editor>
+    <Grid RowDefinitions="*,auto,auto">
         <!-- Todo Section -->
-        <VerticalStackLayout Grid.Row="1">
+        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
             <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -55,64 +54,11 @@
             </CollectionView>
         </VerticalStackLayout>
         <!-- Timeline Section -->
-        <VerticalStackLayout Grid.Row="2">
+        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+            <Border BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 15 15 0 0">
             <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="45" HorizontalOptions="Fill"></customcontrols:TimelineView>
-            <CollectionView ItemsSource="{Binding TimelineLast5}" SelectionMode="None">
-                <CollectionView.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <ColumnDefinition Width="60"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label Text="Son 5 aktivite" Grid.Column="0" HorizontalOptions="Start" Margin="15,0" TextColor="AliceBlue" FontSize="10"></Label>
-                        <Label Text="Starts" Grid.Column="1" HorizontalOptions="Center" TextColor="{StaticResource Gray400}" FontSize="10"></Label>
-                        <Label Text="Time" Grid.Column="2" HorizontalOptions="Center" TextColor="{StaticResource Gray400}" FontSize="10"></Label>
-                        <Label Text="Ends" Grid.Column="3" HorizontalOptions="Center" TextColor="{StaticResource Gray400}" FontSize="10"></Label>
-                    </Grid>
-                </CollectionView.Header>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-                                    <ColumnDefinition Width="60"></ColumnDefinition>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <VerticalStackLayout Grid.Column="0" Margin="5,0">
-                                    <Label Text="{Binding Path=TodoName}" HorizontalOptions="Start" VerticalOptions="Start" FontAttributes="Bold" FontSize="10"/>
-                                    <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"/>
-                                </VerticalStackLayout>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                    <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ccffdd"></Label>
-                                    <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ccffdd">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
-                                                <Setter Property="IsVisible" Value="False"/>
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
-                                </VerticalStackLayout>
-                                <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Start" FontAttributes="Bold" FontSize="14"></Label>
-                                <Label Text="→" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="End" TextColor="DimGrey"></Label>
-                                <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
-                                    <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ffe6dd"></Label>
-                                    <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ffe6dd">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding Path=IsToday}" Value="True">
-                                                <Setter Property="IsVisible" Value="False"/>
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            </Border>
         </VerticalStackLayout>
+        <Editor BackgroundColor="{StaticResource Gray600}" Grid.Row="2" Grid.Column="1" Text="{Binding DayDesc}" Placeholder="Add daily notes" VerticalOptions="Center" AutoSize="TextChanges"></Editor>
     </Grid>
 </ContentPage>

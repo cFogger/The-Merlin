@@ -39,11 +39,36 @@ namespace The_Merlin.Models
             }
         }
 
+        public string GetStartString
+        {
+            get
+            {
+                if (Starts.Date == DateTime.Today)
+                    return Starts.ToShortTimeString();
+                else
+                    return Starts.ToString();
+            }
+        }
+
+        public string GetEndString
+        {
+            get
+            {
+                if (Ends.HasValue)
+                    if (Ends.Value.Date == DateTime.Today)
+                        return Ends.Value.ToShortTimeString();
+                    else
+                        return Ends.Value.ToString();
+                else
+                    return "...";
+            }
+        }
+
         public bool IsToday
         {
             get
             {
-                return Starts.Date == DateTime.Now.Date;
+                return Starts.Date == DateTime.Now.Date || (Ends.HasValue && Ends.Value.Date == DateTime.Today);
             }
         }
 

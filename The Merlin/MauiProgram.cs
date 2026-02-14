@@ -35,14 +35,14 @@ namespace The_Merlin
             builder.Services.AddSingleton<TodoDefData>();
 
             //single pages
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<MainPageViewModel>();
-            builder.Services.AddTransient<TimelineLogsViewModel>();
-            builder.Services.AddTransient<TimelineLogsView>();
-            builder.Services.AddTransient<TodoDefListViewModel>();
-            builder.Services.AddTransient<TodoDefListView>();
-            builder.Services.AddTransient<DayListView>();
-            builder.Services.AddTransient<DayListViewModel>();
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<TimelineLogsViewModel>();
+            builder.Services.AddSingleton<TimelineLogsView>();
+            builder.Services.AddSingleton<TodoDefListViewModel>();
+            builder.Services.AddSingleton<TodoDefListView>();
+            builder.Services.AddSingleton<DayListView>();
+            builder.Services.AddSingleton<DayListViewModel>();
 
             //reusable
             builder.Services.AddTransient<TodoDetailViewModel>();

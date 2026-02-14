@@ -1,0 +1,43 @@
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="The_Merlin.CustomControls.TimelineItemPopup" 
+               CanBeDismissedByTappingOutsideOfPopup="True">
+
+    <Border BackgroundColor="#1E1E1E" 
+           Stroke="{Binding TodoColor}"
+           StrokeShape="RoundRectangle 20"
+           Padding="20"
+           WidthRequest="300">
+
+        <VerticalStackLayout Spacing="15">
+            <HorizontalStackLayout Spacing="10">
+                <BoxView Color="{Binding TodoColor}" WidthRequest="15" HeightRequest="15" CornerRadius="7.5" VerticalOptions="Center"/>
+                <Label Text="{Binding TodoName}" FontSize="20" FontAttributes="Bold" TextColor="White"/>
+            </HorizontalStackLayout>
+
+            <Line BackgroundColor="#333"/>
+
+            <Label Text="{Binding Context}" TextColor="White" FontSize="14" />
+
+            <HorizontalStackLayout Spacing="5">
+                <Label Text="Süre:" TextColor="#888"/>
+                <Label Text="{Binding GetDurationString}" TextColor="White" FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="5">
+                <Label Text="Zaman:" TextColor="#888"/>
+                <Label Text="{Binding GetStartString}" TextColor="White"/>
+                <Label Text="-" TextColor="White"/>
+                <Label Text="{Binding GetEndString}" TextColor="White"/>
+            </HorizontalStackLayout>
+
+            <Border BackgroundColor="{Binding TodoColor}" StrokeShape="RoundRectangle 20" HorizontalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Button_Clicked"></TapGestureRecognizer>
+                </Border.GestureRecognizers>
+                <Label Margin="7" Text="Kapat" TextColor="Black" HorizontalOptions="Center"/>
+            </Border>
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

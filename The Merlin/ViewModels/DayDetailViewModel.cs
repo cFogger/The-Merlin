@@ -24,8 +24,9 @@ namespace The_Merlin.ViewModels
         private DayItem _myDayItem;
 
         public ObservableCollection<TodoItem> TodoItems { get; } = [];
-        public List<TodoDefItem> TodoDefs;
+        public ObservableCollection<TodoDefItem> TodoDefs { get; } = [];
         public ObservableCollection<TimelineItem> TimelineItems { get; } = [];
+        public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
 
         private TodoData _todoData;
         private DayData _dayData;
@@ -45,8 +46,11 @@ namespace The_Merlin.ViewModels
 
         public async void onTodoDefsChanged(object? sender, EventArgs e)
         {
-            TodoDefs = await _todoDefData.GetAllTodoDefItems();
-            DefSearchText = string.Empty;
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _todoDefData.GetTodoDefItems(TodoDefs);
+                DefSearchText = string.Empty;
+            });
         }
 
         public void onTodoItemsChanged(object? sender, EventArgs e)
@@ -89,7 +93,6 @@ namespace The_Merlin.ViewModels
             await Shell.Current.GoToAsync("TodoDefListView");
         });
 
-        public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
 
         private string _defSearchText;
         public string DefSearchText

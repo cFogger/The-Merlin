@@ -41,9 +41,10 @@ namespace The_Merlin.Data
             try
             {
                 HttpResponseMessage response;
-                LoadingService.Instance.IsLoading = true; // Ekran kararır, çark döner
                 try
                 {
+                    LoadingService.Instance.IsLoading = true; // Ekran kararır, çark döner
+
                     if (JsonContent == "nulloğlunull")
                         response = await HttpClient.GetAsync(Url + url);
                     else

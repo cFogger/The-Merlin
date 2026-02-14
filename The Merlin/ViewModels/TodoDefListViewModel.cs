@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
@@ -10,16 +11,7 @@ namespace The_Merlin.ViewModels
 {
     public class TodoDefListViewModel : BaseViewModel
     {
-        public List<TodoDefItem> TodoDefItems
-        {
-            get => _todoDefItems;
-            set
-            {
-                _todoDefItems = value;
-                OnPropertyChanged();
-            }
-        }
-        private List<TodoDefItem> _todoDefItems;
+        public ObservableCollection<TodoDefItem> TodoDefItems { get; } = [];
 
         private TodoDefData _todoDefData;
         public TodoDefListViewModel(TodoDefData todoDefData) { 
@@ -27,13 +19,13 @@ namespace The_Merlin.ViewModels
             Load();
             _todoDefData.TodoDefItemsChanged += async (s, e) =>
             {
-                TodoDefItems = await _todoDefData.GetAllTodoDefItems();
+                await _todoDefData.GetTodoDefItems(TodoDefItems);
             };
         }
 
         private async void Load()
         {
-            TodoDefItems = await _todoDefData.GetAllTodoDefItems();
+            await _todoDefData.GetTodoDefItems(TodoDefItems);
         }
 
         public ICommand AddNewTodoDefCommand => new Command(async () =>

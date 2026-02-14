@@ -21,7 +21,7 @@ namespace The_Merlin
 
         protected override void OnDisappearing()
         {
-            base.OnDisappearing(); _vm.Unload(); _vm.myDispatcher.Tick -= InvalidateMethod;
+            base.OnDisappearing(); _vm.myDispatcher.Tick -= InvalidateMethod;
         }
 
         private void InvalidateMethod(object? sender, EventArgs e)

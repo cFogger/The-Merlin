@@ -49,6 +49,8 @@ namespace The_Merlin.ViewModels
             get { return _todo; }
             set
             {
+                if (_todo == value) return;
+
                 _todo = value;
                 OnPropertyChanged();
                 myTodoText = value.TodoText;

@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using The_Merlin.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace The_Merlin.Data
 {
@@ -17,6 +19,14 @@ namespace The_Merlin.Data
         {
             var xd = await dtm.resolveRespond(prefix + "/GetAll");
             return JsonConvert.DeserializeObject<List<TodoDefItem>>(xd.ToString());
+        }
+
+        public async Task GetTodoDefItems(ObservableCollection<TodoDefItem> myObs)
+        {
+            myObs.Clear();
+            var mylist = await GetAllTodoDefItems();
+            foreach (TodoDefItem item in mylist)
+                myObs.Add(item);
         }
 
         public async Task<TodoDefItem> GetTodoDefItemById(int id)

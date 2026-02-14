@@ -7,7 +7,7 @@
     <VerticalStackLayout>
         <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10" VerticalScrollBarVisibility="Always">
             <CollectionView.Header>
-                <Grid ColumnSpacing="10" ColumnDefinitions="44,*,50,60,50">
+                <Grid ColumnDefinitions="44,*,100,60,100">
                     <Grid.Resources>
                         <Style TargetType="Label">
                             <Setter Property="TextColor" Value="{StaticResource Gray400}"></Setter>
@@ -24,8 +24,8 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                        <Grid ColumnDefinitions="44,*,50,60,50">
-                            <Label HeightRequest="22" FontAttributes="Bold" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Grid.Column="0">
+                        <Grid ColumnDefinitions="44,*,100,60,100">
+                            <Label HeightRequest="22" FontAttributes="Bold" HorizontalTextAlignment="Center" WidthRequest="40" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Grid.Column="0">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}"></TapGestureRecognizer>
                                 </Label.GestureRecognizers>
