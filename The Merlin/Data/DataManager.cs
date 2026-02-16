@@ -34,7 +34,6 @@ namespace The_Merlin.Data
             HttpClient.Timeout = TimeSpan.FromSeconds(15);
         }
 
-
         public async Task<object> resolveRespond(string url, string JsonContent = "nulloğlunull")
         {
             object result = null;

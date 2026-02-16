@@ -42,7 +42,6 @@ namespace The_Merlin.ViewModels
             TimerRunning = true;
         }
 
-
         private TodoItem _todo;
         public TodoItem Todo
         {

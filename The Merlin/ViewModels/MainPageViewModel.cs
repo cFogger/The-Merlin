@@ -43,15 +43,23 @@ namespace The_Merlin.ViewModels
                 _timelineData.TimelineChanged += onTimelineChanged;
                 _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
                 _todoDefData.TodoDefItemsChanged += onTodoDefsChanged;
+                _timer.TimerStarted += _timer_TimerStarted;
+                _timer.TimerStopped += _timer_TimerStarted;
 
                 onTimelineChanged(this, EventArgs.Empty);
                 onTodoItemsChanged(this, EventArgs.Empty);
                 onTodoDefsChanged(this, EventArgs.Empty);
+                _timer_TimerStarted(this, EventArgs.Empty);
 
                 isFirstLoad = false;
                 MyDayItem = await _dayData.GetToday();
             }
             DayDesc = MyDayItem.Content;
+        }
+
+        private void _timer_TimerStarted(object? sender, EventArgs e)
+        {           
+            IsTimerAvailable = true;
         }
 
         public void onTimelineChanged(object? sender, EventArgs e)
@@ -102,6 +110,14 @@ namespace The_Merlin.ViewModels
 
         public ICommand TodoAddCommand => new Command<TodoDefItem>((tdi) => { if (tdi == null) return; tdi.CreateTodoItem(_todoData); });
 
+        private bool _isTimerAvailable;
+        public bool IsTimerAvailable
+        {
+            get { return _isTimerAvailable; }
+            set { _isTimerAvailable = !_timer.IsTimerRunning(); OnPropertyChanged(); }
+        }
+
+        public ICommand StartTimerCommand => new Command<TodoItem>(async (ti) => { if (ti == null) return; if (IsTimerAvailable) await _timer.StartStopTimer(ti); });
 
         private string _defSearchText;
         public string DefSearchText

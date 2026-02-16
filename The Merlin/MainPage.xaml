@@ -32,7 +32,10 @@
                                     <Label VerticalOptions="Center" Text="{Binding TodoText}"/>
                                     <Label VerticalOptions="Start" Text="{Binding TodoDefText}" FontSize="8" TextColor="{Binding Color}" IsVisible="{Binding isDifferentFromDef}"/>
                                 </HorizontalStackLayout>
-                                <Border BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="2" WidthRequest="65">
+                                <Border BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="1">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.StartTimerCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                    </Border.GestureRecognizers>
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="InProgress">
                                             <Setter Property="BackgroundColor" Value="DarkSlateGrey"></Setter>
@@ -45,10 +48,19 @@
                                         </DataTrigger>
                                     </Border.Triggers>
                                     <!-- Status Triggers -->
-                                    <VerticalStackLayout VerticalOptions="Center">
-                                        <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="10" HorizontalOptions="Center"/>
-                                        <Label Text="{Binding getTotalTimeString}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10"/>
-                                    </VerticalStackLayout>
+                                    <HorizontalStackLayout Margin="15,0,15,0">
+                                        <VerticalStackLayout VerticalOptions="Center">
+                                            <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="10" HorizontalOptions="Center"/>
+                                            <Label Text="{Binding getTotalTimeString}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10"/>
+                                        </VerticalStackLayout>
+                                        <Label Margin="15,0,0,5" IsVisible="{Binding BindingContext.IsTimerAvailable, Source={x:Reference myMainPage}}" Text="⫸" VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Completed">
+                                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </HorizontalStackLayout>
                                 </Border>
                                 <!--<Button Grid.Column="3" Text="Go" Command="{Binding BindingContext.NavigateToTodoDetail, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}" WidthRequest="44"></Button>-->
                             </Grid>
