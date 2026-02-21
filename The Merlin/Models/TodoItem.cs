@@ -44,6 +44,18 @@
                     return string.Format("00:{0:D2}", ts.Seconds);
             }
         }
+
+        public int GetDefaultDurationInMinutes
+        {
+            get
+            {
+                return (int)Duration.TotalMinutes;
+            }
+            set
+            {
+                Duration = TimeSpan.FromMinutes(value);
+            }
+        }
     }
 
     public enum TodoItemStatus

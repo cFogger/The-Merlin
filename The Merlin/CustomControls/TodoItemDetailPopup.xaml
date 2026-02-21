@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:models="clr-namespace:The_Merlin.Models"
+               x:TypeArguments="models:TodoItem"
+               x:Class="The_Merlin.CustomControls.TodoItemDetailPopup">
+    <Border StrokeThickness="0" 
+            BackgroundColor="#1E1E1E" 
+            Padding="20" 
+            StrokeShape="RoundRectangle 20"
+            WidthRequest="350">
+
+        <VerticalStackLayout Spacing="15">
+            <Label Text="Görevi Düzenle" FontSize="18" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+
+            <Entry Text="{Binding TodoText}" 
+                   Placeholder="Görev İsmi" 
+                   TextColor="White" 
+                   PlaceholderColor="Gray"/>
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Label Text="Süre (dk):" VerticalOptions="Center" TextColor="Silver"/>
+                <Entry Text="{Binding GetDefaultDurationInMinutes}" 
+                       Keyboard="Numeric" 
+                       WidthRequest="80"/>
+            </HorizontalStackLayout>
+
+            <Button Text="Kaydet" 
+                    Clicked="TaskSaved" 
+                    BackgroundColor="#6200EE" 
+                    TextColor="White"/>
+
+            <Button Text="Vazgeç" 
+                    Clicked="OnCancelClicked" 
+                    BackgroundColor="Transparent" 
+                    TextColor="Gray"/>
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

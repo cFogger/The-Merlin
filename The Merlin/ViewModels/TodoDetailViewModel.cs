@@ -18,28 +18,10 @@ namespace The_Merlin.ViewModels
 
         public TodoDetailViewModel(IMessageService msgService, ITimerService timerService, TimelineData timelineData, TodoData todoData, TodoDefData todoDefData)
         {
-            _timerService = timerService;
             _messageService = msgService;
             _timelineData = timelineData;
             _todoData = todoData;
             _todoDefData = todoDefData;
-
-            _timerService.TimerStarted += _timerService_TimerStarted;
-            _timerService.TimerStopped += _timerService_TimerStopped;
-        }
-
-        private void _timerService_TimerStopped(object? sender, EventArgs e)
-        {
-            TimerRunning = false;
-            if (_timerService.ActiveTodoSession() != null)
-                IsStartVisible = _timerService.ActiveTodoSession()?.Id == Todo.Id;
-            else
-                IsStartVisible = true;
-        }
-
-        private void _timerService_TimerStarted(object? sender, EventArgs e)
-        {
-            TimerRunning = true;
         }
 
         private TodoItem _todo;
@@ -54,12 +36,7 @@ namespace The_Merlin.ViewModels
                 OnPropertyChanged();
                 myTodoText = value.TodoText;
                 IsManualCompletion = value.CompletionType == TodoCompletionType.Manual;
-                TimerRunning = _timerService.IsTimerRunning();
                 Load();
-                if (_timerService.ActiveTodoSession() != null)
-                    IsStartVisible = _timerService.ActiveTodoSession()?.Id == value.Id;
-                else
-                    IsStartVisible = true;
             }
         }
 
@@ -73,7 +50,6 @@ namespace The_Merlin.ViewModels
 
         private bool _isManualCompletion;
         public bool IsManualCompletion { get { return _isManualCompletion; } set { _isManualCompletion = value; OnPropertyChanged(); } }
-
 
         CancellationTokenSource cts;
         private string _myTodoText;
@@ -98,15 +74,6 @@ namespace The_Merlin.ViewModels
 
         private string _totalTimeString;
         public string TotalTimeString { get { return _totalTimeString; } set { _totalTimeString = value; OnPropertyChanged(); } }
-
-        private bool _isStartVisible;
-        public bool IsStartVisible { get { return _isStartVisible; } set { _isStartVisible = value; OnPropertyChanged(); } }
-
-        private bool _timerRunning;
-        public bool TimerRunning { get { return _timerRunning; } set { _timerRunning = value; OnPropertyChanged(); } }
-
-        private string _timeString;
-        public string TimeString { get { return _timeString; } set { _timeString = value; OnPropertyChanged(); } }
 
         private TimeSpan _startTimeSelected;
         private TimeSpan _endTimeSelected;
@@ -136,7 +103,7 @@ namespace The_Merlin.ViewModels
             await _todoData.SaveItem(Todo);
             if (_timerService.ActiveTodoSession() != null && _timerService.ActiveTodoSession().Id == Todo.Id)
             {
-                await _timerService.StartStopTimer(Todo);
+                IsManualCompletion = false;
             }
             else
             {
@@ -149,11 +116,6 @@ namespace The_Merlin.ViewModels
                     Context = cntxt
                 });
             }
-        });
-
-        public ICommand StartStopCommand => new Command(async () =>
-        {
-            await _timerService.StartStopTimer(Todo);
         });
     }
 }

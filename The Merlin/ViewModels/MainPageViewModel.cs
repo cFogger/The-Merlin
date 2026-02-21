@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Maui.Extensions;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using The_Merlin.CustomControls;
@@ -86,11 +87,18 @@ namespace The_Merlin.ViewModels
 
         public ICommand NavigateToTodoDetail => new Command<TodoItem>(async (ti) =>
         {
-            var parameters = new Dictionary<string, object>
-                {
-                    { "todo", ti }
-                };
-            await Shell.Current.GoToAsync("TodoDetailView", parameters);
+            //var parameters = new Dictionary<string, object>
+            //    {
+            //        { "todo", ti }
+            //    };
+            //await Shell.Current.GoToAsync("TodoDetailView", parameters);
+
+            var popupresult = await App.Current.Windows[0].Page.ShowPopupAsync<TodoItem>(new TodoItemDetailPopup(ti));
+            if (!popupresult.WasDismissedByTappingOutsideOfPopup && popupresult.Result != null)
+            {
+                await _todoData.SaveItem(popupresult.Result);
+                ti = popupresult.Result;
+            }
         });
 
         public ICommand AddQuickTodoDefCommand => new Command(async () =>
