@@ -27,6 +27,7 @@ namespace The_Merlin.ViewModels
         public ObservableCollection<TodoDefItem> TodoDefs { get; } = [];
         public ObservableCollection<TimelineItem> TimelineItems { get; } = [];
         public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
+        public ObservableCollection<StatItem> StatItems { get; } = [];
 
         private TodoData _todoData;
         private DayData _dayData;
@@ -58,6 +59,7 @@ namespace The_Merlin.ViewModels
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await _todoData.GetTodos(TodoItems, myDayItem.Date);
+                CalculateDailyPercentages();
             });
         }
 
@@ -111,6 +113,49 @@ namespace The_Merlin.ViewModels
 
                 OnPropertyChanged();
             }
+        }
+
+        public void CalculateDailyPercentages()
+        {
+            StatItems.Clear();
+            var myList = new List<StatItem>();
+            TimeSpan TotalDuration = myDayItem.Date == DateTime.Today ? DateTime.Now.TimeOfDay : TimeSpan.FromDays(1);
+            TimeSpan ActiveDuration = TimeSpan.Zero;
+            foreach (var item in TodoItems)
+            {
+                if (item.TotalTime == 0) continue;
+                ActiveDuration += TimeSpan.FromSeconds(item.TotalTime);
+                myList.Add(new StatItem
+                {
+                    Text = item.TodoText + ": " + TimeSpan.FromSeconds(item.TotalTime).ToString(@"hh\:mm\:ss") + " (" + (TimeSpan.FromSeconds(item.TotalTime).TotalHours / TotalDuration.TotalHours * 100).ToString("0.00") + "%)",
+                    Color = item.Color,
+                    Percentage = TimeSpan.FromSeconds(item.TotalTime).TotalHours / TotalDuration.TotalHours * 100
+                });
+            }
+            foreach (var item in myList.OrderBy(x => x.Percentage))
+            {
+                StatItems.Add(item);
+            }
+
+            StatItems.Add(new StatItem
+            {
+                Text = "Recorded: " + ActiveDuration.ToString(@"hh\:mm\:ss") + " (" + (ActiveDuration.TotalHours / TotalDuration.TotalHours * 100).ToString("0.00") + "%)",
+                Color = Colors.Green.ToHex(),
+                Percentage = ActiveDuration.TotalHours / TotalDuration.TotalHours * 100
+            });
+            StatItems.Add(new StatItem
+            {
+                Text = "Offrecord: " + (TotalDuration - ActiveDuration).ToString(@"hh\:mm\:ss") + " (" + ((TotalDuration - ActiveDuration).TotalHours / TotalDuration.TotalHours * 100).ToString("0.00") + "%)",
+                Color = Colors.Red.ToHex(),
+                Percentage = ((TotalDuration - ActiveDuration).TotalHours / TotalDuration.TotalHours * 100)
+            });
+        }
+
+        public class StatItem
+        {
+            public string Text { get; set; }
+            public string Color { get; set; }
+            public double Percentage { get; set; }
         }
     }
 }

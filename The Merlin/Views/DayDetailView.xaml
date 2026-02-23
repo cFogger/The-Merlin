@@ -19,26 +19,27 @@
                HorizontalOptions="Center"/>
         <Button Text="Delete" BackgroundColor="DarkRed" Command="{Binding DeleteCommand}"></Button>
         <customcontrols:TimelineView Items="{Binding TimelineItems}" x:Name="timelineDraw" HeightRequest="60" HorizontalOptions="Fill"></customcontrols:TimelineView>
+        <CollectionView ItemsSource="{Binding StatItems}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Text}" TextColor="{Binding Color}" VerticalOptions="Center" HorizontalOptions="Center"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+            <Grid ColumnDefinitions="auto,*">
                 <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="200"></SearchBar>
                 <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Button Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" 
-                                            CommandParameter="{Binding .}" 
-                                            Text="{Binding TodoDefText}"></Button>
+                            <Button Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}" Text="{Binding TodoDefText}"></Button>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Grid>
         </Border>
         <Border Padding="10" Margin="5" BackgroundColor="{StaticResource Gray950}">
-            <CollectionView ItemsSource="{Binding TodoItems}">
+            <CollectionView ItemsSource="{Binding TodoItems}" ItemsLayout="VerticalList">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="10" Margin="5" StrokeThickness=".1">

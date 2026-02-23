@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Text;
+using The_Merlin.Data;
 using The_Merlin.Models;
 using The_Merlin.Services;
 
@@ -147,20 +148,25 @@ namespace The_Merlin.CustomControls
             this.StartInteraction += TimelineView_StartInteraction;
         }
 
-        private void TimelineView_StartInteraction(object? sender, TouchEventArgs e)
+        private async void TimelineView_StartInteraction(object? sender, TouchEventArgs e)
         {
             var touchPoint = e.Touches[0];
-            LoadingService.Instance.IsLoading = true;
+            //LoadingService.Instance.IsLoading = true;
             if (Drawable is TimelineDrawable drawable)
             {
                 var tch = drawable._clickMap.FirstOrDefault(m => m.Area.Contains(touchPoint));
 
                 if (tch.Item != null)
                 {
-                    Shell.Current.CurrentPage.ShowPopupAsync(new TimelineItemPopup(tch.Item));
+                    var popupres = await Shell.Current.CurrentPage.ShowPopupAsync<TimelineItem>(new TimelineItemDetailPopup(tch.Item));
+                    if (popupres != null && popupres.Result != null)
+                    {
+                        await App.Current.Handler.GetRequiredService<TimelineData>().SaveItem(popupres.Result);
+                        tch.Item = popupres.Result;
+                    }
                 }
             }
-            LoadingService.Instance.IsLoading = false;
+            //LoadingService.Instance.IsLoading = false;
         }
     }
 }

@@ -12,8 +12,23 @@
             WidthRequest="350">
 
         <VerticalStackLayout Spacing="15">
-            <Label Text="Görevi Düzenle" FontSize="18" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
-
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <Label Text="{Binding TodoDefText, StringFormat='Def: {0}'}" TextColor="{Binding Color}" FontSize="10"/>
+                <Label Text="{Binding CompletionType}" FontSize="10" TextColor="DarkGray"/>
+                <Label Text="{Binding Status}" FontSize="10" TextColor="DarkGray">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="InProgress">
+                            <Setter Property="TextColor" Value="DarkSlateGrey"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Pending">
+                            <Setter Property="TextColor" Value="Transparent"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Completed">
+                            <Setter Property="TextColor" Value="DarkOliveGreen"></Setter>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+            </HorizontalStackLayout>
             <Entry Text="{Binding TodoText}" 
                    Placeholder="Görev İsmi" 
                    TextColor="White" 
@@ -23,18 +38,25 @@
                 <Label Text="Süre (dk):" VerticalOptions="Center" TextColor="Silver"/>
                 <Entry Text="{Binding GetDefaultDurationInMinutes}" 
                        Keyboard="Numeric" 
-                       WidthRequest="80"/>
+                       WidthRequest="80"
+                       VerticalOptions="Center"/>
+                <Label Text="{Binding getTotalTimeString}" VerticalOptions="Center" TextColor="Silver" FontSize="12"></Label>
             </HorizontalStackLayout>
-
-            <Button Text="Kaydet" 
+            
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <Button Text="Kaydet" 
                     Clicked="TaskSaved" 
                     BackgroundColor="#6200EE" 
-                    TextColor="White"/>
+                    TextColor="White"
+                    WidthRequest="100"/>
 
-            <Button Text="Vazgeç" 
+                <Button Text="Vazgeç" 
                     Clicked="OnCancelClicked" 
                     BackgroundColor="Transparent" 
-                    TextColor="Gray"/>
+                    TextColor="Gray"
+                    WidthRequest="100"/>
+            </HorizontalStackLayout>
+            
         </VerticalStackLayout>
     </Border>
 </toolkit:Popup>

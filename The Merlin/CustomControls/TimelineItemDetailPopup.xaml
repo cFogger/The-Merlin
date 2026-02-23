@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:models="clr-namespace:The_Merlin.Models"
+               x:Class="The_Merlin.CustomControls.TimelineItemDetailPopup"
+               x:TypeArguments="models:TimelineItem">
+
+    <Border BackgroundColor="#252525" StrokeShape="RoundRectangle 15" Padding="20" WidthRequest="400">
+        <VerticalStackLayout Spacing="15" >
+            <Label Text="{Binding TodoName}" FontSize="20" FontAttributes="Bold" TextColor="{Binding TodoColor}" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Başlangıç:" VerticalOptions="Center" WidthRequest="80"/>
+                <TimePicker x:Name="StartPicker" Time="{Binding Starts.TimeOfDay}" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Bitiş:" VerticalOptions="Center" WidthRequest="80"/>
+                <TimePicker x:Name="EndsPicker" Time="{Binding Ends.TimeOfDay}" />
+            </HorizontalStackLayout>
+
+            <Editor Placeholder="Neler yaptın? (Context)" 
+                    Text="{Binding Context}" 
+                    HeightRequest="100" 
+                    BackgroundColor="#333" 
+                    TextColor="White"/>
+
+            <Button Text="Güncelle" Clicked="OnUpdateClicked" BackgroundColor="#4CAF50" />
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>
+

@@ -5,36 +5,35 @@
              Title="Timeline Logs" 
              x:Name="timelineLogsView">
     <VerticalStackLayout>
+        <HorizontalStackLayout Margin="10" Spacing="10" HorizontalOptions="Center">
+            <Label Text="Timeline of " FontSize="20" VerticalOptions="Center"/>
+            <DatePicker Date="{Binding SelectedDate}" FontSize="20"/>
+            <Button Text="Today" Command="{Binding TodayCommand}" HorizontalOptions="Center" FontSize="16" WidthRequest="90"/>
+        </HorizontalStackLayout>
         <CollectionView ItemsSource="{Binding TimelineIS}" SelectionMode="None" Margin="10" VerticalScrollBarVisibility="Always">
             <CollectionView.Header>
-                <Grid ColumnDefinitions="44,*,100,60,100">
+                <Grid ColumnDefinitions="*,100,60,100,44,44">
                     <Grid.Resources>
                         <Style TargetType="Label">
                             <Setter Property="TextColor" Value="{StaticResource Gray400}"></Setter>
                             <Setter Property="FontSize" Value="10"></Setter>
                         </Style>
                     </Grid.Resources>
-                    <Label Text="..." Grid.Column="0" HorizontalTextAlignment="Center"></Label>
-                    <Label Text="Todo" Grid.Column="1" HorizontalOptions="Start" Margin="15,0"></Label>
-                    <Label Text="Starts" Grid.Column="2" HorizontalOptions="Center"></Label>
-                    <Label Text="Time" Grid.Column="3" HorizontalOptions="Center"></Label>
-                    <Label Text="Ends" Grid.Column="4" HorizontalOptions="Center"></Label>
+                    <Label Text="Todo" Grid.Column="0" HorizontalOptions="Start" Margin="15,0"></Label>
+                    <Label Text="Starts" Grid.Column="1" HorizontalOptions="Center"></Label>
+                    <Label Text="Time" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <Label Text="Ends" Grid.Column="3" HorizontalOptions="Center"></Label>
                 </Grid>
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="10,0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
-                        <Grid ColumnDefinitions="44,*,100,60,100">
-                            <Label HeightRequest="22" FontAttributes="Bold" HorizontalTextAlignment="Center" WidthRequest="40" BackgroundColor="OrangeRed" TextColor="AliceBlue" Text="X" Grid.Column="0">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}"></TapGestureRecognizer>
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <VerticalStackLayout Grid.Column="1" Margin="5,0">
+                        <Grid ColumnDefinitions="*,100,60,100,44,44">
+                            <VerticalStackLayout Grid.Column="0" Margin="5,0">
                                 <Label Text="{Binding Path=TodoName}" HorizontalOptions="Start" VerticalOptions="Start" FontAttributes="Bold" FontSize="10"/>
                                 <Label Text="{Binding Path=Context}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14"/>
                             </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="2" VerticalOptions="Center">
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                                 <Label Text="{Binding Path=Starts, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ccffdd"></Label>
                                 <Label Text="{Binding Path=Starts, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ccffdd">
                                     <Label.Triggers>
@@ -44,9 +43,9 @@
                                     </Label.Triggers>
                                 </Label>
                             </VerticalStackLayout>
-                            <Label Text="{Binding Path=GetDurationString}" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Start" FontAttributes="Bold" FontSize="14"></Label>
-                            <Label Text="→" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="End" TextColor="DimGrey"></Label>
-                            <VerticalStackLayout Grid.Column="4" VerticalOptions="Center">
+                            <Label Text="{Binding Path=GetDurationString}" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Start" FontAttributes="Bold" FontSize="14"></Label>
+                            <Label Text="→" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="End" TextColor="DimGrey"></Label>
+                            <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
                                 <Label Text="{Binding Path=Ends, StringFormat='{0:HH:mm}'}" HorizontalOptions="Center" FontSize="14" TextColor="#ffe6dd"></Label>
                                 <Label Text="{Binding Path=Ends, StringFormat='{0:dd.MM.yy}'}" HorizontalOptions="Center" FontSize="10" TextColor="#ffe6dd">
                                     <Label.Triggers>
@@ -56,6 +55,14 @@
                                     </Label.Triggers>
                                 </Label>
                             </VerticalStackLayout>
+                            <Button Command="{Binding BindingContext.DeleteCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}" 
+                                    Text="❌"
+                                    HeightRequest="28" WidthRequest="40"
+                                    BackgroundColor="White" Grid.Column="4"/>
+                            <Button Command="{Binding BindingContext.EditCommand, Source={x:Reference timelineLogsView}}" CommandParameter="{Binding .}" 
+                                    Text="✏"
+                                    HeightRequest="28" WidthRequest="40"
+                                    BackgroundColor="Orange" Grid.Column="5"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

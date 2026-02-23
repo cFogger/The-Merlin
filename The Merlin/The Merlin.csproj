@@ -76,7 +76,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="CustomControls\TimelineItemPopup.xaml">
+	  <Compile Update="CustomControls\TimelineItemDetailPopup.xaml.cs">
+	    <DependentUpon>TimelineItemDetailPopup.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="CustomControls\TimelineItemDetailPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="CustomControls\TodoItemDetailPopup.xaml">
