@@ -13,7 +13,9 @@ namespace The_Merlin.CustomControls
 {
     public class TimelineDrawable : IDrawable
     {
-        public List<TimelineItem> Items { get; set; } = new();
+        public List<TimelineItem> Items { get; set; } = new();,
+        public List<HabitHistoryItem> HabitHistory { get; set; } = new();
+
         public List<(RectF Area, TimelineItem Item)> _clickMap = new();
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
@@ -82,9 +84,9 @@ namespace The_Merlin.CustomControls
                     canvas.DrawString(item.GetDurationString, x + 5, 10, HorizontalAlignment.Left);
                 }
             }
+            DrawHabitMarkers(canvas, dirtyRect, widthPerHour);
 
             canvas.Alpha = 1;
-
             DrawCurrentTimeLine(canvas, dirtyRect, widthPerHour);
         }
 
@@ -94,6 +96,21 @@ namespace The_Merlin.CustomControls
             canvas.StrokeColor = Colors.Red;
             canvas.StrokeSize = 2;
             canvas.DrawLine(nowPos, 0, nowPos, dirtyRect.Height);
+        }
+
+        private void DrawHabitMarkers(ICanvas canvas, RectF dirtyRect, double widthPerHour)
+        {
+            foreach (var history in HabitHistory)
+            {
+                float xPos = (float)(history.HabitTime.TimeOfDay.TotalHours * widthPerHour);
+
+                // Olumlu alışkanlıklar yeşil, olumsuzlar kırmızı/turuncu nokta olarak
+
+                canvas.FillColor = Color.FromArgb(history.Habit.Color);
+
+                // Zaman çizgisinin hemen altına küçük bir daire veya kısa çizgi
+                canvas.FillCircle(xPos, 55, 3);
+            }
         }
     }
 
@@ -111,6 +128,20 @@ namespace The_Merlin.CustomControls
         {
             get => (ObservableCollection<TimelineItem>)GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
+        }
+
+        public static readonly BindableProperty HabitItemsProperty =
+                BindableProperty.Create(
+                    nameof(HabitItems),
+                    typeof(ObservableCollection<HabitHistoryItem>),
+                    typeof(TimelineView),
+                    null,
+                    propertyChanged: OnHabitItemsChanged);
+
+        public ObservableCollection<HabitHistoryItem> HabitItems
+        {
+            get => (ObservableCollection<HabitHistoryItem>)GetValue(HabitItemsProperty);
+            set => SetValue(HabitItemsProperty, value);
         }
 
         private static void OnItemsChanged(BindableObject bindable, object oldValue, object newValue)
@@ -133,11 +164,30 @@ namespace The_Merlin.CustomControls
             }
         }
 
+        private static void OnHabitItemsChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var control = (TimelineView)bindable;
+            // Eski listenin olay aboneliğini temizle
+            if (oldValue is ObservableCollection<HabitHistoryItem> oldList)
+                oldList.CollectionChanged -= control.OnCollectionChanged;
+            // Yeni listenin olaylarına abone ol
+            if (newValue is ObservableCollection<HabitHistoryItem> newList)
+            {
+                newList.CollectionChanged += control.OnCollectionChanged;
+                if (control.Drawable is TimelineDrawable drawable)
+                {
+                    drawable.HabitHistory = newList.ToList();
+                    control.Invalidate();
+                }
+            }
+        }
+
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (Drawable is TimelineDrawable drawable)
             {
                 drawable.Items = Items.ToList();
+                drawable.HabitHistory = HabitItems.ToList();
                 Invalidate(); // Liste değiştiği anda (ekleme/çıkarma) yeniden çiz
             }
         }

@@ -17,6 +17,11 @@ namespace The_Merlin.ViewModels
         public ObservableCollection<TodoDefItem> TodoDefs { get; } = [];
         public ObservableCollection<TodoDefItem> FilteredTodoDefs { get; } = [];
 
+        public ObservableCollection<HabitItem> HabitDefs { get; } = [];
+        public ObservableCollection<HabitItem> FilteredHabitDefs { get; } = [];
+        public ObservableCollection<HabitItem> TodaysHabits { get; } = []; // DayItem JSON'dan dolacak
+        public ObservableCollection<HabitHistoryItem> TodaysHabitHistory { get; } = [];
+
         public string dateString { get { return DateTime.Today.ToString("dd.MM.yy"); } }
         public IDispatcherTimer myDispatcher { get { return _timer.Dispatcher(); } }
 
@@ -24,16 +29,18 @@ namespace The_Merlin.ViewModels
         private TodoData _todoData;
         private TodoDefData _todoDefData;
         private DayData _dayData;
+        private HabitData _habitData;
         private ITimerService _timer;
 
         bool isFirstLoad = true;
 
-        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData, ITimerService timer)
+        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData, HabitData habitData, ITimerService timer)
         {
             _timelineData = timelineData;
             _todoData = todoData;
             _todoDefData = todoDefData;
             _dayData = dayData;
+            _habitData = habitData;
             _timer = timer;
         }
 

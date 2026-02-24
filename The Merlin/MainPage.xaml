@@ -6,20 +6,34 @@
              x:Class="The_Merlin.MainPage">
     <Grid RowDefinitions="*,auto">
         <!-- Todo Section -->
-        <Grid RowDefinitions="auto,*" Grid.Row="0">
+        <Grid RowDefinitions="auto,auto,*,*" Grid.Row="0">
             <Border Grid.Row="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
                 <Grid ColumnDefinitions="auto,*">
                     <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="200" Margin="5,0"></SearchBar>
                     <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Button Text="{Binding TodoDefText}" BorderColor="{Binding DefaultColor}" BorderWidth="1" Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"></Button>
+                                <Button Text="{Binding TodoDefText}" BorderColor="{Binding DefaultColor}" BorderWidth="1" Command="{Binding BindingContext.TodoAddCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"/>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </Grid>
             </Border>
-            <CollectionView Grid.Row="1" ItemsSource="{Binding todoItems}" HorizontalOptions="Center" SelectionMode="None" ItemsLayout="VerticalList" VerticalScrollBarVisibility="Default">
+
+            <Border Grid.Row="1" Padding="2" BackgroundColor="{StaticResource Gray600}">
+                <Grid ColumnDefinitions="auto,*">
+                    <SearchBar Grid.Column="0" Text="{Binding HabitSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickHabitCommand}" WidthRequest="200" Margin="5,0"></SearchBar>
+                    <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding ActiveHabits}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Button Text="{Binding Title}" BorderColor="{Binding Color}" BorderWidth="1" Command="{Binding BindingContext.AddHabitCountCommand, Source={x:Reference myMainPage}}"  CommandParameter="{Binding .}"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+
+            <CollectionView Grid.Row="2" ItemsSource="{Binding todoItems}" HorizontalOptions="Center" SelectionMode="None" ItemsLayout="VerticalList" VerticalScrollBarVisibility="Default">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="5,2" HeightRequest="44" StrokeThickness=".1" BackgroundColor="{StaticResource Gray950}">
@@ -68,11 +82,26 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <CollectionView Grid.Row="3" ItemsSource="{Binding TodaysHabits}" ItemsLayout="HorizontalList" HeightRequest="60">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10,5" Margin="5" BackgroundColor="#2C2C2C" StrokeShape="RoundRectangle 10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.IncrementHabitCommand, Source={x:Reference myMainPage}}" CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Label Text="{Binding Title}" FontSize="12" HorizontalOptions="Center"/>
+                                <Label Text="{Binding TotalCount, StringFormat='{0} kez'}" FontSize="10" TextColor="{StaticResource Primary}" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
         <!-- Timeline Section -->
         <VerticalStackLayout Grid.Row="1">
             <Border BackgroundColor="{StaticResource Gray950}" StrokeShape="RoundRectangle 15 15 0 0">
-                <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" x:Name="graphicsView" HeightRequest="45" HorizontalOptions="Fill"></customcontrols:TimelineView>
+                <customcontrols:TimelineView Items="{Binding TodaysTimelineItems}" HabitItems="{Binding TodaysHabitHistory}" x:Name="graphicsView" HeightRequest="45" HorizontalOptions="Fill"></customcontrols:TimelineView>
             </Border>
             <Editor BackgroundColor="{StaticResource Gray600}" Text="{Binding DayDesc}" Placeholder="Add daily notes" VerticalOptions="Center" AutoSize="TextChanges"></Editor>
         </VerticalStackLayout>
