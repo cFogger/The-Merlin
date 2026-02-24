@@ -9,15 +9,9 @@ namespace The_Merlin.Models
     {
         public int Id { get; set; }
         public int HabitId { get; set; }
-
-        // Alışkanlığın tam olarak ne zaman gerçekleştiği (İstatistik için kritik)
-        public DateTime HabitTime { get; set; } = DateTime.Now;
-
-        // O an eklenen miktar (Örn: 1 bardak, 200ml, 1 adet vb.)
+        public DateTime HabitTime { get; set; }
         public int Count { get; set; }
-
-        // Geriye dönük erişim için navigation property
-        [JsonIgnore] // API döngüsünü engellemek için
-        public virtual HabitItem Habit { get; set; }
+        public string HabitTitle { get; set; }
+        public string HabitColor { get; set; }
     }
 }

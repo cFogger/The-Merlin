@@ -83,6 +83,11 @@ namespace The_Merlin.ViewModels
             await _timerService.StartStopTimer(_timerService.ActiveTodoSession());
         });
 
+        public ICommand NavigateToHabitList => new Command(async () =>
+        {
+            await Shell.Current.GoToAsync("HabitItemsView");
+        });
+
         public ICommand NavigateToDayList => new Command(async () =>
         {
             await Shell.Current.GoToAsync("DayListView");

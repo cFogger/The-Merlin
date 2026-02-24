@@ -24,11 +24,11 @@ namespace The_Merlin.Data
         public DataManager()
         {
 
-            Url = "https://www.cfogger.me/";
+            //Url = "https://www.cfogger.me/";
             //PC url
             //Url = "https://localhost:44387/";
             //Laptop url
-            //Url = "http://localhost:50173/";
+            Url = "http://localhost:50173/";
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             HttpClient.Timeout = TimeSpan.FromSeconds(15);

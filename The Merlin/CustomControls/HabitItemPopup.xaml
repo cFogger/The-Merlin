@@ -1,31 +1,42 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                xmlns:models="clr-namespace:The_Merlin.Models"
-             x:Class="The_Merlin.CustomControls.HabitItemPopup"
-                              x:TypeArguments="models:TodoItem">
+               x:Class="The_Merlin.CustomControls.HabitItemPopup"
+               x:TypeArguments="models:HabitItem">
     <Border BackgroundColor="#1E1E1E" StrokeShape="RoundRectangle 20" Padding="20" WidthRequest="320">
         <VerticalStackLayout Spacing="15">
             <Label Text="Alışkanlık Tanımla" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
 
-            <Entry Text="{Binding Title}" Placeholder="Alışkanlık Adı (Örn: Su İç)" PlaceholderColor="Gray" />
+            <Entry Text="{Binding HabitItem.Title}" Placeholder="Alışkanlık Adı (Örn: Su İç)" PlaceholderColor="Gray" />
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                 <VerticalStackLayout Grid.Column="0">
                     <Label Text="Min Hedef" FontSize="12" Opacity="0.7"/>
-                    <Entry Text="{Binding DailyMinCount}" Keyboard="Numeric" />
+                    <Entry Text="{Binding HabitItem.DailyMinCount}" Keyboard="Numeric" />
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="1">
                     <Label Text="Max Sınır" FontSize="12" Opacity="0.7"/>
-                    <Entry Text="{Binding DailyMaxCount}" Keyboard="Numeric" />
+                    <Entry Text="{Binding HabitItem.DailyMaxCount}" Keyboard="Numeric" />
                 </VerticalStackLayout>
             </Grid>
 
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                 <Label Text="Olumlu Alışkanlık mı?" VerticalOptions="Center"/>
-                <Switch IsToggled="{Binding IsPositive}" OnColor="#4CAF50" />
+                <Switch IsToggled="{Binding HabitItem.IsPositive}" OnColor="#4CAF50" />
             </HorizontalStackLayout>
+
+            <Label Text="Renk Seçin" FontSize="14" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding AvailableColors}" SelectionMode="Single" SelectionChanged="OnColorSelected">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="5" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="{Binding .}" WidthRequest="40" HeightRequest="40" StrokeShape="RoundRectangle 20" Padding="0" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Button Text="Kaydet" Clicked="OnSaveClicked" BackgroundColor="#6200EE" CornerRadius="10" />
             <Button Text="Vazgeç" Clicked="OnCancelClicked" BackgroundColor="Transparent" TextColor="Gray" />

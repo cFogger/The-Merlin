@@ -23,10 +23,10 @@
             <Border Grid.Row="1" Padding="2" BackgroundColor="{StaticResource Gray600}">
                 <Grid ColumnDefinitions="auto,*">
                     <SearchBar Grid.Column="0" Text="{Binding HabitSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickHabitCommand}" WidthRequest="200" Margin="5,0"></SearchBar>
-                    <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding ActiveHabits}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
+                    <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredHabitDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Button Text="{Binding Title}" BorderColor="{Binding Color}" BorderWidth="1" Command="{Binding BindingContext.AddHabitCountCommand, Source={x:Reference myMainPage}}"  CommandParameter="{Binding .}"/>
+                                <Button Text="{Binding Title}" BorderColor="{Binding Color}" BorderWidth="1" Command="{Binding BindingContext.AddHabitToDayCommand, Source={x:Reference myMainPage}}"  CommandParameter="{Binding .}"/>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

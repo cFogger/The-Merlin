@@ -13,7 +13,7 @@ namespace The_Merlin.CustomControls
 {
     public class TimelineDrawable : IDrawable
     {
-        public List<TimelineItem> Items { get; set; } = new();,
+        public List<TimelineItem> Items { get; set; } = new();
         public List<HabitHistoryItem> HabitHistory { get; set; } = new();
 
         public List<(RectF Area, TimelineItem Item)> _clickMap = new();
@@ -106,7 +106,7 @@ namespace The_Merlin.CustomControls
 
                 // Olumlu alışkanlıklar yeşil, olumsuzlar kırmızı/turuncu nokta olarak
 
-                canvas.FillColor = Color.FromArgb(history.Habit.Color);
+                canvas.FillColor = Color.FromArgb(history.HabitColor);
 
                 // Zaman çizgisinin hemen altına küçük bir daire veya kısa çizgi
                 canvas.FillCircle(xPos, 55, 3);

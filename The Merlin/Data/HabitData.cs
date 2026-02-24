@@ -36,7 +36,7 @@ namespace The_Merlin.Data
             HabitItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public async Task DeleteTodoDefItem(int id)
+        public async Task DeleteHabitItem(int id)
         {
             await dtm.resolveRespond(prefix + "/Delete?id=" + id);
             HabitItemsChanged?.Invoke(this, EventArgs.Empty);

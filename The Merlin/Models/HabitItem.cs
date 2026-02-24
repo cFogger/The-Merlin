@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using The_Merlin.Data;
 
 namespace The_Merlin.Models
 {
@@ -18,5 +19,17 @@ namespace The_Merlin.Models
 
         // İlişki: Bir alışkanlığın birçok geçmiş kaydı olabilir
         public virtual List<HabitHistoryItem> History { get; set; } = new();
+
+        public async void AddHabitHistory(HabitHistoryData _habitData, int count = 1)
+        {
+            TotalCount += count; // Toplam sayıyı güncelle
+            HabitHistoryItem historyItem = new()
+            {
+                HabitId = this.Id,
+                HabitTime = DateTime.Now,
+                Count = count
+            };
+            await _habitData.AddHabitHistoryItem(historyItem);
+        }
     }
 }

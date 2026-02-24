@@ -33,6 +33,8 @@ namespace The_Merlin
             builder.Services.AddSingleton<DayData>();
             builder.Services.AddSingleton<TodoData>();
             builder.Services.AddSingleton<TodoDefData>();
+            builder.Services.AddSingleton<HabitData>();
+            builder.Services.AddSingleton<HabitHistoryData>();
 
             //single pages
             builder.Services.AddSingleton<MainPage>();
@@ -43,6 +45,8 @@ namespace The_Merlin
             builder.Services.AddSingleton<TodoDefListView>();
             builder.Services.AddSingleton<DayListView>();
             builder.Services.AddSingleton<DayListViewModel>();
+            builder.Services.AddSingleton<HabitItemsView>();
+            builder.Services.AddSingleton<HabitItemsViewModel>();
 
             //reusable
             builder.Services.AddTransient<TodoDetailViewModel>();

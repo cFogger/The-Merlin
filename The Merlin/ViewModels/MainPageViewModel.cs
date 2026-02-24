@@ -7,6 +7,7 @@ using The_Merlin.Data;
 using The_Merlin.Interfaces;
 using The_Merlin.Models;
 using The_Merlin.Services;
+using System.Linq;
 
 namespace The_Merlin.ViewModels
 {
@@ -30,17 +31,19 @@ namespace The_Merlin.ViewModels
         private TodoDefData _todoDefData;
         private DayData _dayData;
         private HabitData _habitData;
+        private HabitHistoryData _habitHistoryData;
         private ITimerService _timer;
 
         bool isFirstLoad = true;
 
-        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData, HabitData habitData, ITimerService timer)
+        public MainPageViewModel(TimelineData timelineData, TodoData todoData, TodoDefData todoDefData, DayData dayData, HabitData habitData, HabitHistoryData habitHistoryData, ITimerService timer)
         {
             _timelineData = timelineData;
             _todoData = todoData;
             _todoDefData = todoDefData;
             _dayData = dayData;
             _habitData = habitData;
+            _habitHistoryData = habitHistoryData;
             _timer = timer;
         }
 
@@ -51,23 +54,38 @@ namespace The_Merlin.ViewModels
                 _timelineData.TimelineChanged += onTimelineChanged;
                 _todoData.TodoItemCollectionChanged += onTodoItemsChanged;
                 _todoDefData.TodoDefItemsChanged += onTodoDefsChanged;
+                _habitData.HabitItemsChanged += onHabitItemsChanged;
+                _habitHistoryData.HabitHistoryItemsChanged += onHabitHistoryChanged;
                 _timer.TimerStarted += _timer_TimerStarted;
                 _timer.TimerStopped += _timer_TimerStarted;
 
                 onTimelineChanged(this, EventArgs.Empty);
                 onTodoItemsChanged(this, EventArgs.Empty);
                 onTodoDefsChanged(this, EventArgs.Empty);
+                onHabitItemsChanged(this, EventArgs.Empty);
+                onHabitHistoryChanged(this, EventArgs.Empty);
                 _timer_TimerStarted(this, EventArgs.Empty);
 
                 isFirstLoad = false;
                 MyDayItem = await _dayData.GetToday();
             }
+            onTodaysHabitChanged();
+            Debug.WriteLine(MyDayItem.Habits.Count());
             DayDesc = MyDayItem.Content;
         }
 
         private void _timer_TimerStarted(object? sender, EventArgs e)
         {           
             IsTimerAvailable = true;
+        }
+
+        public void onTodaysHabitChanged()
+        {
+            TodaysHabits.Clear();
+            foreach (var habit in MyDayItem.Habits)
+            {
+                TodaysHabits.Add(habit);
+            }
         }
 
         public void onTimelineChanged(object? sender, EventArgs e)
@@ -78,10 +96,24 @@ namespace The_Merlin.ViewModels
             });
         }
 
+        public void onHabitHistoryChanged(object? sender, EventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _habitHistoryData.GetHabitHistoryItems(TodaysHabitHistory);
+            });
+        }
+
         public async void onTodoDefsChanged(object? sender, EventArgs e)
         {
             await _todoDefData.GetTodoDefItems(TodoDefs);
             DefSearchText = string.Empty;
+        }
+
+        public async void onHabitItemsChanged(object? sender, EventArgs e)
+        {
+            await _habitData.GetHabitItems(HabitDefs);
+            HabitSearchText = string.Empty; // Arama metnini sıfırla
         }
 
         public void onTodoItemsChanged(object? sender, EventArgs e)
@@ -123,7 +155,42 @@ namespace The_Merlin.ViewModels
             DefSearchText = temptext;
         });
 
+        public ICommand AddQuickHabitCommand => new Command(async () =>
+        {
+            string temptext = HabitSearchText;
+            if (!string.IsNullOrEmpty(HabitSearchText))
+                await _habitData.AddHabitItem(new HabitItem
+                {
+                    Title = HabitSearchText,
+                    CreatedAt = DateTime.Now,
+                    TotalCount = 0,
+                    DailyMaxCount = 0,
+                    DailyMinCount = 0,
+                    IsPositive = true,
+                });
+            HabitSearchText = string.Empty;
+            HabitSearchText = temptext;
+        });
+
         public ICommand TodoAddCommand => new Command<TodoDefItem>((tdi) => { if (tdi == null) return; tdi.CreateTodoItem(_todoData); });
+
+        public ICommand AddHabitToDayCommand => new Command<HabitItem>(async (hi) =>
+        {
+            if (hi == null) return;
+            if (MyDayItem.Habits.Any(h => h.Id == hi.Id)) return; // Aynı alışkanlık zaten eklenmişse ekleme
+            if (MyDayItem.Habits.Count == 0) MyDayItem.Habits = new List<HabitItem>() { hi };
+            else MyDayItem.Habits.Add(hi);
+
+            await _dayData.UpdateItem(MyDayItem);
+            onTodaysHabitChanged();
+        });
+
+        public ICommand IncrementHabitCommand =>
+            new Command<HabitItem>((hi) =>
+            {
+                hi.TotalCount++;
+                hi.AddHabitHistory(_habitHistoryData, 1);
+            });
 
         private bool _isTimerAvailable;
         public bool IsTimerAvailable
@@ -149,6 +216,32 @@ namespace The_Merlin.ViewModels
                     foreach (var item in TodoDefs)
                         FilteredTodoDefs.Add(item);
 
+                OnPropertyChanged();
+            }
+        }
+
+        private string _habitSearchText;
+        public string HabitSearchText
+        {
+            get { return _habitSearchText; }
+            set
+            {
+                _habitSearchText = value;
+                FilteredHabitDefs.Clear();
+                if (!string.IsNullOrEmpty(_habitSearchText))
+                {
+                    foreach (var item in HabitDefs.Where(x => x.Title.Contains(_habitSearchText, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        FilteredHabitDefs.Add(item);
+                    }
+                }
+                else
+                {
+                    foreach (var item in HabitDefs)
+                    {
+                        FilteredHabitDefs.Add(item);
+                    }
+                }
                 OnPropertyChanged();
             }
         }
