@@ -7,17 +7,23 @@
              
              x:Name="myMainPage">
     <VerticalStackLayout>
-        <Label 
-            Text="{Binding myDayItem.Id}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Label Text="{Binding myDayItem.Date, StringFormat='{0:dd.MM.yy}'}"
-               VerticalOptions="Center"
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding myDayItem.DayType}"
-               VerticalOptions="Center"
-               HorizontalOptions="Center"/>
-        <Button Text="Delete" BackgroundColor="DarkRed" Command="{Binding DeleteCommand}"></Button>
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Label 
+                   Text="{Binding myDayItem.Id}"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Center" 
+                   TextColor="Gray"/>
+            <Label Text="{Binding myDayItem.DayType}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   TextColor="Gray"/>
+            <Label Text="{Binding myDayItem.Date, StringFormat='{0:dd.MM.yy}'}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   FontSize="20"/>
+
+            <Button Text="Delete" HeightRequest="44" BackgroundColor="DarkRed" Command="{Binding DeleteCommand}"></Button>
+        </HorizontalStackLayout>
         <customcontrols:TimelineView Items="{Binding TimelineItems}" x:Name="timelineDraw" HeightRequest="60" HorizontalOptions="Fill"></customcontrols:TimelineView>
         <CollectionView ItemsSource="{Binding StatItems}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
             <CollectionView.ItemTemplate>
@@ -26,7 +32,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}">
+        <Border Margin="0" Padding="2" StrokeThickness=".1" BackgroundColor="{StaticResource Gray600}" IsVisible="{Binding IsItFuture}">
             <Grid ColumnDefinitions="auto,*">
                 <SearchBar Grid.Column="0" Text="{Binding DefSearchText}" Placeholder="Add Definition" ReturnType="Go" SearchCommand="{Binding AddQuickTodoDefCommand}" WidthRequest="200"></SearchBar>
                 <CollectionView Grid.Column="1" VerticalOptions="Center" ItemsSource="{Binding FilteredTodoDefs}" ItemsLayout="HorizontalList" HorizontalScrollBarVisibility="Never">
@@ -42,12 +48,31 @@
             <CollectionView ItemsSource="{Binding TodoItems}" ItemsLayout="VerticalList">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="10" Margin="5" StrokeThickness=".1">
-                            <VerticalStackLayout>
-                                <Label Text="{Binding TodoText}" FontAttributes="Bold" />
-                                <Label Text="{Binding IsCompleted, StringFormat='Completed: {0}'}" />
-                            </VerticalStackLayout>
-                        </Border>
+                        <Grid ColumnDefinitions="*,auto,auto">
+                            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Fill" Grid.Column="0">
+                                <Border Margin="0,2,5,0" VerticalOptions="Center" BackgroundColor="{Binding Color}" HeightRequest="12" WidthRequest="12" StrokeThickness=".1"></Border>
+                                <Label VerticalOptions="Center" Text="{Binding TodoText}"/>
+                                <Label VerticalOptions="Start" Text="{Binding TodoDefText}" FontSize="8" TextColor="{Binding Color}" IsVisible="{Binding isDifferentFromDef}"/>
+                            </HorizontalStackLayout>
+                            <Border BackgroundColor="Transparent" StrokeShape="RoundRectangle 30" Grid.Column="1">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="InProgress">
+                                        <Setter Property="BackgroundColor" Value="DarkSlateGrey"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Pending">
+                                        <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="Completed">
+                                        <Setter Property="BackgroundColor" Value="DarkOliveGreen"></Setter>
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <!-- Status Triggers -->
+                                <VerticalStackLayout VerticalOptions="Center" Margin="15,0,15,0">
+                                    <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="10" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding getTotalTimeString}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

@@ -16,12 +16,23 @@ namespace The_Merlin.ViewModels
                 _myDayItem = value; 
                 OnPropertyChanged();
 
-                onTodoDefsChanged(this, EventArgs.Empty);
+                IsItFuture = _myDayItem.Date.Date >= DateTime.Today;
+                if (IsItFuture)
+                    onTodoDefsChanged(this, EventArgs.Empty);
+
                 onTodoItemsChanged(this, EventArgs.Empty);
                 loadTimelineItems();
+
             }
         }
         private DayItem _myDayItem;
+
+        private bool _isItFuture;
+        public bool IsItFuture
+        {
+            get { return _isItFuture; }
+            set { _isItFuture = value; OnPropertyChanged(); }
+        }
 
         public ObservableCollection<TodoItem> TodoItems { get; } = [];
         public ObservableCollection<TodoDefItem> TodoDefs { get; } = [];
